@@ -12,7 +12,11 @@ package WorkShop;
 public class Adres {
     
     public Adres(String straatNaam, String postCode, String toevoeging, int huisNummer, String woonPlaats){
-        
+        this.straatNaam = straatNaam;
+        this.postCode = postCode;
+        this.toevoeging = toevoeging;
+        this.huisNummer = huisNummer;
+        this.woonPlaats = woonPlaats;
     }
     
     private String straatNaam;
