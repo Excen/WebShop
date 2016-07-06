@@ -15,6 +15,6 @@ import java.util.ArrayList;
 public class Bestelling {
     private int bestellingId;
     private int klantId;
-    
+    Artikel artikel = new Artikel();
     
 }
