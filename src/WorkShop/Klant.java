@@ -16,7 +16,19 @@ public class Klant {
     private String achterNaam;
     private String tussenVoegsel;
     private String email;
-    // private Adres adres = new Adres();
+    private Adres adres;
     
-    
+
+
+
+public Klant (int klantId, String voorNaam, String achterNaam, 
+        String tussenVoegsel, String email, Adres adres){
+     this.klantId = klantId;
+     this.voorNaam = voorNaam;
+     this.achterNaam = achterNaam; 
+     this.tussenVoegsel = tussenVoegsel;
+     this.email = email;
+     // adres = new Adres();
+
+}
 }
