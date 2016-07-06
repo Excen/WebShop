@@ -16,7 +16,7 @@ public class Klant {
     private String achterNaam;
     private String tussenVoegsel;
     private String email;
-    private Adres adres = new Adres();
+    // private Adres adres = new Adres();
     
     
 }
