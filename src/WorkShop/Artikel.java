@@ -1,15 +1,39 @@
 package WorkShop;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Excen
- */
 public class Artikel {
+    private int artikelId;
+    private String artikelNaam;
+    private double prijs;
+    
+    public Artikel(int artikelId, String artikelNaam, double prijs) {
+        this.artikelId = artikelId;
+        this.artikelNaam = artikelNaam;
+        this.prijs = prijs;
+        }
+
+    public int getKlantId() {
+        return artikelId;
+    }
+
+    public String getArtikelNaam() {
+        return artikelNaam;
+    }
+
+    public double getPrijs() {
+        return prijs;
+    }
+
+    public void setKlantId(int klantId) {
+        this.artikelId = klantId;
+    }
+
+    public void setArtikelNaam(String artikelNaam) {
+        this.artikelNaam = artikelNaam;
+    }
+
+    public void setPrijs(double prijs) {
+        this.prijs = prijs;
+    }
     
 }
