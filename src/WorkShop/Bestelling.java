@@ -13,8 +13,22 @@ import java.util.ArrayList;
  * @author Excen
  */
 public class Bestelling {
-    private int bestellingId;
-    private int klantId;
-    Artikel artikel = new Artikel();
+    private int bestelling_id;
+    private int klant_id;
+    private artikel_id;
+    private artikel_naam;
+    private artikel_aantal;
+    private artikel_prijs;
+    
+    
+    
+    try (Connection connectie = DriverManager.getConnection(Url, User, Pw);
+         PreparedStatement statement = connectie.prepareStatement(sql code);){
+    ResultSet result = statement.executeQuery();
+    while (result.next()){
+        
+    }
+}
+    
     
 }
