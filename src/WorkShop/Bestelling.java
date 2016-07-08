@@ -15,20 +15,24 @@ import java.util.ArrayList;
 public class Bestelling {
     private int bestelling_id;
     private int klant_id;
-    private artikel_id;
-    private artikel_naam;
-    private artikel_aantal;
-    private artikel_prijs;
+    private int artikel_id1;
+    private int artikel_id2;
+    private int artikel_id3;
+    private String artikel_naam1;
+    private String artikel_naam2;
+    private String artikel_naam3;
+    private int artikel_aantal1;
+    private int artikel_aantal2;
+    private int artikel_aantal3;
+    private float artikel_prijs1;
+    private float artikel_prijs2;
+    private float artikel_prijs3;
     
     
     
-    try (Connection connectie = DriverManager.getConnection(Url, User, Pw);
-         PreparedStatement statement = connectie.prepareStatement(sql code);){
-    ResultSet result = statement.executeQuery();
-    while (result.next()){
-        
-    }
+    
+    
 }
     
     
-}
+
