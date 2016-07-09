@@ -16,11 +16,8 @@ public class Bestelling {
     private int bestelling_id;
     private int klant_id;
     private int artikel_id1;
-
     private String artikel_naam1;
-
     private int artikel_aantal1;
-
     private float artikel_prijs1;
 
     
