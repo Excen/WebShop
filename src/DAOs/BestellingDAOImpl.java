@@ -26,7 +26,7 @@ public class BestellingDAOImpl implements BestellingDAO {
     
 
     @Override
-    public ArrayList<Bestelling>bestellinglijst findAll() throws SQLException {
+    public ArrayList <Bestelling> bestellinglijst findAll() throws SQLException {
         con = DriverManager.getConnection(url, user, pw);
         String sqlQuery = "select * from Bestelling";
         stmt = con.prepareStatement(sqlQuery);
