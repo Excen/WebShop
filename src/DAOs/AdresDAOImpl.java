@@ -5,37 +5,38 @@
  */
 package DAOs;
 
-import WorkShop.Bestelling;
-import java.sql.*;
+import WorkShop.Adres;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
- * @author Excen
+ * @author Wendy
  */
-public class BestellingDAOImpl implements BestellingDAO {
+public class AdresDAOImpl implements AdresDAO {
 
     @Override
-    public Bestelling[] findAll() throws SQLException {
+    public List<Adres> findAll() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Bestelling FindById(int bestelling_id) {
+    public Adres findByAdresID(int adresID) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean instert(Bestelling bestelling) throws SQLException {
+    public Adres findByStraatNaam(String straatNaam) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean update(Bestelling bestelling) throws SQLException {
+    public Adres findByPostcode(String postCode) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean delete(Bestelling bestelling) throws SQLException {
+    public Adres findByWoonplaats(String woonPlaats) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

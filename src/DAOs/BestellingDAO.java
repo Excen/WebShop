@@ -5,7 +5,7 @@
  */
 package DAOs;
 
-import POJO_WorkShop.Bestelling;
+import WorkShop.Bestelling;
 import java.sql.SQLException;
 /**
  *
