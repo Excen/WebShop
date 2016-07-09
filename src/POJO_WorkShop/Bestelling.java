@@ -1,4 +1,4 @@
-package WorkShop;
+package POJO_WorkShop;
 
 import java.util.ArrayList;
 
