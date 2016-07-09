@@ -7,6 +7,7 @@ package DAOs;
 
 import WorkShop.Bestelling;
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,14 +28,16 @@ public class BestellingDAOImpl implements BestellingDAO {
     @Override
     public ArrayList<Bestelling>bestellinglijst findAll() throws SQLException {
         con = DriverManager.getConnection(url, user, pw);
-        String sqlQuery = "select * from Artikel";
+        String sqlQuery = "select * from Bestelling";
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
         while (rs.next()) {
-            /** get the fields from one artikel
-             * and store it in an Artikel object
-             */
-            Artikel artikel = new Artikel();
+            
+            Bestelling bestelling = new Bestelling();
+            bestelling.setBestelling_id(rs.getInt("bestelling_id"));
+            bestelling.
+            
+            
             artikel.setArtikelID(rs.getInt("artikel_id"));
             artikel.setArtikelNaam(rs.getString("atrikel_naam"));
             artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
