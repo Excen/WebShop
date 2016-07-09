@@ -22,35 +22,51 @@ public class BestellingDAOImpl implements BestellingDAO {
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
-    
-    
 
-    @Override
-    public ArrayList <Bestelling> bestellinglijst findAll() throws SQLException {
-        con = DriverManager.getConnection(url, user, pw);
+
+    public ArrayList<Bestelling> findAll() throws SQLException {
+        
+        ArrayList<Bestelling>bestellinglijst = new ArrayList<>();
+        
         String sqlQuery = "select * from Bestelling";
+        
+        con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
+            
         while (rs.next()) {
             
             Bestelling bestelling = new Bestelling();
             bestelling.setBestelling_id(rs.getInt("bestelling_id"));
-            bestelling.
-            
-            
-            artikel.setArtikelID(rs.getInt("artikel_id"));
-            artikel.setArtikelNaam(rs.getString("atrikel_naam"));
-            artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
-            // add the artikel in the list
-            artikelList.add(artikel);
+
+            // add bestelling in de list
+            bestellinglijst.add(bestelling);
             }
-          connection.close();
-          return artikelList;  
-    }
+          
+          return bestellinglijst;  
+          }
+    
 
     @Override
-    public Bestelling FindById(int bestelling_id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Bestelling FindById(int bestelling_id) throws SQLException {
+        
+        String sqlQuery = "select " + bestelling_id + " from bestelling";
+        Bestelling bestelling = null;
+        
+        con = DriverManager.getConnection(url, user, pw);
+        stmt = con.prepareStatement(sqlQuery);
+        rs = stmt.executeQuery();
+            
+        while (rs.next()) {
+            
+            bestelling = new Bestelling();
+            bestelling.setBestelling_id(rs.getInt("bestelling_id"));
+
+            
+            }    
+            return bestelling;
+        }
+        
     }
 
     @Override

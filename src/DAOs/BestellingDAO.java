@@ -7,13 +7,14 @@ package DAOs;
 
 import WorkShop.Bestelling;
 import java.sql.SQLException;
+import java.util.ArrayList;
 /**
  *
  * @author Excen
  */
 public interface BestellingDAO {
     
-    public Bestelling[] findAll() throws SQLException;
+    public ArrayList<Bestelling> findAll() throws SQLException;
     public Bestelling FindById(int bestelling_id);
     public boolean instert (Bestelling bestelling) throws SQLException;
     public boolean update (Bestelling bestelling) throws SQLException;
