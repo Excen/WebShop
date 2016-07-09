@@ -29,6 +29,11 @@ public class Klant {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public static Klant getInstance(){
+        return new Klant();
+    }
+    
+    
     public int getKlantId() {
         return klantId;
     }
