@@ -28,7 +28,7 @@ public class Bestelling {
     private float artikel_prijs2;
     private float artikel_prijs3;
     
-    
+    public Bestelling(){};
     
     
     

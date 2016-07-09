@@ -13,10 +13,36 @@ import java.sql.*;
  * @author Excen
  */
 public class BestellingDAOImpl implements BestellingDAO {
+    
+    String url = "URL";
+    String user = "User";
+    String pw = "PassWord";
+    
+    Connection con;
+    ResultSet rs;
+    PreparedStatement stmt;
+    
+    
 
     @Override
-    public Bestelling[] findAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Bestelling>bestellinglijst findAll() throws SQLException {
+        con = DriverManager.getConnection(url, user, pw);
+        String sqlQuery = "select * from Artikel";
+        stmt = con.prepareStatement(sqlQuery);
+        rs = stmt.executeQuery();
+        while (rs.next()) {
+            /** get the fields from one artikel
+             * and store it in an Artikel object
+             */
+            Artikel artikel = new Artikel();
+            artikel.setArtikelID(rs.getInt("artikel_id"));
+            artikel.setArtikelNaam(rs.getString("atrikel_naam"));
+            artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
+            // add the artikel in the list
+            artikelList.add(artikel);
+            }
+          connection.close();
+          return artikelList;  
     }
 
     @Override
