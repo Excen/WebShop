@@ -2,40 +2,41 @@ package WorkShop;
 
 
 public class Artikel {
-    private int artikelId;
+    private int artikelID;
     private String artikelNaam;
-    private double prijs;
+    private double artikelPrijs;
     
-    public Artikel(int artikelId, String artikelNaam, double prijs) {
-        this.artikelId = artikelId;
+    public Artikel(){
+    }
+    
+    public Artikel(int artikelID, String artikelNaam, double artikelPrijs) {
+        this.artikelID = artikelID;
         this.artikelNaam = artikelNaam;
-        this.prijs = prijs;
+        this.artikelPrijs = artikelPrijs;
         }
 
-    public int getKlantId() {
-        return artikelId;
+    public int getArtikelID() {
+        return artikelID;
     }
 
     public String getArtikelNaam() {
         return artikelNaam;
     }
 
-    public double getPrijs() {
-        return prijs;
+    public double getArtikelPrijs() {
+        return artikelPrijs;
     }
 
-    public void setKlantId(int klantId) {
-        this.artikelId = klantId;
+    public void setArtikelID(int artikelID) {
+        this.artikelID = artikelID;
     }
 
     public void setArtikelNaam(String artikelNaam) {
         this.artikelNaam = artikelNaam;
     }
 
-    public void setPrijs(double prijs) {
-        this.prijs = prijs;
+    public void setArtikelPrijs(double artikelPrijs) {
+        this.artikelPrijs = artikelPrijs;
     }
     
-  
-    }
-
+}
