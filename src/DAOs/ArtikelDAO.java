@@ -7,15 +7,19 @@ package DAOs;
 
 import WorkShop.Artikel; // anders doet die niet?
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
  * @author Anne
  */
 public interface ArtikelDAO {
-    public Artikel[] findAll() throws Exception;
-    public Artikel findbyArtikelID(int artikelID) throws SQLException;
-    public Artikel findbyArtikelNaam(String artikelNaam) throws SQLException;
-    public Artikel findbyArtikelPrijs (double artikelPrijs) throws SQLException;
+    public ArrayList<Artikel> findAll() throws SQLException, ClassNotFoundException;
+    public Artikel findByArtikelID(int artikelID) throws SQLException, ClassNotFoundException;
+    public Artikel findByArtikelNaam(String artikelNaam) throws SQLException, ClassNotFoundException;
+    public Artikel findByArtikelPrijs (double artikelPrijs) throws SQLException, ClassNotFoundException;
+    public void insertArtikel (int artikelID, String artikelNaam, double artikelPrijs) throws ClassNotFoundException;
+    public void deleteArtikel(int artikelID) throws SQLException, ClassNotFoundException;
+    public void update(Artikel artikel) throws SQLException, ClassNotFoundException;
     
 }
