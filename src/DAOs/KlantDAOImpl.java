@@ -5,7 +5,6 @@
  */
 package DAOs;
 
-
 import WorkShop.Klant;
 import WorkShop.Klant.KlantBuilder;
 import java.sql.Connection;
@@ -30,12 +29,25 @@ class KlantDAOImpl implements KlantDAO {
     ResultSet rs;
     PreparedStatement stmt;
 
-    /* Class.forName(driver);
-    con = DriverManager.getConnection(url,user,pw );
-    */
+    /*
+    private void connectToDB () {
+    
+        try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, uer, pw);
+            System.out.print("You are connected to " + url);
+        }
+        catch(java.lang.Exception ex){
+            ex.printStackTrace();
+        }
+*/
 
+       
     @Override
     public ArrayList<Klant> findAllKlanten() throws SQLException, ClassNotFoundException {
+       
+        //connectToDB();
+        
         ArrayList<Klant> klantenLijst = new ArrayList<>();
        
         String sqlQuery = "select * from Klant";
@@ -59,18 +71,19 @@ class KlantDAOImpl implements KlantDAO {
             con.close(); 
         }
         }
-        catch(SQLException ex){}
+        catch( SQLException ex){}
                                
         return klantenLijst; 
     }
     
     @Override
     public Klant findByKlantId(int klantId) throws SQLException {
-        Klant klant = Klant.getInstance();  
-        String sqlQuery = "select voornaam, achternaam, tussenvoegsel, email " + 
-                "from Klant where klant_id = ? ";
-        stmt = con.prepareStatement(sqlQuery);
+        //connectToDB();
         
+        Klant klant = Klant.getInstance();  
+        String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
+                + "email from Klant where klant_id = ? ";
+        stmt = con.prepareStatement(sqlQuery);
         try{
             stmt.setInt(1, klantId);      
             rs = stmt.executeQuery();          
@@ -91,11 +104,12 @@ class KlantDAOImpl implements KlantDAO {
         }
         catch(SQLException ex){}
                 
-        return klant;
-    }    
+        return klant; 
+    }
     
-        @Override
+    @Override    
     public Klant findByVoorNaam(String voorNaam) throws SQLException {
+        //connectToDB();
         
         Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
@@ -126,6 +140,8 @@ class KlantDAOImpl implements KlantDAO {
 
     @Override
     public Klant findByAchterNaam(String achterNaam) throws SQLException {
+        //connectToDB();
+        
         Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where achternaam = ? ";
@@ -156,6 +172,9 @@ class KlantDAOImpl implements KlantDAO {
 
     @Override
     public Klant findByEmail(String email) throws SQLException {
+        
+        //connectToDB();
+        
         Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where email = ? ";
@@ -185,6 +204,8 @@ class KlantDAOImpl implements KlantDAO {
 
     @Override
     public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) throws SQLException {
+       //connectToDB();
+        
         Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where voorNaam = ? and achterNaam = ? ";
@@ -214,7 +235,9 @@ class KlantDAOImpl implements KlantDAO {
     }
 
     @Override
-    public void insert() throws SQLException {
+    public Klant insert() throws SQLException {
+        
+        Klant klant = new Klant();
         
         Scanner input = new Scanner(System.in);
         System.out.print("Voornaam: ");
@@ -242,14 +265,30 @@ class KlantDAOImpl implements KlantDAO {
                          + " values (?, ?, ?, ?)";
                  
                  // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, voornaam);
-                 preparedStmt.setString (2, achternaam);
-                 preparedStmt.setString (3, tussenvoegsel);
-                 preparedStmt.setString (4, email);
+                stmt = conn.prepareStatement(sqlQuery,
+                         PreparedStatement.RETURN_GENERATED_KEYS);
+                 stmt.setString (2, voornaam);
+                 stmt.setString (3, achternaam);
+                 stmt.setString (4, tussenvoegsel);
+                 stmt.setString (5, email);
+                 
+                 rs = stmt.getGeneratedKeys();
+                 if (rs.isBeforeFirst()){
+                     KlantBuilder klantBuilder = new KlantBuilder();
+                     rs.next(); 
+                     klantBuilder.klantId(rs.getInt(1));
+                     klantBuilder.voorNaam(rs.getString("voornaam"));
+                     klantBuilder.achterNaam(rs.getString("achternaam"));
+                     klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                     klantBuilder.email(rs.getString("email"));
+            
+            // build Klant
+                    klant = klantBuilder.build();
+                 }
+                 
                  
                  // execute the preparedstatement
-                 preparedStmt.execute();
+                 stmt.execute();
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -257,7 +296,10 @@ class KlantDAOImpl implements KlantDAO {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
-  }    
+         return klant;
+  }  
+    
+    
     @Override
     public void updateVoorNaam() throws SQLException {
         
@@ -411,7 +453,7 @@ class KlantDAOImpl implements KlantDAO {
     }
     
     @Override
-    public void delete() throws SQLException {
+    public void deleteByKlantId() throws SQLException {
         
         Scanner input = new Scanner(System.in);
         System.out.print("Klant ID: ");
@@ -424,16 +466,16 @@ class KlantDAOImpl implements KlantDAO {
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
                  // create a sql date object so we can use it in our INSERT statement
                  
-                 // the mysql insert statement
-                 String sqlQuery = "delete from klant where klant_id = " 
-                         + klantId ;
+                 // the mysql insert statement.first parent, than child
+                 String sqlQuery = "delete from bestelling, klant where  " 
+                         + "klant.klant_id = bestelling.klant_id and klant.klant_id = " 
+                         + klantId ;                 
                  
                  // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);                
                                                  
                  // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
+                 preparedStmt.executeUpdate();                 
              }
       }
     
@@ -444,6 +486,44 @@ class KlantDAOImpl implements KlantDAO {
             }
     }    
         
+    @Override
+    public void deleteByKlantNaam() throws SQLException {
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Voornaam: ");
+        String voornaam = input.next().trim();
+        System.out.print("Achternaam: ");
+        String achternaam = input.next().trim();
+        System.out.print("Tussenvoegsel: ");
+        String tussenvoegsel = input.next().trim();
+       
+        
+      try{  
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // create a sql date object so we can use it in our INSERT statement
+                 
+                 // the mysql insert statement.first parent, than child
+                 String sqlQuery = "delete from bestelling, klant where  " 
+                         + "klant.klant_id = bestelling.klant_id and klant.voornaam = " 
+                         + voornaam  + ", klant.achternaam = " + achternaam + 
+                         ", klant.tussenvoegsel = " + tussenvoegsel;                 
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);                
+                                                 
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();                 
+             }
+      }
+    
+            catch (ClassNotFoundException | SQLException e)
+            {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+            }
+    } 
     
     
     @Override
@@ -476,8 +556,77 @@ class KlantDAOImpl implements KlantDAO {
         
     }
 
+    @Override
+    public Klant FindByAdresId(int adresId) throws SQLException {
     
+        //connectToDB();
+        
+        Klant klant = Klant.getInstance();  
+        String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
+                + "email from klant where koppelklantadres.adres_id = ? " +
+                "and klant.klant_id = koppelklantadres.klant_id";
+        
+        stmt = con.prepareStatement(sqlQuery);
+        try{
+            stmt.setInt(1, adresId);      
+            rs = stmt.executeQuery();          
+            
+        while (rs.next()) {       
+            
+            KlantBuilder klantBuilder = new KlantBuilder();
+            klantBuilder.klantId(rs.getInt("klant_id"));
+            klantBuilder.voorNaam(rs.getString("voornaam"));
+            klantBuilder.achterNaam(rs.getString("achternaam"));
+            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+            klantBuilder.email(rs.getString("email"));
+            
+            // build Klant
+            klant = klantBuilder.build();
+            con.close();            
+        }        
+        }
+        catch(SQLException ex){}
+                
+        return klant; 
+        
+        
+    }
+
+    /*
+    @Override
+    public int[] addBatchKlanten() throws Exception {
     
+    // x aantal random gegenereerde klanten creeren.     
+        
+        
+    // Create statement object   
+    String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel, email)"
+                         + " values (?, ?, ?, ?)";                    
     
+    stmt = con.prepareStatement(sqlQuery);
+    con.setAutoCommit(false);
+
+    // Add above SQL statement in the batch.
+    stmt.addBatch(sqlQuery);
+
+                 stmt.setString (2, voornaam);
+                 stmt.setString (3, achternaam);
+                 stmt.setString (4, tussenvoegsel);
+                 stmt.setString (5, email);
     
+    // Create an int[] to hold returned values
+    int[] count = stmt.executeBatch();
+    //Explicitly commit statements to apply changes
+    con.commit();
+        
+
+    return count;    
+        
+                 
+               
+                 
+                 
+                 
+    } */
+
 }

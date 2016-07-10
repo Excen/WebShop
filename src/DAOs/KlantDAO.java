@@ -15,16 +15,20 @@ import java.util.ArrayList;
  */
 public interface KlantDAO {
     public ArrayList <Klant> findAllKlanten() throws Exception;
-    public Klant findByKlantId(int klantID) throws SQLException;
+    public Klant findByKlantId(int klantId) throws SQLException;
     public Klant findByVoorNaam(String voorNaam) throws SQLException;
     public Klant findByAchterNaam(String achterNaam) throws SQLException;
     public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) throws SQLException;
     public Klant findByEmail(String email) throws SQLException;
-    public void insert() throws SQLException;
+    public Klant FindByAdresId (int adresId) throws SQLException; 
+    public Klant insert() throws SQLException;
     public void updateVoorNaam() throws SQLException;
     public void updateAchterNaam() throws SQLException; 
     public void updateTussenVoegsel() throws SQLException; 
     public void updateEmail() throws SQLException; 
-    public void delete() throws SQLException; 
+    public void deleteByKlantId() throws SQLException; 
+    public void deleteByKlantNaam() throws SQLException;
     public void deleteAll() throws SQLException;
+    
+    //public int[] addBatchKlanten() throws Exception;
 }

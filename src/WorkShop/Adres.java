@@ -32,7 +32,11 @@ public class Adres {
     }
     
     public Adres() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported."); 
+    }
+    
+    public static Adres getInstance(){
+        return new Adres();
     }
     
     public int getAdresId(){
@@ -95,7 +99,7 @@ public class Adres {
                 return this; 
         }
         
-        public AdresBuilder huisnummer (int huisNummer){
+        public AdresBuilder huisNummer (int huisNummer){
             this.huisNummer = huisNummer;
                 return this;
         }
@@ -114,7 +118,8 @@ public class Adres {
     }
     
     public static void main (String [] args) throws SQLException, ClassNotFoundException{
-    AdresDAOImpl adresDAO = new AdresDAOImpl();
+    
+        AdresDAOImpl adresDAO = new AdresDAOImpl();
             ArrayList<Adres> ListAll = adresDAO.findAllAdresses();
             for (Adres adres: ListAll) {
                 System.out.println("Adres ID is " + adres.getAdresId());

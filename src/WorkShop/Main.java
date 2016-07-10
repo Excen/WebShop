@@ -47,12 +47,15 @@ public class Main {
         }
         
     //  execute SQL commands
+        private void executeSQL(){
         if (connection == null){
             System.out.print ("Please first connect to a database")
             return; 
         }
         else {
         
+        
+        }
         
         }
         

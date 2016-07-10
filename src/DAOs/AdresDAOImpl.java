@@ -21,6 +21,7 @@ import java.util.Scanner;
  */
 public class AdresDAOImpl implements AdresDAO {
 
+    //datafields 
     String driver = "com.mysql.jdbc.Driver";
     String url = "jdbc:mysql://localhost3306/Winkel";
     String user = "Anjewe"; 
@@ -28,6 +29,7 @@ public class AdresDAOImpl implements AdresDAO {
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
+    
     
     @Override
     public ArrayList <Adres> findAllAdresses() throws SQLException, 
@@ -45,7 +47,7 @@ public class AdresDAOImpl implements AdresDAO {
             AdresBuilder adresBuilder = new AdresBuilder();
             adresBuilder.adresId(rs.getInt("adres_id"));
             adresBuilder.straatNaam(rs.getString("straatnaam"));
-            adresBuilder.huisnummer(rs.getInt("huisnummer"));
+            adresBuilder.huisNummer(rs.getInt("huisnummer"));
             adresBuilder.toevoeging(rs.getString("toevoeging"));
             adresBuilder.postCode(rs.getString("postcode"));
             adresBuilder.woonPlaats(rs.getString("woonplaats"));
@@ -61,40 +63,158 @@ public class AdresDAOImpl implements AdresDAO {
     
 
     @Override
-    public Adres findByAdresID(int adresID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Adres findByAdresID(int adresId) throws SQLException {
+        
+        // connect to DB
+        
+        Adres adres = Adres.getInstance();  
+        String sqlQuery = "select adres_id,straatnummer,toevoeging,postcode, " + 
+                "woonplaats from Adres where adres_id = ? ";
+        stmt = con.prepareStatement(sqlQuery);
+        
+        try{
+            stmt.setInt(1, adresId);      
+            rs = stmt.executeQuery();          
+            
+        while (rs.next()) {       
+            
+            AdresBuilder adresBuilder = new AdresBuilder();
+            adresBuilder.adresId(rs.getInt("adres_id"));
+            adresBuilder.straatNaam(rs.getString("straatnaam"));
+            adresBuilder.huisNummer(rs.getInt("huisnummer"));
+            adresBuilder.toevoeging(rs.getString("toevoeging"));
+            adresBuilder.postCode(rs.getString("postcode"));
+            adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+            // build Klant
+            adres = adresBuilder.build();
+            con.close();            
+        }        
+        }
+        catch(SQLException ex){}
+                
+        return adres;
+    }    
 
-    @Override
-    public Adres findByStraatNaam(String straatNaam) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     @Override
-    public Adres findByWoonplaats(String woonPlaats) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Adres findByStraatNaam(String straatNaam) throws SQLException {
+        // connect to DB
+        
+        Adres adres = Adres.getInstance();  
+        String sqlQuery = "select adres_id,straatnummer,toevoeging,postcode, " + 
+                "woonplaats from Adres where straatnaam = ? ";
+        stmt = con.prepareStatement(sqlQuery);
+        
+        try{
+            stmt.setString(1, straatNaam);      
+            rs = stmt.executeQuery();          
+            
+        while (rs.next()) {       
+            
+            AdresBuilder adresBuilder = new AdresBuilder();
+            adresBuilder.adresId(rs.getInt("adres_id"));
+            adresBuilder.straatNaam(rs.getString("straatnaam"));
+            adresBuilder.huisNummer(rs.getInt("huisnummer"));
+            adresBuilder.toevoeging(rs.getString("toevoeging"));
+            adresBuilder.postCode(rs.getString("postcode"));
+            adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+            // build Klant
+            adres = adresBuilder.build();
+            con.close();            
+        }        
+        }
+        catch(SQLException ex){}
+                
+        return adres;
     }
-
+    
+    
     @Override
-    public Adres findByPostcodeHuisNummer(String postCode) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Adres findByWoonplaats(String woonPlaats) throws SQLException {
+        // connect to DB
+        
+        Adres adres = Adres.getInstance();  
+        String sqlQuery = "select adres_id,straatnummer,toevoeging,postcode, " + 
+                "woonplaats from Adres where woonplaats = ? ";
+        stmt = con.prepareStatement(sqlQuery);
+        
+        try{
+            stmt.setString(1, woonPlaats);      
+            rs = stmt.executeQuery();          
+            
+        while (rs.next()) {       
+            
+            AdresBuilder adresBuilder = new AdresBuilder();
+            adresBuilder.adresId(rs.getInt("adres_id"));
+            adresBuilder.straatNaam(rs.getString("straatnaam"));
+            adresBuilder.huisNummer(rs.getInt("huisnummer"));
+            adresBuilder.toevoeging(rs.getString("toevoeging"));
+            adresBuilder.postCode(rs.getString("postcode"));
+            adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+            // build Klant
+            adres = adresBuilder.build();
+            con.close();            
+        }        
+        }
+        catch(SQLException ex){}
+                
+        return adres;
     }
 
+    
+    @Override
+    public Adres findByPostcodeHuisNummer(String postCode, String huisNummer) throws SQLException {
+        // connect to DB
+        
+        Adres adres = Adres.getInstance();  
+        String sqlQuery = "select adres_id,straatnummer,toevoeging,postcode, " + 
+                "woonplaats from Adres where postcode = ? and huisnummer = ?";
+        stmt = con.prepareStatement(sqlQuery);
+        
+        try{
+            stmt.setString(1, postCode);    
+            stmt.setString(2, huisNummer);
+            rs = stmt.executeQuery();          
+            
+        while (rs.next()) {       
+            
+            AdresBuilder adresBuilder = new AdresBuilder();
+            adresBuilder.adresId(rs.getInt("adres_id"));
+            adresBuilder.straatNaam(rs.getString("straatnaam"));
+            adresBuilder.huisNummer(rs.getInt("huisnummer"));
+            adresBuilder.toevoeging(rs.getString("toevoeging"));
+            adresBuilder.postCode(rs.getString("postcode"));
+            adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+            // build Klant
+            adres = adresBuilder.build();
+            con.close();            
+        }        
+        }
+        catch(SQLException ex){}
+                
+        return adres;
+    }
+
+    
     @Override // checken van volgorde in database
     public void insert() throws SQLException {
         
         Scanner input = new Scanner(System.in);
         System.out.print("Straatnaam: ");
         String straatnaam = input.next().trim();
-        
-        System.out.print("Postcode: ");
-        String postcode = input.next().trim();
-        
+               
         System.out.print("Huisnummer: ");
         String huisnummer = input.next().trim();
         
         System.out.print("Toevoeging: ");
         String toevoeging = input.next().trim();
+        
+        System.out.print("Postcode: ");
+        String postcode = input.next().trim();
         
         System.out.print("Woonplaats: ");
         String woonplaats = input.next().trim();
@@ -108,15 +228,15 @@ public class AdresDAOImpl implements AdresDAO {
                  // create a sql date object so we can use it in our INSERT statement
                  
                  // the mysql insert statement
-                 String sqlQuery = "insert into adres (straatnaam, postcode," +
-                         " huisnummer, toevoeging, woonplaats) values (?, ?, ?, ?)";
+                 String sqlQuery = "insert into adres (straatnaam, huisnummer," +
+                         " toevoeging, postcode, woonplaats) values (?, ?, ?, ?)";
                  
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setString (1, straatnaam);
-                 preparedStmt.setString (2, postcode);
-                 preparedStmt.setString (3, huisnummer);
-                 preparedStmt.setString (4, toevoeging);
+                 preparedStmt.setString (2, huisnummer);
+                 preparedStmt.setString (3, toevoeging);
+                 preparedStmt.setString (4, postcode);
                  preparedStmt.setString (5, woonplaats);
                  
                  // execute the preparedstatement
@@ -380,6 +500,40 @@ public class AdresDAOImpl implements AdresDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
+    }
+
+    @Override
+    public Adres FindByKlantId(int klantId) throws SQLException {
+        // connect to DB
+        
+        Adres adres = Adres.getInstance();  
+        String sqlQuery = "select adres_id,straatnummer,toevoeging,postcode, " + 
+                "woonplaats from adres where koppelklantadres.klant_id = ? " +
+                "and adres.adres_id = koppelklantadres.adres_id";
+        stmt = con.prepareStatement(sqlQuery);        
+          
+        try{
+            stmt.setInt(1, klantId);      
+            rs = stmt.executeQuery();          
+            
+        while (rs.next()) {       
+            
+            AdresBuilder adresBuilder = new AdresBuilder();
+            adresBuilder.adresId(rs.getInt("adres_id"));
+            adresBuilder.straatNaam(rs.getString("straatnaam"));
+            adresBuilder.huisNummer(rs.getInt("huisnummer"));
+            adresBuilder.toevoeging(rs.getString("toevoeging"));
+            adresBuilder.postCode(rs.getString("postcode"));
+            adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+            // build Klant
+            adres = adresBuilder.build();
+            con.close();            
+        }        
+        }
+        catch(SQLException ex){}
+                
+        return adres;
     }
 
     
