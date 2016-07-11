@@ -12,8 +12,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.ArrayList; 
+//import java.util.Set;
+//import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
 
 /**
  *
@@ -28,7 +32,10 @@ class KlantDAOImpl implements KlantDAO {
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
-
+    
+    ArrayList <String> voornaamLijst = new ArrayList<>();
+    ArrayList <String> achternaamLijst = new ArrayList<>();
+    ArrayList <String> tussenvoegselLijst = new ArrayList<>();
     /*
     private void connectToDB () {
     
@@ -592,27 +599,36 @@ class KlantDAOImpl implements KlantDAO {
         
     }
 
-    /*
-    @Override
-    public int[] addBatchKlanten() throws Exception {
     
-    // x aantal random gegenereerde klanten creeren.     
+     @Override
+    public int[] addBatchKlanten() throws Exception {    
+	
+	// Create statement object 
+	
+        String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel)"
+                         + " values (?, ?, ?)";  
+						 
+	stmt = con.prepareStatement(sqlQuery);
+	
+        con.setAutoCommit(false);					 
+		
+	int x = (int)(Math.random()* voornaamLijst.size());
+	
+	for (int i = 0; i < x; i++){
+            String voornaam = 
+               voornaamLijst.get((int)(Math.random())*(voornaamLijst.size() + 1));
+            String achternaam = 
+               achternaamLijst.get((int)(Math.random())*(achternaamLijst.size() + 1));
+            String tussenvoegsel = 
+               tussenvoegselLijst.get ((int)(Math.random())*(tussenvoegselLijst.size() + 1));
+	
+	// Add above SQL statement in the batch.	
+	stmt.setString (1, voornaam);
+        stmt.setString (2, achternaam);
+        stmt.setString (3, tussenvoegsel);
         
-        
-    // Create statement object   
-    String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel, email)"
-                         + " values (?, ?, ?, ?)";                    
-    
-    stmt = con.prepareStatement(sqlQuery);
-    con.setAutoCommit(false);
-
-    // Add above SQL statement in the batch.
-    stmt.addBatch(sqlQuery);
-
-                 stmt.setString (2, voornaam);
-                 stmt.setString (3, achternaam);
-                 stmt.setString (4, tussenvoegsel);
-                 stmt.setString (5, email);
+        stmt.addBatch(sqlQuery);
+	}               
     
     // Create an int[] to hold returned values
     int[] count = stmt.executeBatch();
@@ -620,13 +636,91 @@ class KlantDAOImpl implements KlantDAO {
     con.commit();
         
 
-    return count;    
-        
-                 
-               
-                 
-                 
-                 
-    } */
+    return count;  
+    }
 
-}
+    @Override
+    public void vulVoornaamLijst (){
+	Scanner input = new Scanner(System.in);
+        boolean continueInput = true; 
+        
+       do{
+        try{	
+	System.out.print("Voeg nieuwe voornaam toe: ");
+	String voornaamNieuw = input.nextLine(); 
+        
+            if(!voornaamLijst.contains(voornaamNieuw)){
+                voornaamLijst.add(voornaamNieuw);  
+                continueInput = false;
+            }
+            else {
+                System.out.print("Naam bestaat al, probeer opnieuw");
+                input.nextLine();            
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+    }
+	
+    @Override
+    public void vulAchternaamLijst (){		
+		
+	Scanner input = new Scanner(System.in);
+        boolean continueInput = true; 
+        
+       do{
+        try{	
+	System.out.print("Voeg nieuwe achternaam toe: ");
+	String achternaamNieuw = input.nextLine(); 
+        
+            if(!achternaamLijst.contains(achternaamNieuw)){
+                achternaamLijst.add(achternaamNieuw);  
+                continueInput = false;
+            }
+            else {
+                System.out.print("Naam bestaat al, probeer opnieuw");
+                input.nextLine();            
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+    }
+	
+    @Override
+    public void vulTussenvoegselLijst (){		
+	Scanner input = new Scanner(System.in);
+        boolean continueInput = true; 
+        
+       do{
+        try{	
+	System.out.print("Voeg nieuwe voornaam toe: ");
+	String tussenvoegselNieuw = input.nextLine(); 
+        
+            if(!tussenvoegselLijst.contains(tussenvoegselNieuw)){
+                tussenvoegselLijst.add(tussenvoegselNieuw);  
+                continueInput = false;
+            }
+            else {
+                System.out.print("Tussenvoegsel bestaat al in de lijst, probeer opnieuw");
+                input.nextLine();            
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+    }
+		
+} 
+
+

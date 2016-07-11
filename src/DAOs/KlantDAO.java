@@ -29,6 +29,9 @@ public interface KlantDAO {
     public void deleteByKlantId() throws SQLException; 
     public void deleteByKlantNaam() throws SQLException;
     public void deleteAll() throws SQLException;
+    public int[] addBatchKlanten() throws Exception; 
+    public void vulVoornaamLijst ();
+    public void vulAchternaamLijst ();
+    public void vulTussenvoegselLijst ();
     
-    //public int[] addBatchKlanten() throws Exception;
 }
