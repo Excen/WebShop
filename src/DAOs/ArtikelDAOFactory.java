@@ -11,6 +11,8 @@ package DAOs;
  */
 public class ArtikelDAOFactory {
     public static ArtikelDAO createDAO() {
+        
+        String change = "yeah het werkt!";
         return (new ArtikelDAOImpl());
     }
 }
