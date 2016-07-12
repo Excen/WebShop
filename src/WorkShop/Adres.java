@@ -5,10 +5,6 @@
  */
 package WorkShop;
 
-import DAOs.AdresDAOImpl;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 /**
  *
  * @author Excen
@@ -35,9 +31,9 @@ public class Adres {
         throw new UnsupportedOperationException("Not supported."); 
     }
     
-    public static Adres getInstance(){
+    /*public static Adres getInstance(){
         return new Adres();
-    }
+    }*/
     
     public int getAdresId(){
         return adresId;
@@ -117,15 +113,7 @@ public class Adres {
         
     }
     
-    public static void main (String [] args) throws SQLException, ClassNotFoundException{
     
-        AdresDAOImpl adresDAO = new AdresDAOImpl();
-            ArrayList<Adres> ListAll = adresDAO.findAllAdresses();
-            for (Adres adres: ListAll) {
-                System.out.println("Adres ID is " + adres.getAdresId());
-                System.out.println("Adres naam is " + adres.getStraatNaam());
-            }
-    }
   
     
 }

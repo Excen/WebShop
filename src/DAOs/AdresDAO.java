@@ -16,12 +16,12 @@ import java.util.ArrayList;
 public interface AdresDAO {
     
     public ArrayList <Adres> findAllAdresses() throws Exception;
-    public Adres findByAdresID(int adresId) throws SQLException;
-    public Adres findByStraatNaam(String straatNaam) throws SQLException;
-    public Adres findByPostcodeHuisNummer(String postCode, String huisNummer) throws SQLException;
-    public Adres findByWoonplaats(String woonPlaats) throws SQLException;
-    public Adres FindByKlantId (int klantId) throws SQLException;
-    public void insert() throws SQLException;
+    public Adres findByAdresID(int adresId) throws SQLException, ClassNotFoundException;
+    public Adres findByStraatNaam(String straatNaam) throws SQLException,ClassNotFoundException ;
+    public Adres findByPostcodeHuisNummer(String postCode, int huisNummer) throws SQLException, ClassNotFoundException;
+    public Adres findByWoonplaats(String woonPlaats) throws SQLException, ClassNotFoundException;
+    public ArrayList<Adres> findByKlantId (int klantId) throws Exception;
+    public boolean insertAdres() throws SQLException, ClassNotFoundException;
     public void updateStraatNaam() throws SQLException;
     public void updatePostCode() throws SQLException;
     public void updateHuisNummer() throws SQLException;

@@ -26,7 +26,8 @@ import java.util.Scanner;
 class KlantDAOImpl implements KlantDAO {
 
     String driver = "com.mysql.jdbc.Driver";
-    String url = "jdbc:mysql://localhost3306/Winkel";
+    String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
+    //String url = "jdbc:mysql://localhost3306/winkel";
     String user = "Anjewe"; 
     String pw = "Koetjes"; 
     Connection con;
@@ -242,7 +243,7 @@ class KlantDAOImpl implements KlantDAO {
     }
 
     @Override
-    public Klant insert() throws SQLException {
+    public Klant insertKlant() throws SQLException {
         
         Klant klant = new Klant();
         
@@ -304,7 +305,10 @@ class KlantDAOImpl implements KlantDAO {
       System.err.println(e.getMessage());
     }
          return klant;
-  }  
+  }  /* insert klant_id ook in koppelklantadres tabel
+    check: bestaat adres al? ja: 
+    nee: 
+    */
     
     
     @Override
@@ -491,7 +495,7 @@ class KlantDAOImpl implements KlantDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
-    }    
+    }   // delete klnat_id ook uit koppelklantadres tabel 
         
     @Override
     public void deleteByKlantNaam() throws SQLException {
@@ -530,7 +534,7 @@ class KlantDAOImpl implements KlantDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
-    } 
+    } // delete klnat_id ook uit koppelklantadres tabel
     
     
     @Override
@@ -559,48 +563,49 @@ class KlantDAOImpl implements KlantDAO {
             {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
-            }
-        
-    }
+            }        
+    }  // delete klnat_id ook uit koppelklantadres tabel
 
     @Override
-    public Klant FindByAdresId(int adresId) throws SQLException {
+    public ArrayList<Klant> FindByAdresId(int adresId) throws Exception {
     
-        //connectToDB();
-        
-        Klant klant = Klant.getInstance();  
+        ArrayList<Klant> klantenByAdres = new ArrayList<>();
+                
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from klant where koppelklantadres.adres_id = ? " +
                 "and klant.klant_id = koppelklantadres.klant_id";
         
         stmt = con.prepareStatement(sqlQuery);
         try{
+            Class.forName(driver);
+            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
             stmt.setInt(1, adresId);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
+                while (rs.next()) {       
             
-            KlantBuilder klantBuilder = new KlantBuilder();
-            klantBuilder.klantId(rs.getInt("klant_id"));
-            klantBuilder.voorNaam(rs.getString("voornaam"));
-            klantBuilder.achterNaam(rs.getString("achternaam"));
-            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-            klantBuilder.email(rs.getString("email"));
+                    KlantBuilder klantBuilder = new KlantBuilder();
+                    klantBuilder.klantId(rs.getInt("klant_id"));
+                    klantBuilder.voorNaam(rs.getString("voornaam"));
+                    klantBuilder.achterNaam(rs.getString("achternaam"));
+                    klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                    klantBuilder.email(rs.getString("email"));
             
-            // build Klant
-            klant = klantBuilder.build();
-            con.close();            
-        }        
+                    // build Klant
+                    Klant klant = klantBuilder.build();
+                        
+                }        
+            }
         }
-        catch(SQLException ex){}
+        catch(SQLException | ClassNotFoundException ex){}
                 
-        return klant; 
+        return klantenByAdres; 
         
         
     }
 
     
-     @Override
+     @Override // gebruik methode insert van hier boven. 
     public int[] addBatchKlanten() throws Exception {    
 	
 	// Create statement object 
@@ -637,7 +642,7 @@ class KlantDAOImpl implements KlantDAO {
         
 
     return count;  
-    }
+    }  
 
     @Override
     public void vulVoornaamLijst (){

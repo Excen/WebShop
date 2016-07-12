@@ -20,12 +20,13 @@ public interface KlantDAO {
     public Klant findByAchterNaam(String achterNaam) throws SQLException;
     public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) throws SQLException;
     public Klant findByEmail(String email) throws SQLException;
-    public Klant FindByAdresId (int adresId) throws SQLException; 
-    public Klant insert() throws SQLException;
+    public ArrayList<Klant> FindByAdresId (int adresId) throws Exception; 
+    public Klant insertKlant() throws SQLException;
     public void updateVoorNaam() throws SQLException;
     public void updateAchterNaam() throws SQLException; 
     public void updateTussenVoegsel() throws SQLException; 
     public void updateEmail() throws SQLException; 
+    //public void updateAdresKlant (int adresId) throws Exception;
     public void deleteByKlantId() throws SQLException; 
     public void deleteByKlantNaam() throws SQLException;
     public void deleteAll() throws SQLException;
@@ -33,5 +34,6 @@ public interface KlantDAO {
     public void vulVoornaamLijst ();
     public void vulAchternaamLijst ();
     public void vulTussenvoegselLijst ();
+     
     
 }

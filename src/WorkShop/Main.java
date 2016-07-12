@@ -1,37 +1,24 @@
 package WorkShop;
 
+import DAOs.AdresDAOImpl;
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
  * @author Excen
  */
-public class Main {
-    public static void main (String[]args) throws SQLException{
-        
-        String driver ="";
-        String Url = "Voorbeeld Url";
-        String User = "Anjewe";
-        String Pw = "Koetjes";
-        String search = "voorbeeldSearch";
-        
-        
-        
-        
+public class Main {        
         /*
         
         Statement stat = connectie.prepareStatement(Select search from *);
         ResultSet result = stat.executeQuery();
-        
-        
         
     }
     // connection to Database
@@ -52,18 +39,57 @@ public class Main {
             System.out.print ("Please first connect to a database")
             return; 
         }
-        else {
-        
-        
-        }
+        else {       
         
         }
         
-        
-        
-        
+        }        
         */
+        
+    public static void main (String [] args) throws SQLException, ClassNotFoundException{
+   
+    String driver = "com.mysql.jdbc.Driver";
+    String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
+    //String url = "jdbc:mysql://localhost3306/winkel";
+    String user = "Anjewe"; 
+    String pw = "Koetjes"; 
+    Connection con;
+    ResultSet rs;
+    PreparedStatement stmt;
+        
+        try {
+        
+        Class.forName(driver);
+        con = DriverManager.getConnection(url,user,pw);
+
+        System.out.println("connected with "+ con.toString());
+
+        AdresDAOImpl adresDAO = new AdresDAOImpl();
+        //adresDAO.insertAdres();
+       
+        boolean updateGelukt = adresDAO.insertAdres();
+        //System.out.println(adres.getAdresId() + " " + adres.getWoonPlaats() );
+        System.out.println("Adres toevoegen is gelukt: " + updateGelukt);
+        
+        
+        /*
+        ArrayList<Adres> adressen = adresDAO.findAllAdresses();
+        for (int i = 0; i< adressen.size(); i++){
+            System.out.println ((adressen.get(i)).getAdresId() + "  " +
+                    (adressen.get(i)).getStraatNaam() + "  " +(adressen.get(i)).getHuisNummer() +
+                    "  " + (adressen.get(i)).getToevoeging() +
+                    "  " + (adressen.get(i)).getPostCode() +
+                    "  " + (adressen.get(i)).getWoonPlaats());
+        } */
+        }    
+        catch(SQLException | HeadlessException e) {
+        System.out.print("not connect to server and message is: " + e.getMessage());
+        }
+                   
     }
+}
+        
+    
     
 
-}
+
