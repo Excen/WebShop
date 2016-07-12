@@ -5,6 +5,7 @@
  */
 package DAOs;
 
+
 import WorkShop.Bestelling;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,12 +16,10 @@ import java.util.ArrayList;
 public interface BestellingDAO {
     
     public ArrayList<Bestelling> findAll() throws SQLException;
-    public Bestelling FindById(int bestelling_id);
-    public boolean instert (Bestelling bestelling) throws SQLException;
-    public boolean update (Bestelling bestelling) throws SQLException;
-    public boolean delete (Bestelling bestelling) throws SQLException;
-    
-    
-    
+    public Bestelling findById(int bestelling_id) throws SQLException;
+    public void createBestelling(Bestelling bestelling) throws SQLException;
+    public void updateKlantId(int bestelling_id, int klant_id) throws SQLException;
+    public void deleteBestelling(int bestelling_id) throws SQLException;
+    public void deleteAll() throws SQLException;  
 }
 

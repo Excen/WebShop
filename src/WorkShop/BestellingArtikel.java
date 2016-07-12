@@ -1,21 +1,18 @@
-package WorkShop;
-
-import java.util.ArrayList;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package WorkShop;
 
 /**
  *
  * @author Excen
  */
-public class Bestelling {
+public class BestellingArtikel {
     private int bestelling_id;
-    private int klant_id;
-    private java.util.Date datum;
+    private int artikel_id;
+    private int artikel_aantal;
 
     /**
      * @return the bestelling_id
@@ -32,39 +29,36 @@ public class Bestelling {
     }
 
     /**
-     * @return the klant_id
+     * @return the artikel_id
      */
-    public int getKlant_id() {
-        return klant_id;
+    public int getArtikel_id() {
+        return artikel_id;
     }
 
     /**
-     * @param klant_id the klant_id to set
+     * @param artikel_id the artikel_id to set
      */
-    public void setKlant_id(int klant_id) {
-        this.klant_id = klant_id;
+    public void setArtikel_id(int artikel_id) {
+        this.artikel_id = artikel_id;
     }
 
     /**
-     * @return the datum
+     * @return the artikel_aantal
      */
-    public java.util.Date getDatum() {
-        return datum;
+    public int getArtikel_aantal() {
+        return artikel_aantal;
     }
 
     /**
-     * @param datum the datum to set
+     * @param artikel_aantal the artikel_aantal to set
      */
-    public void setDatum(java.util.Date datum) {
-        this.datum = datum;
+    public void setArtikel_aantal(int artikel_aantal) {
+        this.artikel_aantal = artikel_aantal;
     }
     
     
     
     
-   
-
-
-
-
+    
+    
 }
