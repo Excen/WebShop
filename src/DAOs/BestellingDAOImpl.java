@@ -6,6 +6,7 @@
 package DAOs;
 
 import WorkShop.Bestelling;
+import WorkShop.Klant;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -100,12 +101,37 @@ public class BestellingDAOImpl implements BestellingDAO {
           return bestellinglijst;  
           }
     
+    @Override
+    public Klant findKlantByBestellingId (int bestelling_id) throws SQLException {
+        
+        int klant_id;
+        Klant klantje = new Klant();
+        
+        String sqlQuery = "select klant_id from bestelling where bestelling_id = " + bestelling_id;
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BestellingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        con = DriverManager.getConnection(url, user, pw);
+        stmt = con.prepareStatement(sqlQuery);
+        rs = stmt.executeQuery();
+        
+        while (rs.next()){
+        klant_id = rs.getInt("klant_id"); 
+        KlantDAO klantDAO = new KlantDAOImpl();
+        klantje = klantDAO.findByKlantId(klant_id);    
+        }
 
+        return klantje;
+    }
     
     @Override
     public Bestelling findById(int bestelling_id) throws SQLException {
         
-        String sqlQuery = "select * from bestelling where bestelling_id" + bestelling_id;
+        String sqlQuery = "select * from bestelling where bestelling_id = " + bestelling_id;
         Bestelling bestelling = null;
         
         try {

@@ -16,7 +16,19 @@ public class Bestelling {
     private int bestelling_id;
     private int klant_id;
     private java.util.Date datum;
-
+    
+    // Constructor
+    public Bestelling(int bestelling_id, int klant_id){
+        this.bestelling_id = bestelling_id;
+        this.klant_id = klant_id;
+        datum = new java.util.Date();
+    }
+    
+    public Bestelling(){
+        
+    }
+    
+    
     /**
      * @return the bestelling_id
      */

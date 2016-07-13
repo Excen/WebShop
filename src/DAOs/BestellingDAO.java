@@ -7,6 +7,7 @@ package DAOs;
 
 
 import WorkShop.Bestelling;
+import WorkShop.Klant;
 import java.sql.SQLException;
 import java.util.ArrayList;
 /**
@@ -17,6 +18,7 @@ public interface BestellingDAO {
     
     public ArrayList<Bestelling> findAll() throws SQLException;
     public Bestelling findById(int bestelling_id) throws SQLException;
+    public Klant findKlantByBestellingId (int bestelling_id) throws SQLException;
     public void createBestelling(Bestelling bestelling) throws SQLException;
     public void updateKlantId(int bestelling_id, int klant_id) throws SQLException;
     public void deleteBestelling(int bestelling_id) throws SQLException;

@@ -13,7 +13,19 @@ public class BestellingArtikel {
     private int bestelling_id;
     private int artikel_id;
     private int artikel_aantal;
-
+    
+    // Constructor
+    public BestellingArtikel(int bestelling_id, int artikel_id, int artikel_aantal){
+        this.bestelling_id = bestelling_id;
+        this.artikel_id = artikel_id;
+        this.artikel_aantal = artikel_aantal;
+    }
+    
+    public BestellingArtikel(){
+        
+    }
+    
+    
     /**
      * @return the bestelling_id
      */
