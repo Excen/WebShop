@@ -24,11 +24,11 @@ public interface AdresDAO {
     public boolean insertAdres() throws SQLException, ClassNotFoundException;
     public boolean updateStraatNaam() throws SQLException;
     public boolean updatePostCode() throws SQLException;
-    public void updateHuisNummer() throws SQLException;
-    public void updateToevoeging() throws SQLException;
-    public void updateWoonplaats() throws SQLException;
-    public void delete() throws SQLException;
-    public void deleteAll() throws SQLException;
+    public boolean updateHuisNummer() throws SQLException;
+    public boolean updateToevoeging() throws SQLException;
+    public boolean updateWoonplaats() throws SQLException;
+    public boolean deleteAdres() throws SQLException;
+    public boolean deleteAll() throws SQLException;
     
     
 }

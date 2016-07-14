@@ -249,6 +249,46 @@ public class AdresDAOImpl implements AdresDAO {
         return adres;
     }
     
+    @Override
+    public ArrayList<Adres> findByKlantId(int klantId) throws Exception{
+        
+        ArrayList<Adres> adressenByKlant = new ArrayList<>();
+        
+         
+        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+                "woonplaats from adres where koppelklantadres.klant_id = ? " +
+                "and adres.adres_id = koppelklantadres.adres_id";
+        stmt = con.prepareStatement(sqlQuery);        
+        
+        try{
+            Class.forName(driver);
+            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+            stmt.setInt(1, klantId);      
+            rs = stmt.executeQuery();          
+            
+                while (rs.next()) {       
+             
+                    AdresBuilder adresBuilder = new AdresBuilder();
+                    adresBuilder.adresId(rs.getInt("adres_id"));
+                    adresBuilder.straatNaam(rs.getString("straatnaam"));
+                    adresBuilder.huisNummer(rs.getInt("huisnummer"));
+                    adresBuilder.toevoeging(rs.getString("toevoeging"));
+                    adresBuilder.postCode(rs.getString("postcode"));
+                    adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+                     // build Klant
+                    Adres adres = adresBuilder.build();
+                    adressenByKlant.add(adres);
+                     
+                } 
+            }
+        }
+        catch(SQLException  | ClassNotFoundException ex) {
+            Logger.getLogger(AdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+         return adressenByKlant;
+    }
     
     @Override //werkt
     // verwerk de constraint voornaam, achternaam, email
@@ -349,7 +389,7 @@ public class AdresDAOImpl implements AdresDAO {
     }
 
 
-    @Override
+    @Override // werkt
     public boolean updatePostCode() throws SQLException {
         boolean updated = false; 
         
@@ -390,7 +430,8 @@ public class AdresDAOImpl implements AdresDAO {
 
 
     @Override
-    public void updateHuisNummer() throws SQLException {
+    public boolean updateHuisNummer() throws SQLException {
+        boolean updated = false; 
         
         Scanner input = new Scanner(System.in);
         System.out.print("Adres ID: ");
@@ -417,6 +458,8 @@ public class AdresDAOImpl implements AdresDAO {
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
+                 updated = true; 
+                 
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -424,11 +467,13 @@ public class AdresDAOImpl implements AdresDAO {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
+         return updated; 
     }
 
 
     @Override
-    public void updateToevoeging() throws SQLException {
+    public boolean updateToevoeging() throws SQLException {
+        boolean updated = false; 
         
         Scanner input = new Scanner(System.in);
         System.out.print("Adres ID: ");
@@ -455,6 +500,7 @@ public class AdresDAOImpl implements AdresDAO {
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
+                 updated = true; 
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -462,11 +508,13 @@ public class AdresDAOImpl implements AdresDAO {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
+         return updated; 
     }
 
 
     @Override
-    public void updateWoonplaats() throws SQLException {
+    public boolean updateWoonplaats() throws SQLException {
+        boolean updated = false;
         
         Scanner input = new Scanner(System.in);
         System.out.print("Adres ID: ");
@@ -493,6 +541,7 @@ public class AdresDAOImpl implements AdresDAO {
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
+                 updated = true; 
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -500,12 +549,15 @@ public class AdresDAOImpl implements AdresDAO {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
+         return updated; 
     }
     
     
 
     @Override
-    public void delete() throws SQLException {
+    public boolean deleteAdres() throws SQLException {
+    
+        boolean deleted = false; 
         
     Scanner input = new Scanner(System.in);
     System.out.print("Adres ID: ");
@@ -528,6 +580,8 @@ public class AdresDAOImpl implements AdresDAO {
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
+                 deleted = true; 
+                 
              }
       }
     
@@ -536,11 +590,13 @@ public class AdresDAOImpl implements AdresDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
+      return deleted; 
     }
 // delete adres_id ook uit koppelklantadres tabel
 
     @Override
-    public void deleteAll() throws SQLException {
+    public boolean  deleteAll() throws SQLException {
+        boolean deleted = false;
         
         try{  
             
@@ -558,6 +614,7 @@ public class AdresDAOImpl implements AdresDAO {
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
+                 deleted = true; 
              }
       }
     
@@ -566,53 +623,7 @@ public class AdresDAOImpl implements AdresDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
+        return deleted; 
     }// delete adres_id ook uit koppelklantadres tabel
-
-    @Override
-    public ArrayList<Adres> findByKlantId(int klantId) throws Exception{
-        
-        ArrayList<Adres> adressenByKlant = new ArrayList<>();
-        
-         
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
-                "woonplaats from adres where koppelklantadres.klant_id = ? " +
-                "and adres.adres_id = koppelklantadres.adres_id";
-        stmt = con.prepareStatement(sqlQuery);        
-          
-    
-        
-        try{
-            Class.forName(driver);
-            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-            stmt.setInt(1, klantId);      
-            rs = stmt.executeQuery();          
-            
-                while (rs.next()) {       
-             
-                    AdresBuilder adresBuilder = new AdresBuilder();
-                    adresBuilder.adresId(rs.getInt("adres_id"));
-                    adresBuilder.straatNaam(rs.getString("straatnaam"));
-                    adresBuilder.huisNummer(rs.getInt("huisnummer"));
-                    adresBuilder.toevoeging(rs.getString("toevoeging"));
-                    adresBuilder.postCode(rs.getString("postcode"));
-                    adresBuilder.woonPlaats(rs.getString("woonplaats"));
-            
-                     // build Klant
-                    Adres adres = adresBuilder.build();
-                    adressenByKlant.add(adres);
-                     
-                } 
-            }
-        }
-        catch(SQLException  | ClassNotFoundException ex) {
-            Logger.getLogger(AdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-         return adressenByKlant;
-    }
-                
-       
-    }
-
-    
-
+                    
+}

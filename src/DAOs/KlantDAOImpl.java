@@ -145,9 +145,11 @@ class KlantDAOImpl implements KlantDAO {
         con = DriverManager.getConnection(url,
                 user, pw);
         System.out.println("Database Connected"); 
+        
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where voornaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
+        
         try{
             stmt.setString(1, voorNaam);      
             rs = stmt.executeQuery();          
@@ -190,6 +192,7 @@ class KlantDAOImpl implements KlantDAO {
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where achternaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
+        
         try{
             stmt.setString(1, achterNaam);      
             rs = stmt.executeQuery();          
@@ -231,6 +234,7 @@ class KlantDAOImpl implements KlantDAO {
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where email = ? ";
         stmt = con.prepareStatement(sqlQuery);
+        
         try{
             stmt.setString(1, email);      
             rs = stmt.executeQuery();          
