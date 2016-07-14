@@ -33,7 +33,7 @@ public class ArtikelDAOImpl implements ArtikelDAO {
             // get the fields from one artikel and store it in an Artikel object
             Artikel artikel = new Artikel();
             artikel.setArtikelID(rs.getInt("artikel_id"));
-            artikel.setArtikelNaam(rs.getString("atrikel_naam"));
+            artikel.setArtikelNaam(rs.getString("artikel_naam"));
             artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
                      
             // add the artikel in the list
