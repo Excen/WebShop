@@ -248,10 +248,9 @@ public class AdresDAOImpl implements AdresDAO {
         }                
         return adres;
     }
-
+    
     
     @Override //werkt
-
     // verwerk de constraint voornaam, achternaam, email
     public boolean insertAdres() throws SQLException, ClassNotFoundException {
         
@@ -307,9 +306,11 @@ public class AdresDAOImpl implements AdresDAO {
          return inserted;
   }    // insert adres_id ook in koppelklantadres tabel
 
-    @Override
-    public void updateStraatNaam() throws SQLException {
+    @Override // werkt
+    public boolean updateStraatNaam() throws SQLException {
         
+        boolean updated = false; 
+                
         Scanner input = new Scanner(System.in);
         System.out.print("Adres ID: ");
         int adresId = input.nextInt();
@@ -323,7 +324,7 @@ public class AdresDAOImpl implements AdresDAO {
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
                  // create a sql date object so we can use it in our INSERT statement
-                 
+                                  
                  // the mysql insert statement
                  String sqlQuery = "Update Adres set straatnaam = ? where adres_id = " 
                          + adresId ;
@@ -331,9 +332,11 @@ public class AdresDAOImpl implements AdresDAO {
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setString (1, straatnaam);
+                 
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
+                 updated = true; 
                  
              }
     }
@@ -342,11 +345,13 @@ public class AdresDAOImpl implements AdresDAO {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
+         return updated; 
     }
 
 
     @Override
-    public void updatePostCode() throws SQLException {
+    public boolean updatePostCode() throws SQLException {
+        boolean updated = false; 
         
         Scanner input = new Scanner(System.in);
         System.out.print("Adres ID: ");
@@ -372,7 +377,7 @@ public class AdresDAOImpl implements AdresDAO {
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
-                 
+                 updated = true;
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -380,6 +385,7 @@ public class AdresDAOImpl implements AdresDAO {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
+         return updated; 
     }
 
 

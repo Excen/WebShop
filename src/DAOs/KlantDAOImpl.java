@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 /**
  *
  * @author Wendy
@@ -54,41 +53,59 @@ class KlantDAOImpl implements KlantDAO {
     @Override
     public ArrayList<Klant> findAllKlanten() throws SQLException, ClassNotFoundException {
        
-        //connectToDB();
-        
+        KlantBuilder klantBuilder = new KlantBuilder();     
         ArrayList<Klant> klantenLijst = new ArrayList<>();
-       
+        
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected");
+        
         String sqlQuery = "select * from Klant";
         
         try{
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
-        while (rs.next()) {
             
-            KlantBuilder klantBuilder = new KlantBuilder();
-            klantBuilder.klantId(rs.getInt("klant_id"));
-            klantBuilder.voorNaam(rs.getString("voornaam"));
-            klantBuilder.achterNaam(rs.getString("achternaam"));
-            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-            klantBuilder.email(rs.getString("email"));
+            while (rs.next()) {
             
-            // build Klant
-            Klant klant = klantBuilder.build();    
-            //voeg klant toe aan lijst
-            klantenLijst.add(klant);
-            con.close(); 
+                klantBuilder.klantId(rs.getInt("klant_id"));
+                klantBuilder.voorNaam(rs.getString("voornaam"));
+                klantBuilder.achterNaam(rs.getString("achternaam"));
+                klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                klantBuilder.email(rs.getString("email"));
+            
+                // build Klant
+                Klant klant = klantBuilder.build();    
+                //voeg klant toe aan lijst
+                klantenLijst.add(klant);             
+            }
+            con.close();
         }
-        }
-        catch( SQLException ex){}
-                               
+        catch( SQLException ex){
+            System.out.println(ex.getMessage());
+        }                               
         return klantenLijst; 
     }
     
     @Override
-    public Klant findByKlantId(int klantId) throws SQLException {
-        //connectToDB();
+    public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException {
         
-        Klant klant = Klant.getInstance();  
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected");
+        
+          
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where klant_id = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -96,9 +113,8 @@ class KlantDAOImpl implements KlantDAO {
             stmt.setInt(1, klantId);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
+        while (rs.next()) {  
             
-            KlantBuilder klantBuilder = new KlantBuilder();
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -107,8 +123,9 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                        
+        }  
+        con.close();      
         }
         catch(SQLException ex){}
                 
@@ -116,10 +133,18 @@ class KlantDAOImpl implements KlantDAO {
     }
     
     @Override    
-    public Klant findByVoorNaam(String voorNaam) throws SQLException {
-        //connectToDB();
+    public Klant findByVoorNaam(String voorNaam) throws SQLException, ClassNotFoundException {
         
-        Klant klant = Klant.getInstance();  
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where voornaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -127,30 +152,41 @@ class KlantDAOImpl implements KlantDAO {
             stmt.setString(1, voorNaam);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
+            while (rs.next()) {
             
-            KlantBuilder klantBuilder = new KlantBuilder();
-            klantBuilder.klantId(rs.getInt("klant_id"));
-            klantBuilder.voorNaam(rs.getString("voornaam"));
-            klantBuilder.achterNaam(rs.getString("achternaam"));
-            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-            klantBuilder.email(rs.getString("email"));
+                klantBuilder.klantId(rs.getInt("klant_id"));
+                klantBuilder.voorNaam(rs.getString("voornaam"));
+                klantBuilder.achterNaam(rs.getString("achternaam"));
+                klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                klantBuilder.email(rs.getString("email"));
             
-            // build Klant
-            klant = klantBuilder.build();
-            con.close();            
-        }        
+                // build Klant
+                klant = klantBuilder.build();
+                        
+            }   
+            con.close();     
+        } 
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
         }
-        catch(SQLException ex){}
                 
         return klant;
     }
 
     @Override
-    public Klant findByAchterNaam(String achterNaam) throws SQLException {
-        //connectToDB();
+    public Klant findByAchterNaam(String achterNaam) throws SQLException, ClassNotFoundException {
         
-        Klant klant = Klant.getInstance();  
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
+        
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where achternaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -158,9 +194,7 @@ class KlantDAOImpl implements KlantDAO {
             stmt.setString(1, achterNaam);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
-            
-            KlantBuilder klantBuilder = new KlantBuilder();
+        while (rs.next()) {               
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -169,21 +203,31 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                       
+        }  
+        con.close();       
         }
-        catch(SQLException ex){}
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        }
                 
         return klant;
     }
 
-
     @Override
-    public Klant findByEmail(String email) throws SQLException {
+    public Klant findByEmail(String email) throws SQLException, ClassNotFoundException {
         
-        //connectToDB();
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
         
-        Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where email = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -192,8 +236,6 @@ class KlantDAOImpl implements KlantDAO {
             rs = stmt.executeQuery();          
             
         while (rs.next()) {       
-            
-            KlantBuilder klantBuilder = new KlantBuilder();
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -202,19 +244,32 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                        
+        } 
+        con.close();       
         }
-        catch(SQLException ex){}
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        }
                 
         return klant;
     }
 
     @Override
-    public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) throws SQLException {
-       //connectToDB();
+    public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) 
+            throws SQLException, ClassNotFoundException {
+       
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
         
-        Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where voorNaam = ? and achterNaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -225,7 +280,6 @@ class KlantDAOImpl implements KlantDAO {
             
         while (rs.next()) {       
             
-            KlantBuilder klantBuilder = new KlantBuilder();
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -234,10 +288,13 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                        
+        } 
+        con.close();       
         }
-        catch(SQLException ex){}
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        }
                 
         return klant;
     }
@@ -724,6 +781,12 @@ class KlantDAOImpl implements KlantDAO {
            input.nextLine();
         }
        }while(continueInput);
+    }
+
+    
+    @Override
+    public void updateAdresKlant(int adresId) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 		
 } 

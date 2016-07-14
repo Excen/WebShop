@@ -67,9 +67,12 @@ public class Main {
         AdresDAOImpl adresDAO = new AdresDAOImpl();
         //adresDAO.insertAdres();
        
-        boolean updateGelukt = adresDAO.insertAdres();
+        Adres adres = adresDAO.findByAdresID(15);
+        System.out.println(adres);
+        
+        boolean updateGelukt = adresDAO.updatePostCode();
         //System.out.println(adres.getAdresId() + " " + adres.getWoonPlaats() );
-        System.out.println("Adres toevoegen is gelukt: " + updateGelukt);
+        System.out.println("adres updaten is gelukt: " + updateGelukt);
         
         
         /*
