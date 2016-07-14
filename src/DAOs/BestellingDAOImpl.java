@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Excen
  */
-public class BestellingDAOImpl implements BestellingDAO {
+public class BestellingDAOImpl implements BestellingDAOInterface {
     
     // Info inlog SQL
     String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
@@ -174,7 +174,6 @@ public class BestellingDAOImpl implements BestellingDAO {
         stmt.executeUpdate();
 
     }
-    
     
     /*
     Create a Java Connection to our MySQL database.

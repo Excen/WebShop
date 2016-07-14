@@ -21,9 +21,8 @@ import java.util.logging.Logger;
  *
  * @author Excen
  */
-public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
-    
-    
+public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
+   
     /*
     Haalt gegevens uit de koppeltabel BestellingArtikel.
     Deze gegevens zijn:
@@ -50,7 +49,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
         int artikel_aantal = bestellingArtikel.getArtikel_aantal();
         
         // schrijf ze weg in SQL tabel. 
-        String sqlQuery = "insert into koppelbestellingartikel (bestelling_id, artikel_id, artikel_aantal)"
+        String sqlQuery = "insert into koppelbestellingartikel (bestelling_id, artikel_id, aantal)"
         + " values (?, ?, ?)";
         
         con = DriverManager.getConnection(url, user, pw);
@@ -69,11 +68,14 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
         
         String sqlQuery = "select * from koppelbestellingartikel";
         
+        
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+            
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
@@ -83,7 +85,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
             BestellingArtikel bestelling = new BestellingArtikel();
             bestelling.setBestelling_id(rs.getInt("bestelling_id"));
             bestelling.setArtikel_id(rs.getInt("artikel_id"));
-            bestelling.setArtikel_aantal(rs.getInt("artikel_aantal"));
+            bestelling.setArtikel_aantal(rs.getInt("aantal"));
 
             // add bestelling in de list
             bestellingArtikellijst.add(bestelling);
@@ -94,13 +96,13 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
     
           // find info about ID - refactor - webshop.bestelingartikel
     
+    
     @Override
-    public ArrayList<Artikel> findByBestellingId(int bestelling_id) throws SQLException {
+    public ArrayList<Integer> findByBestellingId2 (int bestelling_id) throws SQLException {
         
-        ArrayList<Artikel>artikelLijst = new ArrayList<>();
+        ArrayList<Integer>artikelLijst = new ArrayList<>();
         
         String sqlQuery = "select * from koppelbestellingartikel where bestelling_id = " + bestelling_id;
-        Bestelling bestelling = null;
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -112,14 +114,46 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
         
-        ArtikelDAO artikeldao = new ArtikelDAOImpl();
+        while (rs.next()){
+            int b = rs.getInt("bestelling_id");
+            int a = rs.getInt("artikel_id");
+            int aa = rs.getInt("aantal");
+            
+            artikelLijst.add(a);
+        }
+        
+        return artikelLijst;
+        
+    }
+    
+    
+    @Override
+    public ArrayList<Artikel> findByBestellingId(int bestelling_id) throws SQLException {
+        
+        ArrayList<Artikel>artikelLijst = new ArrayList<>();
+        
+        String sqlQuery = "select * from koppelbestellingartikel where bestelling_id = " + bestelling_id;
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        con = DriverManager.getConnection(url, user, pw);
+        stmt = con.prepareStatement(sqlQuery);
+        rs = stmt.executeQuery();
+        
+        ArtikelDAO artikelDao = new ArtikelDAOImpl();
             
         while (rs.next()) {
 
             try {
-                // try catch moet omdat artikel classnotfoundexception throwed
-                Artikel artikeltje = artikeldao.findByArtikelID(rs.getInt("artikel_id"));
-                int aantal = rs.getInt("artikel_aantal");
+                int bestelling_idtje = rs.getInt("bestelling_id");
+                int artikel_idtje = rs.getInt("artikel_id");
+                int aantal = rs.getInt("aantal");
+                
+                Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
                 for (int i = 0; i < aantal; i++){
                 artikelLijst.add(artikeltje);
             }
@@ -154,7 +188,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
         while (rs.next()) {
             
             Bestelling bestelling = new Bestelling();
-            BestellingDAO bestellingDao = new BestellingDAOImpl();
+            BestellingDAOInterface bestellingDao = new BestellingDAOImpl();
             bestelling = bestellingDao.findById(rs.getInt("artikel_id"));
 
             // zet in arraylist
@@ -168,7 +202,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAO {
     @Override
     public void updateBestellingArtikelAantal(int bestelling_id, int artikel_id, int newArtikel_aantal) throws SQLException {
         
-        String sqlQuery = "update koppelbestellingartikel set artikel_aantal = " + newArtikel_aantal + "where bestelling_id = ? and artikel_id = ?";
+        String sqlQuery = "update koppelbestellingartikel set aantal = " + newArtikel_aantal + "where bestelling_id = ? and artikel_id = ?";
 
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
