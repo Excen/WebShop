@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Excen
  */
-public interface BestellingDAO {
+public interface BestellingDAOInterface {
     
     public ArrayList<Bestelling> findAll() throws SQLException;
     public Bestelling findById(int bestelling_id) throws SQLException;

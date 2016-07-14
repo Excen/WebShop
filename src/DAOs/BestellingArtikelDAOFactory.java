@@ -9,9 +9,9 @@ package DAOs;
  *
  * @author Excen
  */
-public class BestellingDAOFactory {
-    public static BestellingDAOInterface createDAO(){
-        return (new BestellingDAOImpl());
+public class BestellingArtikelDAOFactory {
+    public static BestellingArtikelDAOInterface createDAO(){
+        return (new BestellingArtikelDAOImpl());
     }
 }
 

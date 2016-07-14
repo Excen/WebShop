@@ -15,14 +15,20 @@ import java.util.ArrayList;
 public class Bestelling {
     private int bestelling_id;
     private int klant_id;
-    private int artikel_id1;
-    private String artikel_naam1;
-    private int artikel_aantal1;
-    private float artikel_prijs1;
-
+    private java.util.Date datum;
     
-    public Bestelling(){};
-
+    // Constructor
+    public Bestelling(int bestelling_id, int klant_id){
+        this.bestelling_id = bestelling_id;
+        this.klant_id = klant_id;
+        datum = new java.util.Date();
+    }
+    
+    public Bestelling(){
+        
+    }
+    
+    
     /**
      * @return the bestelling_id
      */
@@ -52,64 +58,25 @@ public class Bestelling {
     }
 
     /**
-     * @return the artikel_id1
+     * @return the datum
      */
-    public int getArtikel_id1() {
-        return artikel_id1;
+    public java.util.Date getDatum() {
+        return datum;
     }
 
     /**
-     * @param artikel_id1 the artikel_id1 to set
+     * @param datum the datum to set
      */
-    public void setArtikel_id1(int artikel_id1) {
-        this.artikel_id1 = artikel_id1;
-    }
-
-    /**
-     * @return the artikel_naam1
-     */
-    public String getArtikel_naam1() {
-        return artikel_naam1;
-    }
-
-    /**
-     * @param artikel_naam1 the artikel_naam1 to set
-     */
-    public void setArtikel_naam1(String artikel_naam1) {
-        this.artikel_naam1 = artikel_naam1;
-    }
-
-    /**
-     * @return the artikel_aantal1
-     */
-    public int getArtikel_aantal1() {
-        return artikel_aantal1;
-    }
-
-    /**
-     * @param artikel_aantal1 the artikel_aantal1 to set
-     */
-    public void setArtikel_aantal1(int artikel_aantal1) {
-        this.artikel_aantal1 = artikel_aantal1;
-    }
-
-    /**
-     * @return the artikel_prijs1
-     */
-    public float getArtikel_prijs1() {
-        return artikel_prijs1;
-    }
-
-    /**
-     * @param artikel_prijs1 the artikel_prijs1 to set
-     */
-    public void setArtikel_prijs1(float artikel_prijs1) {
-        this.artikel_prijs1 = artikel_prijs1;
+    public void setDatum(java.util.Date datum) {
+        this.datum = datum;
     }
     
     
     
+    
+   
+
+
+
+
 }
-    
-    
-
