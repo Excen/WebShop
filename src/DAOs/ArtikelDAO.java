@@ -14,12 +14,12 @@ import java.util.ArrayList;
  * @author Anne
  */
 public interface ArtikelDAO {
-    public ArrayList<Artikel> findAll() throws SQLException, ClassNotFoundException;
-    public Artikel findByArtikelID(int artikelID) throws SQLException, ClassNotFoundException;
-    public Artikel findByArtikelNaam(String artikelNaam) throws SQLException, ClassNotFoundException;
-    public Artikel findByArtikelPrijs (double artikelPrijs) throws SQLException, ClassNotFoundException;
-    public void insertArtikel (int artikelID, String artikelNaam, double artikelPrijs) throws ClassNotFoundException;
-    public void deleteArtikel(int artikelID) throws SQLException, ClassNotFoundException;
+    public ArrayList<Artikel> findAll();
+    public Artikel findByArtikelID(int artikelID);
+    public Artikel findByArtikelNaam(String artikelNaam);
+    public Artikel findByArtikelPrijs (double artikelPrijs);
+    public boolean insertArtikel (int artikelID, String artikelNaam, double artikelPrijs);
+    public void deleteArtikel(int artikelID);
     public void update(Artikel artikel) throws SQLException, ClassNotFoundException;
     
 }

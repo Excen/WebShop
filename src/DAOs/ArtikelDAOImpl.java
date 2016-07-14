@@ -10,111 +10,123 @@ import java.util.ArrayList;
 
 public class ArtikelDAOImpl implements ArtikelDAO {
     
-    /** strusture:
-    * driver;
-    * connection;
-    * ResultSet;
-    * PreperaredStatement;
-    * public Artikel[] // arraylist? findAll method() throws SQLException {
-    *   Artikel[] artikel;
-    *   String sqlQuery = "select * from Artikel";
-    *   con = ResourceManager.getConnection();
-    *   stmt = con.prepareStatement(sqlquery);
-    *   rs = statement.executeQuery();
-    *   while (rs.next) {
-    *       // get columns and stor in array;
-    *       }
-    *   return artikel;
-    *   }
-    */
-    
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
+    String driver = "com.mysql.jdbc.Driver";
+    String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
+    String gebruikersNaam = "Anjewe";
+    String wachtwoord = "Koetjes";
    
    
     @Override
-    public ArrayList<Artikel> findAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Artikel> findAll() {
         ArrayList<Artikel> artikelList = new ArrayList<>();
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost3306/winkel", "Anjewe", "Koetjes");
-        String sqlQuery = "select * from artikel";
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord); 
+            String sqlQuery = "select * from artikel";
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
+        
         while (rs.next()) {
-            /** get the fields from one artikel
-             * and store it in an Artikel object
-             */
+            // get the fields from one artikel and store it in an Artikel object
             Artikel artikel = new Artikel();
             artikel.setArtikelID(rs.getInt("artikel_id"));
-            artikel.setArtikelNaam(rs.getString("atrikel_naam"));
+            artikel.setArtikelNaam(rs.getString("artikel_naam"));
             artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
+                     
             // add the artikel in the list
             artikelList.add(artikel);
             }
-          con.close();
-          return artikelList;  
-       
-       // ga morgen verder    
-}
-    
+        }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Data search failed");
+            ex.printStackTrace();
+            }  
+        
+        return artikelList;  
+        }
+           
+
             
     @Override
-    public Artikel findByArtikelID (int artikelID) throws SQLException, ClassNotFoundException {
-        // implementation code
-        
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/winkel", "Anjewe", "Koetjes");
-        String sqlQuery = "select * from artikel where artikel_id = " + artikelID;
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
+    public Artikel findByArtikelID (int artikelID) {
         Artikel artikel = new Artikel();
-        artikel.setArtikelID(rs.getInt("artikel_id"));
-        artikel.setArtikelNaam(rs.getString("artikel_naam"));
-        artikel.setArtikelPrijs(rs.getDouble("artikel_double"));
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
+            String sqlQuery = "select * from artikel where artikel_id = " + artikelID;
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
         
+            while (rs.next()) {
+                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelNaam(rs.getString("artikel_naam"));
+                artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
+            }
+        }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Data search failed");
+            ex.printStackTrace();
+            }  
         return artikel;
         }
     
     @Override
-    public Artikel findByArtikelNaam (String artikelNaam) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Winkel", "Anjewe", "Koetjes");
-        String sqlQuery = "select * from artikel where artikel_Naam = " + artikelNaam;
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
+    public Artikel findByArtikelNaam (String artikelNaam) {
         Artikel artikel = new Artikel();
-        artikel.setArtikelNaam(artikelNaam);
-        artikel.setArtikelID(rs.getInt("artikel_id"));
-        artikel.setArtikelPrijs(rs.getDouble("artikel_double"));
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
+            String sqlQuery = "select * from artikel where artikel_naam = " + artikelNaam;
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
         
-        return artikel; 
-        
+            while (rs.next()) {
+                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelNaam(rs.getString("artikel_naam"));
+                artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
+            }
+            
         }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Data search failed");
+            ex.printStackTrace();
+            }  
+        return artikel; 
+        }
+    
     @Override
-    public Artikel findByArtikelPrijs (double artikelPrijs) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/winkel", "Anjewe", "Koetjes");
-        String sqlQuery = "select * from artikel where artikel_prijs = " + artikelPrijs;
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
+    public Artikel findByArtikelPrijs (double artikelPrijs) {
         Artikel artikel = new Artikel();
-        artikel.setArtikelPrijs(artikelPrijs);
-        artikel.setArtikelID(rs.getInt("artikel_id"));
-        artikel.setArtikelNaam(rs.getString("artikel_naam"));
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
+            String sqlQuery = "select * from artikel where artikel_prijs = " + artikelPrijs;
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
         
+            while (rs.next()) {
+                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelNaam(rs.getString("artikel_naam"));
+                artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
+            }
+        }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Data search failed");
+            ex.printStackTrace();
+            }        
         return artikel;
        
         }
-    @Override
-   public void insertArtikel (int artikelID, String artikelNaam, double artikelPrijs) throws ClassNotFoundException {
-       // of boolean return als gelukt is? 
-       try {
+   @Override
+   public boolean insertArtikel (int artikelID, String artikelNaam, double artikelPrijs) {
+       //boolean return als gelukt is? 
+            boolean isAdded = true;
+        try {    
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Winkel", "Anjewe", "Koetjes");
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
             String sqlUpdate = "insert into artikel (artikel_id, artikel_naam, artikel_prijs)"
                 + "values (?, ?, ?)";
             stmt = con.prepareStatement(sqlUpdate);
@@ -124,44 +136,54 @@ public class ArtikelDAOImpl implements ArtikelDAO {
             stmt.setDouble(3, artikelPrijs);
         
             stmt.executeUpdate();
-       }
-       catch (SQLException ex) {
-           ex.printStackTrace();
-       }
-       finally {
-                try {
-                con.close(); 
-                } catch (SQLException ex) {
-                }
-           
-       }
+        }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Data entry failed.");
+            ex.printStackTrace();
+            isAdded = false;
+        }
+            return isAdded;
     }
+
     
     // delete methode
    @Override
-    public void deleteArtikel(int artikelID) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Winkel", "Anjewe", "Koetjes");
-        String sqlUpdate = "delete from artikel where artikel_id = ?";
-        stmt = con.prepareStatement(sqlUpdate);
-        
-        stmt.setInt(1, artikelID);
-        stmt.executeUpdate();
+    public void deleteArtikel(int artikelID) {
+        try { 
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
+            String sqlUpdate = "delete from artikel where artikel_id = ?";
+            stmt = con.prepareStatement(sqlUpdate);
+                    
+            stmt.setInt(1, artikelID);
+            stmt.executeUpdate();
+            }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Deleting failed.");
+            ex.printStackTrace();
+        }
     }
     
     // update method
     @Override
-    public void update(Artikel artikel) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Winkel", "Anjewe", "Koetjes");
-        String sqlUpdate = "update artikel set artikel_id = ?, artikel_naam = ?, artikel_prijs = ?";
-        stmt = con.prepareStatement(sqlUpdate);
+    public void update(Artikel artikel) {
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
+            String sqlUpdate = "update artikel set artikel_id = ?, artikel_naam = ?, artikel_prijs = ?";
+            stmt = con.prepareStatement(sqlUpdate);
         
-        stmt.setInt(1, artikel.getArtikelID());
-        stmt.setString(2, artikel.getArtikelNaam());
-        stmt.setDouble(3, artikel.getArtikelPrijs());
+            stmt.setInt(1, artikel.getArtikelID());
+            stmt.setString(2, artikel.getArtikelNaam());
+            stmt.setDouble(3, artikel.getArtikelPrijs());
         
-        stmt.executeUpdate();
+            stmt.executeUpdate();
+        }
+        catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Update failed.");
+            ex.printStackTrace();
+        }
+      
     }
     
 }
