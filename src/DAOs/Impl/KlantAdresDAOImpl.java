@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Impl;
 
-import WorkShop.Adres;
-import WorkShop.Klant;
-import WorkShop.KlantAdres;
+import DAOs.Interface.KlantAdresDAOInterface;
+import POJO.Adres;
+import POJO.Klant;
+import POJO.KlantAdres;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  *
  * @author Wendy
  */
-public class KlantAdresDAOImpl implements KlantAdresDAO {
+public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     
    @Override
    public ArrayList<KlantAdres> findAll() throws SQLException, ClassNotFoundException{

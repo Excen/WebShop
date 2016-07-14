@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
-import WorkShop.Adres;
+package DAOs.Interface;
+import POJO.Adres;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author Wendy
  */
-public interface AdresDAO {
+public interface AdresDAOInterface {
     
     public ArrayList <Adres> findAllAdresses() throws Exception;
     public Adres findByAdresID(int adresId) throws SQLException, ClassNotFoundException;

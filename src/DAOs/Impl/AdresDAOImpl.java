@@ -1,8 +1,9 @@
 
-package DAOs;
+package DAOs.Impl;
 
-import WorkShop.Adres;
-import WorkShop.Adres.AdresBuilder;
+import DAOs.Interface.AdresDAOInterface;
+import POJO.Adres;
+import POJO.Adres.AdresBuilder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Wendy
  */
-public class AdresDAOImpl implements AdresDAO {
+public class AdresDAOImpl implements AdresDAOInterface {
 
     //datafields 
     String driver = "com.mysql.jdbc.Driver";
@@ -91,6 +92,31 @@ public class AdresDAOImpl implements AdresDAO {
         stmt = con.prepareStatement(sqlQuery);
         
         try{
+            
+            /*
+            Scanner input = new Scanner(System.in);
+            boolean continueInput = true;
+            
+            if (// adresId is in database){ code for excuteQuery}
+            
+            else (//adresId is not in database){
+            System.out.println("AdresId bestaat niet in database, probeer opnieuw: ")
+           
+            adresId = input.nextInt(); 
+              
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+            
+            }
+            
+            
+            */
             stmt.setInt(1, adresId);      
             rs = stmt.executeQuery();          
             

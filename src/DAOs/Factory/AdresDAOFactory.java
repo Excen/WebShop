@@ -3,14 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Factory;
+
+
+import DAOs.Impl.AdresDAOImpl;
+
+import DAOs.Interface.AdresDAOInterface;
 
 /**
  *
  * @author Wendy
  */
 public class AdresDAOFactory {
-    public static AdresDAO createAdresDAO(){
+    public static AdresDAOInterface createAdresDAO(){
         return new AdresDAOImpl();
     }
 }

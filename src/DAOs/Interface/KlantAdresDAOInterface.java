@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Interface;
 
-import WorkShop.Adres;
-import WorkShop.Klant;
-import WorkShop.KlantAdres;
+import POJO.Adres;
+import POJO.Klant;
+import POJO.KlantAdres;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Wendy
  */
-public interface KlantAdresDAO {
+public interface KlantAdresDAOInterface {
     public ArrayList<KlantAdres> findAll() throws SQLException, ClassNotFoundException;
     public ArrayList<Klant> findByAdresId(int bestelling_id) throws SQLException, ClassNotFoundException;
     public ArrayList<Adres> findByKlantId(int artikel_id) throws SQLException, ClassNotFoundException;

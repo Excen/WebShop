@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Interface;
 
-import WorkShop.Klant;
+import POJO.Klant;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author Wendy
  */
-public interface KlantDAO {
+public interface KlantDAOInterface {
     public ArrayList <Klant> findAllKlanten() throws Exception;
     public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException;
     public Klant findByVoorNaam(String voorNaam) throws SQLException, ClassNotFoundException;

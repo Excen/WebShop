@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Impl;
 
-import WorkShop.Klant;
-import WorkShop.Klant.KlantBuilder;
+import DAOs.Interface.KlantDAOInterface;
+import POJO.Klant;
+import POJO.Klant.KlantBuilder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,7 +23,7 @@ import java.util.Scanner;
  *
  * @author Wendy
  */
-class KlantDAOImpl implements KlantDAO {
+public class KlantDAOImpl implements KlantDAOInterface {
 
     String driver = "com.mysql.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";

@@ -1,14 +1,15 @@
 
-package DAOs;
+package DAOs.Impl;
 
-import WorkShop.Artikel;
+import DAOs.Interface.ArtikelDAOInterface;
+import POJO.Artikel;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 
-public class ArtikelDAOImpl implements ArtikelDAO {
+public class ArtikelDAOImpl implements ArtikelDAOInterface {
     
     Connection con;
     ResultSet rs;

@@ -1,6 +1,6 @@
 
 
-package WorkShop;
+package POJO;
 
 /**
  *

@@ -3,14 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Factory;
+
+
+
+import DAOs.Impl.KlantDAOImpl;
+import DAOs.Interface.KlantDAOInterface;
 
 /**
  *
  * @author Wendy
  */
 public class KlantDAOFactory {
-    public static KlantDAO createKlantDao(){
+    public static KlantDAOInterface createKlantDao(){
         return new KlantDAOImpl();
                 
     }

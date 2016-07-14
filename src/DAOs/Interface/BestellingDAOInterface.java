@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Interface;
 
 
-import WorkShop.Bestelling;
-import WorkShop.Klant;
+import POJO.Bestelling;
+import POJO.Klant;
 import java.sql.SQLException;
 import java.util.ArrayList;
 /**
  *
  * @author Excen
  */
-public interface BestellingDAO {
+public interface BestellingDAOInterface {
     
     public ArrayList<Bestelling> findAll() throws SQLException;
     public Bestelling findById(int bestelling_id) throws SQLException;

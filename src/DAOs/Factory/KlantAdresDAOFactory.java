@@ -3,14 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Factory;
+
+import DAOs.Impl.KlantAdresDAOImpl;
+import DAOs.Interface.KlantAdresDAOInterface;
 
 /**
  *
  * @author Wendy
  */
 public class KlantAdresDAOFactory {
-    public static KlantAdresDAO createKlantAdresDao(){
+    public static KlantAdresDAOInterface createKlantAdresDao(){
         return new KlantAdresDAOImpl();
 }
 }
