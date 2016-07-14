@@ -12,7 +12,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.ArrayList; 
+//import java.util.Set;
+//import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -22,13 +25,17 @@ import java.util.Scanner;
 class KlantDAOImpl implements KlantDAO {
 
     String driver = "com.mysql.jdbc.Driver";
-    String url = "jdbc:mysql://localhost3306/Winkel";
+    String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
+    //String url = "jdbc:mysql://localhost3306/winkel";
     String user = "Anjewe"; 
     String pw = "Koetjes"; 
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
-
+    
+    ArrayList <String> voornaamLijst = new ArrayList<>();
+    ArrayList <String> achternaamLijst = new ArrayList<>();
+    ArrayList <String> tussenvoegselLijst = new ArrayList<>();
     /*
     private void connectToDB () {
     
@@ -46,41 +53,59 @@ class KlantDAOImpl implements KlantDAO {
     @Override
     public ArrayList<Klant> findAllKlanten() throws SQLException, ClassNotFoundException {
        
-        //connectToDB();
-        
+        KlantBuilder klantBuilder = new KlantBuilder();     
         ArrayList<Klant> klantenLijst = new ArrayList<>();
-       
+        
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected");
+        
         String sqlQuery = "select * from Klant";
         
         try{
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
-        while (rs.next()) {
             
-            KlantBuilder klantBuilder = new KlantBuilder();
-            klantBuilder.klantId(rs.getInt("klant_id"));
-            klantBuilder.voorNaam(rs.getString("voornaam"));
-            klantBuilder.achterNaam(rs.getString("achternaam"));
-            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-            klantBuilder.email(rs.getString("email"));
+            while (rs.next()) {
             
-            // build Klant
-            Klant klant = klantBuilder.build();    
-            //voeg klant toe aan lijst
-            klantenLijst.add(klant);
-            con.close(); 
+                klantBuilder.klantId(rs.getInt("klant_id"));
+                klantBuilder.voorNaam(rs.getString("voornaam"));
+                klantBuilder.achterNaam(rs.getString("achternaam"));
+                klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                klantBuilder.email(rs.getString("email"));
+            
+                // build Klant
+                Klant klant = klantBuilder.build();    
+                //voeg klant toe aan lijst
+                klantenLijst.add(klant);             
+            }
+            con.close();
         }
-        }
-        catch( SQLException ex){}
-                               
+        catch( SQLException ex){
+            System.out.println(ex.getMessage());
+        }                               
         return klantenLijst; 
     }
     
     @Override
-    public Klant findByKlantId(int klantId) throws SQLException {
-        //connectToDB();
+    public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException {
         
-        Klant klant = Klant.getInstance();  
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected");
+        
+          
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where klant_id = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -88,9 +113,8 @@ class KlantDAOImpl implements KlantDAO {
             stmt.setInt(1, klantId);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
+        while (rs.next()) {  
             
-            KlantBuilder klantBuilder = new KlantBuilder();
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -99,8 +123,9 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                        
+        }  
+        con.close();      
         }
         catch(SQLException ex){}
                 
@@ -108,51 +133,71 @@ class KlantDAOImpl implements KlantDAO {
     }
     
     @Override    
-    public Klant findByVoorNaam(String voorNaam) throws SQLException {
-        //connectToDB();
+    public Klant findByVoorNaam(String voorNaam) throws SQLException, ClassNotFoundException {
         
-        Klant klant = Klant.getInstance();  
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
+        
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where voornaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
+        
         try{
             stmt.setString(1, voorNaam);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
+            while (rs.next()) {
             
-            KlantBuilder klantBuilder = new KlantBuilder();
-            klantBuilder.klantId(rs.getInt("klant_id"));
-            klantBuilder.voorNaam(rs.getString("voornaam"));
-            klantBuilder.achterNaam(rs.getString("achternaam"));
-            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-            klantBuilder.email(rs.getString("email"));
+                klantBuilder.klantId(rs.getInt("klant_id"));
+                klantBuilder.voorNaam(rs.getString("voornaam"));
+                klantBuilder.achterNaam(rs.getString("achternaam"));
+                klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                klantBuilder.email(rs.getString("email"));
             
-            // build Klant
-            klant = klantBuilder.build();
-            con.close();            
-        }        
+                // build Klant
+                klant = klantBuilder.build();
+                        
+            }   
+            con.close();     
+        } 
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
         }
-        catch(SQLException ex){}
                 
         return klant;
     }
 
     @Override
-    public Klant findByAchterNaam(String achterNaam) throws SQLException {
-        //connectToDB();
+    public Klant findByAchterNaam(String achterNaam) throws SQLException, ClassNotFoundException {
         
-        Klant klant = Klant.getInstance();  
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
+        
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where achternaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
+        
         try{
             stmt.setString(1, achterNaam);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
-            
-            KlantBuilder klantBuilder = new KlantBuilder();
+        while (rs.next()) {               
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -161,31 +206,40 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                       
+        }  
+        con.close();       
         }
-        catch(SQLException ex){}
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        }
                 
         return klant;
     }
 
-
     @Override
-    public Klant findByEmail(String email) throws SQLException {
+    public Klant findByEmail(String email) throws SQLException, ClassNotFoundException {
         
-        //connectToDB();
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
         
-        Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where email = ? ";
         stmt = con.prepareStatement(sqlQuery);
+        
         try{
             stmt.setString(1, email);      
             rs = stmt.executeQuery();          
             
         while (rs.next()) {       
-            
-            KlantBuilder klantBuilder = new KlantBuilder();
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -194,19 +248,32 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                        
+        } 
+        con.close();       
         }
-        catch(SQLException ex){}
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        }
                 
         return klant;
     }
 
     @Override
-    public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) throws SQLException {
-       //connectToDB();
+    public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) 
+            throws SQLException, ClassNotFoundException {
+       
+        KlantBuilder klantBuilder = new KlantBuilder();
+        Klant klant = new Klant();
+       
+        //load driver
+        Class.forName(driver);
+        System.out.println("Driver loaded");
+        //establish a connection
+        con = DriverManager.getConnection(url,
+                user, pw);
+        System.out.println("Database Connected"); 
         
-        Klant klant = Klant.getInstance();  
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from Klant where voorNaam = ? and achterNaam = ? ";
         stmt = con.prepareStatement(sqlQuery);
@@ -217,7 +284,6 @@ class KlantDAOImpl implements KlantDAO {
             
         while (rs.next()) {       
             
-            KlantBuilder klantBuilder = new KlantBuilder();
             klantBuilder.klantId(rs.getInt("klant_id"));
             klantBuilder.voorNaam(rs.getString("voornaam"));
             klantBuilder.achterNaam(rs.getString("achternaam"));
@@ -226,16 +292,19 @@ class KlantDAOImpl implements KlantDAO {
             
             // build Klant
             klant = klantBuilder.build();
-            con.close();            
-        }        
+                        
+        } 
+        con.close();       
         }
-        catch(SQLException ex){}
+        catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        }
                 
         return klant;
     }
 
     @Override
-    public Klant insert() throws SQLException {
+    public Klant insertKlant() throws SQLException {
         
         Klant klant = new Klant();
         
@@ -297,7 +366,10 @@ class KlantDAOImpl implements KlantDAO {
       System.err.println(e.getMessage());
     }
          return klant;
-  }  
+  }  /* insert klant_id ook in koppelklantadres tabel
+    check: bestaat adres al? ja: 
+    nee: 
+    */
     
     
     @Override
@@ -484,7 +556,7 @@ class KlantDAOImpl implements KlantDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
-    }    
+    }   // delete klnat_id ook uit koppelklantadres tabel 
         
     @Override
     public void deleteByKlantNaam() throws SQLException {
@@ -523,7 +595,7 @@ class KlantDAOImpl implements KlantDAO {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
             }
-    } 
+    } // delete klnat_id ook uit koppelklantadres tabel
     
     
     @Override
@@ -552,67 +624,77 @@ class KlantDAOImpl implements KlantDAO {
             {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
-            }
-        
-    }
+            }        
+    }  // delete klnat_id ook uit koppelklantadres tabel
 
     @Override
-    public Klant FindByAdresId(int adresId) throws SQLException {
+    public ArrayList<Klant> FindByAdresId(int adresId) throws Exception {
     
-        //connectToDB();
-        
-        Klant klant = Klant.getInstance();  
+        ArrayList<Klant> klantenByAdres = new ArrayList<>();
+                
         String sqlQuery = "select klant_id, voornaam, achternaam, tussenvoegsel, "
                 + "email from klant where koppelklantadres.adres_id = ? " +
                 "and klant.klant_id = koppelklantadres.klant_id";
         
         stmt = con.prepareStatement(sqlQuery);
         try{
+            Class.forName(driver);
+            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
             stmt.setInt(1, adresId);      
             rs = stmt.executeQuery();          
             
-        while (rs.next()) {       
+                while (rs.next()) {       
             
-            KlantBuilder klantBuilder = new KlantBuilder();
-            klantBuilder.klantId(rs.getInt("klant_id"));
-            klantBuilder.voorNaam(rs.getString("voornaam"));
-            klantBuilder.achterNaam(rs.getString("achternaam"));
-            klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-            klantBuilder.email(rs.getString("email"));
+                    KlantBuilder klantBuilder = new KlantBuilder();
+                    klantBuilder.klantId(rs.getInt("klant_id"));
+                    klantBuilder.voorNaam(rs.getString("voornaam"));
+                    klantBuilder.achterNaam(rs.getString("achternaam"));
+                    klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                    klantBuilder.email(rs.getString("email"));
             
-            // build Klant
-            klant = klantBuilder.build();
-            con.close();            
-        }        
+                    // build Klant
+                    Klant klant = klantBuilder.build();
+                        
+                }        
+            }
         }
-        catch(SQLException ex){}
+        catch(SQLException | ClassNotFoundException ex){}
                 
-        return klant; 
+        return klantenByAdres; 
         
         
     }
 
-    /*
-    @Override
-    public int[] addBatchKlanten() throws Exception {
     
-    // x aantal random gegenereerde klanten creeren.     
+     @Override // gebruik methode insert van hier boven. 
+    public int[] addBatchKlanten() throws Exception {    
+	
+	// Create statement object 
+	
+        String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel)"
+                         + " values (?, ?, ?)";  
+						 
+	stmt = con.prepareStatement(sqlQuery);
+	
+        con.setAutoCommit(false);					 
+		
+	int x = (int)(Math.random()* voornaamLijst.size());
+	
+	for (int i = 0; i < x; i++){
+            String voornaam = 
+               voornaamLijst.get((int)(Math.random())*(voornaamLijst.size() + 1));
+            String achternaam = 
+               achternaamLijst.get((int)(Math.random())*(achternaamLijst.size() + 1));
+            String tussenvoegsel = 
+               tussenvoegselLijst.get ((int)(Math.random())*(tussenvoegselLijst.size() + 1));
+	
+	// Add above SQL statement in the batch.	
+	stmt.setString (1, voornaam);
+        stmt.setString (2, achternaam);
+        stmt.setString (3, tussenvoegsel);
         
-        
-    // Create statement object   
-    String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel, email)"
-                         + " values (?, ?, ?, ?)";                    
-    
-    stmt = con.prepareStatement(sqlQuery);
-    con.setAutoCommit(false);
-
-    // Add above SQL statement in the batch.
-    stmt.addBatch(sqlQuery);
-
-                 stmt.setString (2, voornaam);
-                 stmt.setString (3, achternaam);
-                 stmt.setString (4, tussenvoegsel);
-                 stmt.setString (5, email);
+        stmt.addBatch(sqlQuery);
+	}               
     
     // Create an int[] to hold returned values
     int[] count = stmt.executeBatch();
@@ -620,13 +702,97 @@ class KlantDAOImpl implements KlantDAO {
     con.commit();
         
 
-    return count;    
-        
-                 
-               
-                 
-                 
-                 
-    } */
+    return count;  
+    }  
 
-}
+    @Override
+    public void vulVoornaamLijst (){
+	Scanner input = new Scanner(System.in);
+        boolean continueInput = true; 
+        
+       do{
+        try{	
+	System.out.print("Voeg nieuwe voornaam toe: ");
+	String voornaamNieuw = input.nextLine(); 
+        
+            if(!voornaamLijst.contains(voornaamNieuw)){
+                voornaamLijst.add(voornaamNieuw);  
+                continueInput = false;
+            }
+            else {
+                System.out.print("Naam bestaat al, probeer opnieuw");
+                input.nextLine();            
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+    }
+	
+    @Override
+    public void vulAchternaamLijst (){		
+		
+	Scanner input = new Scanner(System.in);
+        boolean continueInput = true; 
+        
+       do{
+        try{	
+	System.out.print("Voeg nieuwe achternaam toe: ");
+	String achternaamNieuw = input.nextLine(); 
+        
+            if(!achternaamLijst.contains(achternaamNieuw)){
+                achternaamLijst.add(achternaamNieuw);  
+                continueInput = false;
+            }
+            else {
+                System.out.print("Naam bestaat al, probeer opnieuw");
+                input.nextLine();            
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+    }
+	
+    @Override
+    public void vulTussenvoegselLijst (){		
+	Scanner input = new Scanner(System.in);
+        boolean continueInput = true; 
+        
+       do{
+        try{	
+	System.out.print("Voeg nieuwe voornaam toe: ");
+	String tussenvoegselNieuw = input.nextLine(); 
+        
+            if(!tussenvoegselLijst.contains(tussenvoegselNieuw)){
+                tussenvoegselLijst.add(tussenvoegselNieuw);  
+                continueInput = false;
+            }
+            else {
+                System.out.print("Tussenvoegsel bestaat al in de lijst, probeer opnieuw");
+                input.nextLine();            
+            }  		       
+        
+        }
+        catch (InputMismatchException ex){
+            System.out.println("Probeer opnieuw: foutieve input");
+           input.nextLine();
+        }
+       }while(continueInput);
+    }
+
+    
+    @Override
+    public void updateAdresKlant(int adresId) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+		
+} 
+
+
