@@ -1,4 +1,4 @@
-package WorkShop;
+package POJO;
 
 
 public class Artikel {

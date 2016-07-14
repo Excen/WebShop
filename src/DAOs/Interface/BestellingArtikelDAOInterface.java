@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Interface;
 
-import WorkShop.Artikel;
-import WorkShop.Bestelling;
-import WorkShop.BestellingArtikel;
+import POJO.Artikel;
+import POJO.Bestelling;
+import POJO.BestellingArtikel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

@@ -1,6 +1,7 @@
-package WorkShop;
+package MAIN;
 
-import DAOs.AdresDAOImpl;
+import DAOs.Impl.AdresDAOImpl;
+import POJO.Adres;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -67,6 +68,7 @@ public class Main {
         AdresDAOImpl adresDAO = new AdresDAOImpl();
         //adresDAO.insertAdres();
        
+        
         Adres adres = adresDAO.findByAdresID(15);
         System.out.println(adres);
         
@@ -75,7 +77,7 @@ public class Main {
         System.out.println("adres updaten is gelukt: " + updateGelukt);
         
         
-        /*
+        
         ArrayList<Adres> adressen = adresDAO.findAllAdresses();
         for (int i = 0; i< adressen.size(); i++){
             System.out.println ((adressen.get(i)).getAdresId() + "  " +
@@ -83,7 +85,7 @@ public class Main {
                     "  " + (adressen.get(i)).getToevoeging() +
                     "  " + (adressen.get(i)).getPostCode() +
                     "  " + (adressen.get(i)).getWoonPlaats());
-        } */
+        } 
         }    
         catch(SQLException | HeadlessException e) {
         System.out.print("not connect to server and message is: " + e.getMessage());

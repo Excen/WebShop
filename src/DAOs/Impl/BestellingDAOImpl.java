@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Impl;
 
-import WorkShop.Bestelling;
-import WorkShop.Klant;
+import DAOs.Interface.KlantDAOInterface;
+import DAOs.Interface.BestellingDAOInterface;
+import POJO.Bestelling;
+import POJO.Klant;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -121,7 +123,7 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
         
         while (rs.next()){
         klant_id = rs.getInt("klant_id"); 
-        KlantDAO klantDAO = new KlantDAOImpl();
+        KlantDAOInterface klantDAO = new KlantDAOImpl();
         klantje = klantDAO.findByKlantId(klant_id);    
         }
 

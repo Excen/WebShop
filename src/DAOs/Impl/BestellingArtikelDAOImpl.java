@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAOs;
+package DAOs.Impl;
 
-import WorkShop.Artikel;
-import WorkShop.Bestelling;
-import WorkShop.BestellingArtikel;
+import DAOs.Interface.BestellingDAOInterface;
+import DAOs.Interface.BestellingArtikelDAOInterface;
+import DAOs.Interface.ArtikelDAOInterface;
+import POJO.Artikel;
+import POJO.Bestelling;
+import POJO.BestellingArtikel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -144,7 +147,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
         
-        ArtikelDAO artikelDao = new ArtikelDAOImpl();
+        ArtikelDAOInterface artikelDao = new ArtikelDAOImpl();
             
         while (rs.next()) {
 
