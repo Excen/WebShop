@@ -151,18 +151,12 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
             
         while (rs.next()) {
 
-            try {
-                int bestelling_idtje = rs.getInt("bestelling_id");
-                int artikel_idtje = rs.getInt("artikel_id");
-                int aantal = rs.getInt("aantal");
-                
-                Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
-                for (int i = 0; i < aantal; i++){
+            int bestelling_idtje = rs.getInt("bestelling_id");
+            int artikel_idtje = rs.getInt("artikel_id");
+            int aantal = rs.getInt("aantal");
+            Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
+            for (int i = 0; i < aantal; i++){
                 artikelLijst.add(artikeltje);
-            }
-            
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             }    
