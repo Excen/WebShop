@@ -12,9 +12,17 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Interface/AdresDAOInterface.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Interface/ArtikelDAOInterface.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Factory/KlantAdresDAOFactory.java</file>
             <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Impl/KlantAdresDAOImpl.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Impl/KlantDAOImpl.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/MAIN/Main.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Interface/KlantAdresDAOInterface.java</file>
             <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Impl/BestellingArtikelDAOImpl.java</file>
-            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Interface/BestellingArtikelDAOInterface.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Impl/AdresDAOImpl.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Interface/BestellingDAOInterface.java</file>
+            <file>file:/C:/Users/Wendy/Documents/NetBeansProjects/Webshop/WebShop/src/DAOs/Impl/BestellingDAOImpl.java</file>
         </group>
     </open-files>
 </project-private>

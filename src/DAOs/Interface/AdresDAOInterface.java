@@ -20,7 +20,7 @@ public interface AdresDAOInterface {
     public Adres findByStraatNaam(String straatNaam) throws SQLException,ClassNotFoundException ;
     public Adres findByPostcodeHuisNummer(String postCode, int huisNummer) throws SQLException, ClassNotFoundException;
     public Adres findByWoonplaats(String woonPlaats) throws SQLException, ClassNotFoundException;
-    public ArrayList<Adres> findByKlantId (int klantId) throws Exception;
+    
     public boolean insertAdres() throws SQLException, ClassNotFoundException;
     public boolean updateStraatNaam() throws SQLException;
     public boolean updatePostCode() throws SQLException;
@@ -30,5 +30,5 @@ public interface AdresDAOInterface {
     public boolean deleteAdres() throws SQLException;
     public boolean deleteAll() throws SQLException;
     
-    
+    //public ArrayList<Adres> findByKlantId (int klantId) throws Exception;
 }

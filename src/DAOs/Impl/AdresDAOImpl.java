@@ -87,15 +87,9 @@ public class AdresDAOImpl implements AdresDAOInterface {
                 user, pw);
         System.out.println("Database Connected");
         
-        boolean continueInput = true; 
         
-       do{ 
            try{
-            ResultSet zoeken = stmt.executeQuery("select count(*) from adres where adres_id = " + adresId );
-              if  (zoeken.next()) {         
-                
-                   try{   
-                    String sqlQuery = "select straatnaam,huisnummer,toevoeging,postcode, " + 
+               String sqlQuery = "select straatnaam,huisnummer,toevoeging,postcode, " + 
                     "woonplaats from Adres where adres_id = ? ";
                     
                     stmt = con.prepareStatement(sqlQuery);                  
@@ -116,24 +110,14 @@ public class AdresDAOImpl implements AdresDAOInterface {
                         adres = adresBuilder.build();
                                    
                         } 
-                        continueInput = false;      
+                             
                     con.close();  
             
                    }// end try
                   catch(SQLException ex){
                   System.out.println(ex.getMessage());
                   }
-                
-                
-           }// end if
-        } //end try
-        
-        catch(NullPointerException ex){
-            System.out.println("AdresId bestaat niet, probeer opnieuw: ");
-            Scanner input = new java.util.Scanner(System.in);
-            adresId = input.nextInt();
-        }
-       }while(continueInput);// end do 
+             
     return adres;        
 }
       
@@ -271,47 +255,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
         return adres;
     }
     
-    @Override
-    public ArrayList<Adres> findByKlantId(int klantId) throws Exception{
-        
-        ArrayList<Adres> adressenByKlant = new ArrayList<>();
-        
-         
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
-                "woonplaats from adres where koppelklantadres.klant_id = ? " +
-                "and adres.adres_id = koppelklantadres.adres_id";
-        stmt = con.prepareStatement(sqlQuery);        
-        
-        try{
-            Class.forName(driver);
-            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-            stmt.setInt(1, klantId);      
-            rs = stmt.executeQuery();          
-            
-                while (rs.next()) {       
-             
-                    AdresBuilder adresBuilder = new AdresBuilder();
-                    adresBuilder.adresId(rs.getInt("adres_id"));
-                    adresBuilder.straatNaam(rs.getString("straatnaam"));
-                    adresBuilder.huisNummer(rs.getInt("huisnummer"));
-                    adresBuilder.toevoeging(rs.getString("toevoeging"));
-                    adresBuilder.postCode(rs.getString("postcode"));
-                    adresBuilder.woonPlaats(rs.getString("woonplaats"));
-            
-                     // build Klant
-                    Adres adres = adresBuilder.build();
-                    adressenByKlant.add(adres);
-                     
-                } 
-            }
-        }
-        catch(SQLException  | ClassNotFoundException ex) {
-            Logger.getLogger(AdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-         return adressenByKlant;
-    }
-    
+   
     @Override //werkt
     // verwerk de constraint voornaam, achternaam, email
     public boolean insertAdres() throws SQLException, ClassNotFoundException {
@@ -451,7 +395,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     }
 
 
-    @Override
+    @Override // werkt
     public boolean updateHuisNummer() throws SQLException {
         boolean updated = false; 
         
@@ -493,7 +437,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     }
 
 
-    @Override
+    @Override // werkt
     public boolean updateToevoeging() throws SQLException {
         boolean updated = false; 
         
@@ -534,7 +478,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     }
 
 
-    @Override
+    @Override // werkt
     public boolean updateWoonplaats() throws SQLException {
         boolean updated = false;
         
@@ -576,7 +520,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
     
 
-    @Override
+    @Override // werkt
     public boolean deleteAdres() throws SQLException {
     
     boolean deleted = false; 
@@ -647,5 +591,48 @@ public class AdresDAOImpl implements AdresDAOInterface {
             }
         return deleted; 
     }// delete adres_id ook uit koppelklantadres tabel
-                    
+    
+    
+    /* @Override
+    public ArrayList<Adres> findByKlantId(int klantId) throws Exception{
+        
+        ArrayList<Adres> adressenByKlant = new ArrayList<>();
+        
+         
+        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+                "woonplaats from adres where koppelklantadres.klant_id = ? " +
+                "and adres.adres_id = koppelklantadres.adres_id";
+        stmt = con.prepareStatement(sqlQuery);        
+        
+        try{
+            Class.forName(driver);
+            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+            stmt.setInt(1, klantId);      
+            rs = stmt.executeQuery();          
+            
+                while (rs.next()) {       
+             
+                    AdresBuilder adresBuilder = new AdresBuilder();
+                    adresBuilder.adresId(rs.getInt("adres_id"));
+                    adresBuilder.straatNaam(rs.getString("straatnaam"));
+                    adresBuilder.huisNummer(rs.getInt("huisnummer"));
+                    adresBuilder.toevoeging(rs.getString("toevoeging"));
+                    adresBuilder.postCode(rs.getString("postcode"));
+                    adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+                     // build Klant
+                    Adres adres = adresBuilder.build();
+                    adressenByKlant.add(adres);
+                     
+                } 
+            }
+        }
+        catch(SQLException  | ClassNotFoundException ex) {
+            Logger.getLogger(AdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+         return adressenByKlant;
+    }
+*/
+    
 }
