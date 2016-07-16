@@ -124,7 +124,7 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
         while (rs.next()){
         klant_id = rs.getInt("klant_id"); 
         KlantDAOInterface klantDAO = new KlantDAOImpl();
-        klantje = klantDAO.findByKlantId(klant_id);    
+        klantje = klantDAO.findKlantByKlantId(klant_id);    
         }
 
         return klantje;

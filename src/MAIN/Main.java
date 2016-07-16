@@ -57,7 +57,9 @@ public class Main {
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
-        
+       
+    
+    
         try {
         
         Class.forName(driver);
@@ -69,12 +71,8 @@ public class Main {
         //adresDAO.insertAdres();
        
         
-        Adres adres = adresDAO.findByAdresID(15);
-        System.out.println(adres);
-        
-        boolean updateGelukt = adresDAO.updatePostCode();
-        //System.out.println(adres.getAdresId() + " " + adres.getWoonPlaats() );
-        System.out.println("adres updaten is gelukt: " + updateGelukt);
+        Adres adres = adresDAO.findByAdresID(7);
+        System.out.println(adres.getPostCode());
         
         
         

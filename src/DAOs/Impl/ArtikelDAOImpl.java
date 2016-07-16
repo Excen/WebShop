@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-
 public class ArtikelDAOImpl implements ArtikelDAOInterface {
     
     Connection con;

@@ -18,6 +18,8 @@ import java.util.ArrayList;
 //import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,13 +59,18 @@ public class KlantDAOImpl implements KlantDAOInterface {
         KlantBuilder klantBuilder = new KlantBuilder();     
         ArrayList<Klant> klantenLijst = new ArrayList<>();
         
-        //load driver
-        Class.forName(driver);
-        System.out.println("Driver loaded");
-        //establish a connection
-        con = DriverManager.getConnection(url,
+        try{
+            //load driver
+            Class.forName(driver);
+            System.out.println("Driver loaded");
+            //establish a connection
+            con = DriverManager.getConnection(url,
                 user, pw);
-        System.out.println("Database Connected");
+            System.out.println("Database Connected");
+        } 
+        catch(ClassNotFoundException ex){
+            Logger.getLogger(KlantDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         String sqlQuery = "select * from Klant";
         
@@ -93,7 +100,7 @@ public class KlantDAOImpl implements KlantDAOInterface {
     }
     
     @Override
-    public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException {
+    public Klant findKlantByKlantId(int klantId) throws SQLException, ClassNotFoundException {
         
         KlantBuilder klantBuilder = new KlantBuilder();
         Klant klant = new Klant();

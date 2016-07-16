@@ -74,7 +74,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     }
     
 
-    @Override //werkt
+   @Override //werkt
     public Adres findByAdresID(int adresId) throws SQLException, ClassNotFoundException  {
         AdresBuilder adresBuilder = new AdresBuilder();
         Adres adres = new Adres(adresBuilder);
@@ -87,60 +87,56 @@ public class AdresDAOImpl implements AdresDAOInterface {
                 user, pw);
         System.out.println("Database Connected");
         
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
-                "woonplaats from Adres where adres_id = ? ";
-        stmt = con.prepareStatement(sqlQuery);
+        boolean continueInput = true; 
         
-        try{
-            
-            /*
-            Scanner input = new Scanner(System.in);
-            boolean continueInput = true;
-            
-            if (// adresId is in database){ code for excuteQuery}
-            
-            else (//adresId is not in database){
-            System.out.println("AdresId bestaat niet in database, probeer opnieuw: ")
-           
-            adresId = input.nextInt(); 
-              
-            }  		       
-        
-        }
-        catch (InputMismatchException ex){
-            System.out.println("Probeer opnieuw: foutieve input");
-           input.nextLine();
-        }
-       }while(continueInput);
-            
-            }
-            
-            
-            */
-            stmt.setInt(1, adresId);      
-            rs = stmt.executeQuery();          
-            
-            while (rs.next()) {      
-                        
-                adresBuilder.adresId(rs.getInt("adres_id"));
-                adresBuilder.straatNaam(rs.getString("straatnaam"));
-                adresBuilder.huisNummer(rs.getInt("huisnummer"));
-                adresBuilder.toevoeging(rs.getString("toevoeging"));
-                adresBuilder.postCode(rs.getString("postcode"));
-                adresBuilder.woonPlaats(rs.getString("woonplaats"));
-            
-                // build Klant
-                adres = adresBuilder.build();
-                            
-            }      
-            con.close();  
-        }
-        catch(SQLException ex){
-        System.out.println(ex.getMessage());
-        }
+       do{ 
+           try{
+            ResultSet zoeken = stmt.executeQuery("select count(*) from adres where adres_id = " + adresId );
+              if  (zoeken.next()) {         
                 
-        return adres;
-    }    
+                   try{   
+                    String sqlQuery = "select straatnaam,huisnummer,toevoeging,postcode, " + 
+                    "woonplaats from Adres where adres_id = ? ";
+                    
+                    stmt = con.prepareStatement(sqlQuery);                  
+            
+                    stmt.setInt(1, adresId);      
+                    rs = stmt.executeQuery();   
+            
+                        while (rs.next()) {   
+                        
+                        //adresBuilder.adresId(rs.getInt("adres_id"));
+                        adresBuilder.straatNaam(rs.getString("straatnaam"));
+                        adresBuilder.huisNummer(rs.getInt("huisnummer"));
+                        adresBuilder.toevoeging(rs.getString("toevoeging"));
+                        adresBuilder.postCode(rs.getString("postcode"));
+                        adresBuilder.woonPlaats(rs.getString("woonplaats"));
+            
+                        // build Klant
+                        adres = adresBuilder.build();
+                                   
+                        } 
+                        continueInput = false;      
+                    con.close();  
+            
+                   }// end try
+                  catch(SQLException ex){
+                  System.out.println(ex.getMessage());
+                  }
+                
+                
+           }// end if
+        } //end try
+        
+        catch(NullPointerException ex){
+            System.out.println("AdresId bestaat niet, probeer opnieuw: ");
+            Scanner input = new java.util.Scanner(System.in);
+            adresId = input.nextInt();
+        }
+       }while(continueInput);// end do 
+    return adres;        
+}
+      
     
     @Override //werkt
     public Adres findByStraatNaam(String straatNaam) throws SQLException, ClassNotFoundException {
@@ -359,7 +355,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
                  preparedStmt.setString (5, woonplaats);
                  
                  // execute the preparedstatement
-                 preparedStmt.execute();
+                 preparedStmt.executeUpdate();
                                  
                  inserted = true; 
              }
@@ -583,7 +579,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     @Override
     public boolean deleteAdres() throws SQLException {
     
-        boolean deleted = false; 
+    boolean deleted = false; 
         
     Scanner input = new Scanner(System.in);
     System.out.print("Adres ID: ");

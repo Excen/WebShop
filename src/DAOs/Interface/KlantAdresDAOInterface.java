@@ -17,15 +17,19 @@ import java.util.ArrayList;
  */
 public interface KlantAdresDAOInterface {
     public ArrayList<KlantAdres> findAll() throws SQLException, ClassNotFoundException;
-    public ArrayList<Klant> findByAdresId(int bestelling_id) throws SQLException, ClassNotFoundException;
-    public ArrayList<Adres> findByKlantId(int artikel_id) throws SQLException, ClassNotFoundException;
+    public ArrayList<Klant> findKlantByAdresId(int bestelling_id) throws SQLException, ClassNotFoundException;
+    public ArrayList<Adres> findAdresByKlantId(int artikel_id) throws SQLException, ClassNotFoundException;
     
-    public void createKlantAdres(KlantAdres klantAdres) throws SQLException, ClassNotFoundException;
+    public boolean createKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException;
+        
+    public boolean deleteAll() throws SQLException, ClassNotFoundException;
+    public boolean deleteKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException;
     
-    public void update (int adres_id, int klant_id ) throws SQLException, ClassNotFoundException;
-    
-    public void deleteAll() throws SQLException, ClassNotFoundException;
-    public void deleteKlantAdres(int klant_id) throws SQLException, ClassNotFoundException;
-    public void deleteAdresFromKlant(int adres_id, int klant_id) throws SQLException, ClassNotFoundException;  
-    public void deleteKlantFromAdres(int klant_id, int adres_id) throws SQLException, ClassNotFoundException; 
 }
+
+//public boolean update (int adres_id, int klant_id ) throws SQLException, ClassNotFoundException;
+    // deleted methode update -> zijn maar twee datafields. dus update  == createKlantADres
+
+//verwijderd: zie hier boven
+//public void deleteAdresFromKlant(int adres_id, int klant_id) throws SQLException, ClassNotFoundException;  
+ // public void deleteKlantFromAdres(int klant_id, int adres_id) throws SQLException, ClassNotFoundException; 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public interface KlantDAOInterface {
     public ArrayList <Klant> findAllKlanten() throws Exception;
-    public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException;
+    public Klant findKlantByKlantId(int klantId) throws SQLException, ClassNotFoundException;
     public Klant findByVoorNaam(String voorNaam) throws SQLException, ClassNotFoundException;
     public Klant findByAchterNaam(String achterNaam) throws SQLException, ClassNotFoundException;
     public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) 
