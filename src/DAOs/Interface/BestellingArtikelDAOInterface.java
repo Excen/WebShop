@@ -21,7 +21,7 @@ public interface BestellingArtikelDAOInterface {
     public ArrayList<BestellingArtikel> findAll() throws SQLException;
     public ArrayList<Integer> findByBestellingId2 (int bestelling_id) throws SQLException;
     public ArrayList<Artikel> findByBestellingId(int bestelling_id) throws SQLException;
-    public ArrayList<Bestelling> findByArtikelId(int artikel_id) throws SQLException;
+    public ArrayList<Bestelling> findBestellingByArtikelId(int artikel_id) throws SQLException;
     public void createBestellingArtikel(BestellingArtikel bestellingArtikel) throws SQLException;
     public void updateBestellingArtikelAantal(int bestelling_id, int artikel_id, int newArtikel_aantal) throws SQLException;
     public void deleteAll() throws SQLException;

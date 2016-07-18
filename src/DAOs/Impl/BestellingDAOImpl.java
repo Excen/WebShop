@@ -61,14 +61,14 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
         java.util.Date datum = bestelling.getDatum();
         
         // Schrijf waarden weg in SQL tabel.
-        String sqlQuery = "insert into bestelling (bestelling_id, klant_id, datum)"
+        String sqlQuery = "insert into bestelling (bestelling_id, klant_id, datum_aangemaakt)"
         + " values (?, ?, ?)";
         
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         stmt.setInt(1, bestelling_id);
         stmt.setInt(2, klant_id);
-        stmt.setObject(3, datum);
+        stmt.setDate(3, new java.sql.Date(datum.getTime()));
         stmt.execute();
         
     }
@@ -94,7 +94,10 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
             Bestelling bestelling = new Bestelling();
             bestelling.setBestelling_id(rs.getInt("bestelling_id"));
             bestelling.setKlant_id(rs.getInt("klant_id"));
-            bestelling.setDatum((java.util.Date)rs.getObject("datum"));
+            // Timestamp?
+            java.sql.Date sqlDate = rs.getDate("datum");
+            
+            bestelling.setDatum(new java.util.Date(sqlDate.getTime()));
 
             // add bestelling in de list
             bestellinglijst.add(bestelling);
@@ -137,8 +140,9 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
     @Override
     public Bestelling findById(int bestelling_id) throws SQLException {
         
-        String sqlQuery = "select * from bestelling where bestelling_id = " + bestelling_id;
-        Bestelling bestelling = null;
+        // String sqlQuery = "select * from bestelling where bestelling_id = " + bestelling_id;
+        String sqlQuery = "select bestelling_id, klant_id from bestelling where bestelling_id = " + bestelling_id;
+        Bestelling bestelling = new Bestelling();
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -148,13 +152,15 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
-            
+        
+        
+        
         while (rs.next()) {
             
-            bestelling = new Bestelling();
+            
             bestelling.setBestelling_id(rs.getInt("bestelling_id"));
             bestelling.setKlant_id(rs.getInt("klant_id"));
-            bestelling.setDatum(rs.getDate("datum_aangemaakt"));
+            // bestelling.setDatum(rs.getDate("datum_aangemaakt"));
             
             }    
             return bestelling;
