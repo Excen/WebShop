@@ -1,9 +1,11 @@
 package MAIN;
 
 import DAOs.Impl.AdresDAOImpl;
+import DAOs.Impl.KlantAdresDAOImpl;
 import DAOs.Impl.KlantDAOImpl;
 import POJO.Adres;
 import POJO.Klant;
+import POJO.KlantAdres;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,31 +74,26 @@ public class Main {
 
         System.out.println("connected with "+ con.toString());
 
+       KlantAdresDAOImpl klantAdres = new KlantAdresDAOImpl();
+       
+       boolean created = klantAdres.createKlantAdres(2,8);
+       System.out.println(created);
+       System.out.println("-----");
+       
+       ArrayList<KlantAdres> lijst = klantAdres.findAll();
+        for (int i = 0; i< lijst.size(); i++){
+        System.out.println ((lijst.get(i)).getKlantId() + "  " +
+                    (lijst.get(i)).getAdresId());
+        }
+        System.out.println("-----");
+       
+        
+        /*
         KlantDAOImpl klantDAO = new KlantDAOImpl();
-         
-        Klant klant = klantDAO.findByVoorNaam("Jens");
-        System.out.println(klant.getEmail());
-         System.out.println("-----");
-         
-        klant = klantDAO.findByAchterNaam("vries");
-        System.out.println(klant.getEmail());
-        System.out.println("-----");
+       Klant klant = klantDAO.insertKlant();
+       System.out.println(klant.getKlantId());
+       System.out.println("-----");
         
-        klant = klantDAO.findKlantByKlantId(3);
-        System.out.println(klant.getEmail());
-        System.out.println("-----");
-        
-        klant = klantDAO.findByEmail("astrid@huge.com");
-        System.out.println(klant.getKlantId());
-        System.out.println("-----");
-       
-        klant = klantDAO.findByVoorNaamAchterNaam("astrid", "groot");
-        System.out.println(klant.getKlantId());
-        System.out.println("-----");
-       
-        /*klantDAO.deleteByKlantId();
-        
-       
         ArrayList<Klant> klanten = klantDAO.findByAdresId(3);
         for (int i = 0; i< klanten.size(); i++){
         System.out.println ((klanten.get(i)).getKlantId() + "  " +
@@ -109,33 +107,21 @@ public class Main {
         int [] y = klantDAO.addBatchKlanten();
         for (int i = 0; i< y.length; i++){
             System.out.println (y[i]);
-        } */
+        } 
+       
+       
+       
         AdresDAOImpl adresDAO = new AdresDAOImpl();
-       boolean update = adresDAO.deleteAdres();
+        boolean update = adresDAO.deleteAll();
         System.out.println(update);
-        }    
-        catch(SQLException | HeadlessException e) {
-        System.out.print("not connect to server and message is: " + e.getMessage());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
+        */
         
-        /*
-        
-        klant = klantDAO.insertKlant();
-       System.out.println(klant.getKlantId());
-       System.out.println("-----");
-        
-        
+        /*        
         //adresDAO.insertAdres();
        
-        
         Adres adres = adresDAO.findByAdresID(7);
         System.out.println(adres.getPostCode());
-        
-       
-        
         
         ArrayList<Adres> adressen = adresDAO.findAllAdresses();
         for (int i = 0; i< adressen.size(); i++){
@@ -147,7 +133,12 @@ public class Main {
         } 
         
                    
-    */
+    */}    
+        catch(SQLException | HeadlessException e) {
+        System.out.print("not connect to server and message is: " + e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }}
         
     

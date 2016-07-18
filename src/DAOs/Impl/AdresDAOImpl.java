@@ -89,7 +89,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
         
         
            try{
-               String sqlQuery = "select straatnaam,huisnummer,toevoeging,postcode, " + 
+               String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
                     "woonplaats from Adres where adres_id = ? ";
                     
                     stmt = con.prepareStatement(sqlQuery);                  
@@ -99,7 +99,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
             
                         while (rs.next()) {   
                         
-                        //adresBuilder.adresId(rs.getInt("adres_id"));
+                        adresBuilder.adresId(rs.getInt("adres_id"));
                         adresBuilder.straatNaam(rs.getString("straatnaam"));
                         adresBuilder.huisNummer(rs.getInt("huisnummer"));
                         adresBuilder.toevoeging(rs.getString("toevoeging"));
@@ -284,9 +284,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
+                 // the mysql update statement
                  String sqlQuery = "insert into adres (straatnaam, huisnummer," +
                          " toevoeging, postcode, woonplaats) values (?, ?, ?, ?,?)";
                  
@@ -329,21 +327,17 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                                  
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set straatnaam = ? where adres_id = " 
-                         + adresId ;
+                 // the mysql update statement
+                 String sqlQuery = "Update Adres set straatnaam = ? where adres_id = ? ";
                  
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setString (1, straatnaam);
-                 
+                 preparedStmt.setInt(2, adresId);                 
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
-                 updated = true; 
-                 
+                 updated = true;                  
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -371,15 +365,13 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set postcode = ? where adres_id = " 
-                         + adresId ;
+                 // the mysql update statement
+                 String sqlQuery = "Update Adres set postcode = ? where adres_id = ";
                  
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setString (1, postcode);
+                 preparedStmt.setInt(2, adresId);
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
@@ -411,21 +403,17 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
                  // the mysql insert statement
-                 String sqlQuery = "Update Adres set huisnummer = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
+                 String sqlQuery = "Update Adres set huisnummer = ? where adres_id = ? "; 
+                
+                 // create the mysql update preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setInt (1, huisnummer);
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
-                 updated = true; 
-                 
+                 updated = true;                  
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -453,15 +441,12 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set toevoeging = ? where adres_id = " 
-                         + adresId ;
-                 
+                // the mysql update statement
+                 String sqlQuery = "Update Adres set toevoeging = ? where adres_id = ?";
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setString (1, toevoeging);
+                 preparedStmt.setInt(2, adresId);
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
@@ -494,15 +479,13 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
+                 // the mysql update statement
+                 String sqlQuery = "Update Adres set woonplaats = ? where adres_id = ?"; 
                  
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set woonplaats = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
+                 // create the mysql update preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                  preparedStmt.setString (1, woonplaats);
+                 preparedStmt.setInt(2, adresId);
                                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
@@ -521,6 +504,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
 
     @Override // werkt
+    // delete adres_id ook uit koppelklantadres tabel
     public boolean deleteAdres() throws SQLException {
     
     boolean deleted = false; 
@@ -534,15 +518,12 @@ public class AdresDAOImpl implements AdresDAOInterface {
       Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
                  
-                 // the mysql insert statement
-                 String sqlQuery = "delete from adres where adres_id = " 
-                         + adresId ;
+                 String sqlQuery = "delete from adres where adres_id = ? " ;
                  
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                                                 
+                           preparedStmt.setInt(1, adresId);                      
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
@@ -558,9 +539,11 @@ public class AdresDAOImpl implements AdresDAOInterface {
             }
       return deleted; 
     }
-// delete adres_id ook uit koppelklantadres tabel
+
 
     @Override
+    //Got an exception!
+//Cannot delete or update a parent row: a foreign key constraint fails (`winkel`.`koppelklantadres`, CONSTRAINT `koppelklantadres_ibfk_2` FOREIGN KEY (`adres_id`) REFERENCES `adres` (`adres_id`))
     public boolean  deleteAll() throws SQLException {
         boolean deleted = false;
         
@@ -572,7 +555,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
                  // create a sql date object so we can use it in our INSERT statement
                  
                  // the mysql insert statement
-                 String sqlQuery = "delete from adres";                         
+                 String sqlQuery = "delete * from adres";                         
                  
                  // create the mysql insert preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);

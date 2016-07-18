@@ -33,14 +33,13 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     String pw = "Koetjes"; 
     Connection con;
     ResultSet rs;
-    PreparedStatement stmt;
+    PreparedStatement stmt;    
     
     
-    
-   @Override
-   public ArrayList<KlantAdres> findAll() throws SQLException, ClassNotFoundException{
+   @Override // werkt
+   public ArrayList<KlantAdres> findAll() throws SQLException, ClassNotFoundException{        
         
-        ArrayList<KlantAdres>KlantAdreslijst = new ArrayList<>();
+        ArrayList<KlantAdres> klantAdresLijst = new ArrayList<>();
         
         try{
             //load driver
@@ -50,29 +49,34 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
             con = DriverManager.getConnection(url,
                 user, pw);
             System.out.println("Database Connected");
-        } 
-        catch(ClassNotFoundException ex){
-            Logger.getLogger(KlantAdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
-        String sqlQuery = "SELECT * FROM Koppelklantadres";
-                      
-        while (rs.next()) {
-
-            KlantAdres klantAdres = new KlantAdres();
-            klantAdres.setKlantId(rs.getInt("klant_id"));
-            klantAdres.setAdresId(rs.getInt("adres_id"));
+        
+            String sqlQuery = "SELECT * FROM koppelklantadres";
             
+            rs = stmt.executeQuery(sqlQuery);
+                while (rs.next()) {
+                    KlantAdres klantAdres = new KlantAdres();
+                    klantAdres.setKlantId(rs.getInt("klant_id"));
+                    klantAdres.setAdresId(rs.getInt("adres_id"));            
 
-            // add bestelling in de list
-            KlantAdreslijst.add(klantAdres);
+                    // add bestelling in de list
+                    klantAdresLijst.add(klantAdres);
+                }   
+                con.close();
+            } 
+            catch(ClassNotFoundException ex){
+            Logger.getLogger(KlantAdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
+            catch(SQLException ex){
+            System.out.println(ex.getMessage());
+         }
+        // arrayList van adressen 
           
-          return KlantAdreslijst;  
-          }
+    return klantAdresLijst;  
+}
     
 
-    @Override
+    @Override // werkt
     public ArrayList<Klant> findKlantByAdresId(int adresId) throws SQLException, ClassNotFoundException {
         
         ArrayList<Klant> klantenlijst = new ArrayList<>();
@@ -104,22 +108,17 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
                     
                     int klantId = rs.getInt("klant_id");
                     Klant klant = klantDao.findKlantByKlantId(klantId);
-                    klantenlijst.add(klant);
-            
-                    // voeg Klant klant toe aan lijst : klantenlijst.add(findByKlantId(int klantId));
-                    // of Klant klant = findByKlantId(int klantId); klantenlijst.add(klant);
-                       
+                    klantenlijst.add(klant);            
+                    //voeg klant toe aan lijst :Klant klant = findByKlantId(int klantId); klantenlijst.add(klant);                       
         }  
         con.close();      
         }
-        catch(SQLException ex){}
-        
-        
+        catch(SQLException ex){}       
         
         return klantenlijst;
     }
 
-    @Override
+    @Override // werkt
     public ArrayList<Adres> findAdresByKlantId(int klantId) throws SQLException, ClassNotFoundException {
         ArrayList<Adres> adressenLijst = new ArrayList<>();
         AdresDAOInterface adresDao = new AdresDAOImpl();
@@ -139,8 +138,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         
         String sqlQuery = "SELECT adres_id FROM Koppelklantadres WHERE klant_id = ?";
         
-        stmt = con.prepareStatement(sqlQuery);
-        
+        stmt = con.prepareStatement(sqlQuery);        
         
         try{
             stmt.setInt(1, klantId);      
@@ -160,18 +158,8 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         return adressenLijst;
     }
 
-    @Override
+    @Override // werkt
     public boolean createKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException {
-         
-        /* of via scanner , niet via parameters in methode.
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Voer klantId in: ");
-        int klantId = input.nextInt();
-               
-        System.out.print("Voer adresId in: ");
-        int adresId = input.nextInt();
-        */
         
         boolean created = false; 
         try{
@@ -182,12 +170,10 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
             con = DriverManager.getConnection(url,
                 user, pw);
             System.out.println("Database Connected");
-        
-        
+                
             // schrijf ze weg in SQL tabel. 
-            String sqlQuery = "INSERT INTO koppelklantadres (klant_id, adres_id)"
-            + " values (?, ?)";
-        
+            String sqlQuery = "INSERT INTO koppelklantadres (klant_id, adres_id) values (?, ?)";
+                   
             stmt = con.prepareStatement(sqlQuery);
            
             stmt.setInt(1, klantId);
@@ -204,7 +190,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
        return created; 
     }    
 
-    @Override
+    @Override // werkt
     public boolean deleteAll() throws SQLException, ClassNotFoundException {
         
         boolean deleted = false;
@@ -212,14 +198,12 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         try{  
             
         Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
+             // create a sql date object so we can use it in our statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
                  
-                 // the mysql insert statement
                  String sqlQuery = "delete from koppelklantadres";                         
                  
-                 // create the mysql insert preparedstatement
+                 // create the mysql preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                                                  
                  // execute the preparedstatement
@@ -236,11 +220,9 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
             }
         return deleted; 
     }
-        
-    
     
 
-    @Override
+    @Override // werkt
     public boolean deleteKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException {
 
     boolean deleted = false; 
@@ -249,13 +231,10 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
                  
-                 // the mysql insert statement
-                 String sqlQuery = "delete from adres where klant_id = ? AND adres_id = ?" 
-                         ;
+                 String sqlQuery = "delete from koppelklantadres where klant_id = ? AND adres_id = ?" ;
                  
-                 // create the mysql insert preparedstatement
+                 // create the mysql preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                     
                  preparedStmt.setInt(1, klantId);
@@ -263,8 +242,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  
-                 deleted = true; 
-                 
+                 deleted = true;                  
              }
       }
     

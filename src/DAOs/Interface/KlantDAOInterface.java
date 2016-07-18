@@ -30,14 +30,16 @@ public interface KlantDAOInterface {
     
     public void deleteByKlantId() throws SQLException; 
     public void deleteByKlantNaam() throws SQLException;
-    public void deleteAll() throws SQLException;
+    public void deleteAll() throws SQLException;    
     
-    public int[] addBatchKlanten() throws Exception; 
+    
+    
+
+    /*public int[] addBatchKlanten() throws Exception; >> later bij tijd over
     public void vulVoornaamLijst ();
     public void vulAchternaamLijst ();
-    public void vulTussenvoegselLijst ();
+    public void vulTussenvoegselLijst ();*/
     
-   
     //public ArrayList<Klant> findByAdresId (int adresId) throws Exception;  
     //public void updateAdresKlant (int adresId) throws Exception;
 }
