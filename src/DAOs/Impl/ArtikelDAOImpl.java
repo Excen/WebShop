@@ -6,6 +6,7 @@ import POJO.Artikel;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 
@@ -14,6 +15,7 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
+    Statement st;
     String driver = "com.mysql.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
     String gebruikersNaam = "Anjewe";
@@ -80,23 +82,46 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
-            String sqlQuery = "select * from artikel where artikel_naam = " + artikelNaam;
-            stmt = con.prepareStatement(sqlQuery);
-            rs = stmt.executeQuery();
-        
-            while (rs.next()) {
-                artikel.setArtikelID(rs.getInt("artikel_id"));
-                artikel.setArtikelNaam(rs.getString("artikel_naam"));
-                artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
-            }
+            boolean continueInput = true;
             
-        }
+            do {
+                try {
+                    String SQLZoeken = "select count(artikel_naam) from artikel where artikel_naam = " + artikelNaam;
+                    ResultSet zoeken = stmt.executeQuery(SQLZoeken);
+                    if (zoeken.next()) {
+                        try {
+                           String sqlQuery = "select * from artikel where artikel_naam = ? "; 
+                           stmt = con.prepareStatement(sqlQuery);
+                           stmt.setString(1, artikelNaam);
+                           rs = stmt.executeQuery();
+                           while (rs.next()) {
+                                artikel.setArtikelID(rs.getInt("artikel_id"));
+                                artikel.setArtikelNaam(rs.getString("artikel_naam"));
+                                artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
+                            }
+                            continueInput = false;    
+                        }
+                        finally {
+                            con.close();
+                        }
+                    }
+                }
+            catch(NullPointerException ex){
+                System.out.println("Dit artikel naam bestaat niet, probeer opnieuw: ");
+                Scanner input = new java.util.Scanner(System.in);
+                artikelNaam = input.nextLine();
+                }
+            }while (continueInput);
+       }  
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data search failed");
             ex.printStackTrace();
-            }  
-        return artikel; 
         }
+    return artikel;   
+    }         
+                
+        
+
     
     @Override
     public Artikel findByArtikelPrijs (double artikelPrijs) {
