@@ -9,7 +9,7 @@ package Controller;
  *
  * @author Excen
  */
-public class Controller implements ControllerInterface {
+public class HoofdMenuController implements ControllerInterface {
     
     
     
