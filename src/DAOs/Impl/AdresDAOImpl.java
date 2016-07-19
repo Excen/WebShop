@@ -74,7 +74,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     }
     
 
-    @Override //werkt
+   @Override //werkt
     public Adres findByAdresID(int adresId) throws SQLException, ClassNotFoundException  {
         AdresBuilder adresBuilder = new AdresBuilder();
         Adres adres = new Adres(adresBuilder);
@@ -87,60 +87,40 @@ public class AdresDAOImpl implements AdresDAOInterface {
                 user, pw);
         System.out.println("Database Connected");
         
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
-                "woonplaats from Adres where adres_id = ? ";
-        stmt = con.prepareStatement(sqlQuery);
         
-        try{
+           try{
+               String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+                    "woonplaats from Adres where adres_id = ? ";
+                    
+                    stmt = con.prepareStatement(sqlQuery);                  
             
-            /*
-            Scanner input = new Scanner(System.in);
-            boolean continueInput = true;
+                    stmt.setInt(1, adresId);      
+                    rs = stmt.executeQuery();   
             
-            if (// adresId is in database){ code for excuteQuery}
-            
-            else (//adresId is not in database){
-            System.out.println("AdresId bestaat niet in database, probeer opnieuw: ")
-           
-            adresId = input.nextInt(); 
-              
-            }  		       
-        
-        }
-        catch (InputMismatchException ex){
-            System.out.println("Probeer opnieuw: foutieve input");
-           input.nextLine();
-        }
-       }while(continueInput);
-            
-            }
-            
-            
-            */
-            stmt.setInt(1, adresId);      
-            rs = stmt.executeQuery();          
-            
-            while (rs.next()) {      
+                        while (rs.next()) {   
                         
-                adresBuilder.adresId(rs.getInt("adres_id"));
-                adresBuilder.straatNaam(rs.getString("straatnaam"));
-                adresBuilder.huisNummer(rs.getInt("huisnummer"));
-                adresBuilder.toevoeging(rs.getString("toevoeging"));
-                adresBuilder.postCode(rs.getString("postcode"));
-                adresBuilder.woonPlaats(rs.getString("woonplaats"));
+                        adresBuilder.adresId(rs.getInt("adres_id"));
+                        adresBuilder.straatNaam(rs.getString("straatnaam"));
+                        adresBuilder.huisNummer(rs.getInt("huisnummer"));
+                        adresBuilder.toevoeging(rs.getString("toevoeging"));
+                        adresBuilder.postCode(rs.getString("postcode"));
+                        adresBuilder.woonPlaats(rs.getString("woonplaats"));
             
-                // build Klant
-                adres = adresBuilder.build();
-                            
-            }      
-            con.close();  
-        }
-        catch(SQLException ex){
-        System.out.println(ex.getMessage());
-        }
-                
-        return adres;
-    }    
+                        // build Klant
+                        adres = adresBuilder.build();
+                                   
+                        } 
+                             
+                    con.close();  
+            
+                   }// end try
+                  catch(SQLException ex){
+                  System.out.println(ex.getMessage());
+                  }
+             
+    return adres;        
+}
+      
     
     @Override //werkt
     public Adres findByStraatNaam(String straatNaam) throws SQLException, ClassNotFoundException {
@@ -275,7 +255,328 @@ public class AdresDAOImpl implements AdresDAOInterface {
         return adres;
     }
     
+   
+    @Override //werkt
+    // verwerk de constraint voornaam, achternaam, email
+    public boolean insertAdres() throws SQLException, ClassNotFoundException {
+        
+        boolean inserted = false; 
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Straatnaam: ");
+        String straatnaam = input.next();
+               
+        System.out.print("Huisnummer: ");
+        int huisnummer = input.nextInt();
+        
+        System.out.print("Toevoeging: ");
+        String toevoeging = input.next().trim();
+        
+        System.out.print("Postcode: ");
+        String postcode = input.next().trim();
+        
+        System.out.print("Woonplaats: ");
+        String woonplaats = input.next();
+        
+         try {
+      // create a mysql database connection
+      
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // the mysql update statement
+                 String sqlQuery = "insert into adres (straatnaam, huisnummer," +
+                         " toevoeging, postcode, woonplaats) values (?, ?, ?, ?,?)";
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setString (1, straatnaam);
+                 preparedStmt.setInt (2, huisnummer);
+                 preparedStmt.setString (3, toevoeging);
+                 preparedStmt.setString (4, postcode);
+                 preparedStmt.setString (5, woonplaats);
+                 
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                                 
+                 inserted = true; 
+             }
+    }
+    catch (ClassNotFoundException | SQLException e)
+    {
+      System.err.println("Got an exception!");
+      System.err.println(e.getMessage());
+    }
+         return inserted;
+  }    // insert adres_id ook in koppelklantadres tabel
+
+    @Override // werkt
+    public boolean updateStraatNaam() throws SQLException {
+        
+        boolean updated = false; 
+                
+        Scanner input = new Scanner(System.in);
+        System.out.print("Adres ID: ");
+        int adresId = input.nextInt();
+        System.out.print("Straatnaam: ");
+        String straatnaam = input.next().trim();
+        
+         try {
+      // create a mysql database connection
+      
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // the mysql update statement
+                 String sqlQuery = "Update Adres set straatnaam = ? where adres_id = ? ";
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setString (1, straatnaam);
+                 preparedStmt.setInt(2, adresId);                 
+                                
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 updated = true;                  
+             }
+    }
+    catch (ClassNotFoundException | SQLException e)
+    {
+      System.err.println("Got an exception!");
+      System.err.println(e.getMessage());
+    }
+         return updated; 
+    }
+
+
+    @Override // werkt
+    public boolean updatePostCode() throws SQLException {
+        boolean updated = false; 
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Adres ID: ");
+        int adresId = input.nextInt();
+        System.out.print("Postcode: ");
+        String postcode = input.next().trim();
+        
+         try {
+      // create a mysql database connection
+      
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // the mysql update statement
+                 String sqlQuery = "Update Adres set postcode = ? where adres_id = ";
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setString (1, postcode);
+                 preparedStmt.setInt(2, adresId);
+                                
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 updated = true;
+             }
+    }
+    catch (ClassNotFoundException | SQLException e)
+    {
+      System.err.println("Got an exception!");
+      System.err.println(e.getMessage());
+    }
+         return updated; 
+    }
+
+
+    @Override // werkt
+    public boolean updateHuisNummer() throws SQLException {
+        boolean updated = false; 
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Adres ID: ");
+        int adresId = input.nextInt();
+        System.out.print("Huisnummer: ");
+        int huisnummer = input.nextInt();
+        
+         try {
+      // create a mysql database connection
+      
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // the mysql insert statement
+                 String sqlQuery = "Update Adres set huisnummer = ? where adres_id = ? "; 
+                
+                 // create the mysql update preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setInt (1, huisnummer);
+                                
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 
+                 updated = true;                  
+             }
+    }
+    catch (ClassNotFoundException | SQLException e)
+    {
+      System.err.println("Got an exception!");
+      System.err.println(e.getMessage());
+    }
+         return updated; 
+    }
+
+
+    @Override // werkt
+    public boolean updateToevoeging() throws SQLException {
+        boolean updated = false; 
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Adres ID: ");
+        int adresId = input.nextInt();
+        System.out.print("Toevoeging: ");
+        String toevoeging = input.next().trim();
+        
+         try {
+      // create a mysql database connection
+      
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                // the mysql update statement
+                 String sqlQuery = "Update Adres set toevoeging = ? where adres_id = ?";
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setString (1, toevoeging);
+                 preparedStmt.setInt(2, adresId);
+                                
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 
+                 updated = true; 
+             }
+    }
+    catch (ClassNotFoundException | SQLException e)
+    {
+      System.err.println("Got an exception!");
+      System.err.println(e.getMessage());
+    }
+         return updated; 
+    }
+
+
+    @Override // werkt
+    public boolean updateWoonplaats() throws SQLException {
+        boolean updated = false;
+        
+        Scanner input = new Scanner(System.in);
+        System.out.print("Adres ID: ");
+        int adresId = input.nextInt();
+        System.out.print("Woonplaats: ");
+        String woonplaats = input.next().trim();
+        
+         try {
+      // create a mysql database connection
+      
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // the mysql update statement
+                 String sqlQuery = "Update Adres set woonplaats = ? where adres_id = ?"; 
+                 
+                 // create the mysql update preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setString (1, woonplaats);
+                 preparedStmt.setInt(2, adresId);
+                                
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 
+                 updated = true; 
+             }
+    }
+    catch (ClassNotFoundException | SQLException e)
+    {
+      System.err.println("Got an exception!");
+      System.err.println(e.getMessage());
+    }
+         return updated; 
+    }
+    
+    
+
+    @Override // werkt
+    // delete adres_id ook uit koppelklantadres tabel
+    public boolean deleteAdres() throws SQLException {
+    
+    boolean deleted = false; 
+        
+    Scanner input = new Scanner(System.in);
+    System.out.print("Adres ID: ");
+    int adresId = input.nextInt();
+       
+        
+      try{  
+      Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 
+                 String sqlQuery = "delete from adres where adres_id = ? " ;
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                           preparedStmt.setInt(1, adresId);                      
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 
+                 deleted = true; 
+                 
+             }
+      }
+    
+            catch (ClassNotFoundException | SQLException e)
+            {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+            }
+      return deleted; 
+    }
+
+
     @Override
+    //Got an exception!
+//Cannot delete or update a parent row: a foreign key constraint fails (`winkel`.`koppelklantadres`, CONSTRAINT `koppelklantadres_ibfk_2` FOREIGN KEY (`adres_id`) REFERENCES `adres` (`adres_id`))
+    public boolean  deleteAll() throws SQLException {
+        boolean deleted = false;
+        
+        try{  
+            
+        Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 // create a sql date object so we can use it in our INSERT statement
+                 
+                 // the mysql insert statement
+                 String sqlQuery = "delete * from adres";                         
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                                                 
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 
+                 deleted = true; 
+             }
+      }
+    
+            catch (ClassNotFoundException | SQLException e)
+            {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+            }
+        return deleted; 
+    }// delete adres_id ook uit koppelklantadres tabel
+    
+    
+    /* @Override
     public ArrayList<Adres> findByKlantId(int klantId) throws Exception{
         
         ArrayList<Adres> adressenByKlant = new ArrayList<>();
@@ -315,341 +616,6 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
          return adressenByKlant;
     }
+*/
     
-    @Override //werkt
-    // verwerk de constraint voornaam, achternaam, email
-    public boolean insertAdres() throws SQLException, ClassNotFoundException {
-        
-        boolean inserted = false; 
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Straatnaam: ");
-        String straatnaam = input.next();
-               
-        System.out.print("Huisnummer: ");
-        int huisnummer = input.nextInt();
-        
-        System.out.print("Toevoeging: ");
-        String toevoeging = input.next().trim();
-        
-        System.out.print("Postcode: ");
-        String postcode = input.next().trim();
-        
-        System.out.print("Woonplaats: ");
-        String woonplaats = input.next();
-        
-         try {
-      // create a mysql database connection
-      
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "insert into adres (straatnaam, huisnummer," +
-                         " toevoeging, postcode, woonplaats) values (?, ?, ?, ?,?)";
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, straatnaam);
-                 preparedStmt.setInt (2, huisnummer);
-                 preparedStmt.setString (3, toevoeging);
-                 preparedStmt.setString (4, postcode);
-                 preparedStmt.setString (5, woonplaats);
-                 
-                 // execute the preparedstatement
-                 preparedStmt.execute();
-                                 
-                 inserted = true; 
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return inserted;
-  }    // insert adres_id ook in koppelklantadres tabel
-
-    @Override // werkt
-    public boolean updateStraatNaam() throws SQLException {
-        
-        boolean updated = false; 
-                
-        Scanner input = new Scanner(System.in);
-        System.out.print("Adres ID: ");
-        int adresId = input.nextInt();
-        System.out.print("Straatnaam: ");
-        String straatnaam = input.next().trim();
-        
-         try {
-      // create a mysql database connection
-      
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                                  
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set straatnaam = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, straatnaam);
-                 
-                                
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 updated = true; 
-                 
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return updated; 
-    }
-
-
-    @Override // werkt
-    public boolean updatePostCode() throws SQLException {
-        boolean updated = false; 
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Adres ID: ");
-        int adresId = input.nextInt();
-        System.out.print("Postcode: ");
-        String postcode = input.next().trim();
-        
-         try {
-      // create a mysql database connection
-      
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set postcode = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, postcode);
-                                
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 updated = true;
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return updated; 
-    }
-
-
-    @Override
-    public boolean updateHuisNummer() throws SQLException {
-        boolean updated = false; 
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Adres ID: ");
-        int adresId = input.nextInt();
-        System.out.print("Huisnummer: ");
-        int huisnummer = input.nextInt();
-        
-         try {
-      // create a mysql database connection
-      
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set huisnummer = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setInt (1, huisnummer);
-                                
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
-                 updated = true; 
-                 
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return updated; 
-    }
-
-
-    @Override
-    public boolean updateToevoeging() throws SQLException {
-        boolean updated = false; 
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Adres ID: ");
-        int adresId = input.nextInt();
-        System.out.print("Toevoeging: ");
-        String toevoeging = input.next().trim();
-        
-         try {
-      // create a mysql database connection
-      
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set toevoeging = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, toevoeging);
-                                
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
-                 updated = true; 
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return updated; 
-    }
-
-
-    @Override
-    public boolean updateWoonplaats() throws SQLException {
-        boolean updated = false;
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Adres ID: ");
-        int adresId = input.nextInt();
-        System.out.print("Woonplaats: ");
-        String woonplaats = input.next().trim();
-        
-         try {
-      // create a mysql database connection
-      
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "Update Adres set woonplaats = ? where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, woonplaats);
-                                
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
-                 updated = true; 
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return updated; 
-    }
-    
-    
-
-    @Override
-    public boolean deleteAdres() throws SQLException {
-    
-        boolean deleted = false; 
-        
-    Scanner input = new Scanner(System.in);
-    System.out.print("Adres ID: ");
-    int adresId = input.nextInt();
-       
-        
-      try{  
-      Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "delete from adres where adres_id = " 
-                         + adresId ;
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                                                 
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
-                 deleted = true; 
-                 
-             }
-      }
-    
-            catch (ClassNotFoundException | SQLException e)
-            {
-            System.err.println("Got an exception!");
-            System.err.println(e.getMessage());
-            }
-      return deleted; 
-    }
-// delete adres_id ook uit koppelklantadres tabel
-
-    @Override
-    public boolean  deleteAll() throws SQLException {
-        boolean deleted = false;
-        
-        try{  
-            
-        Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // create a sql date object so we can use it in our INSERT statement
-                 
-                 // the mysql insert statement
-                 String sqlQuery = "delete from adres";                         
-                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                                                 
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
-                 deleted = true; 
-             }
-      }
-    
-            catch (ClassNotFoundException | SQLException e)
-            {
-            System.err.println("Got an exception!");
-            System.err.println(e.getMessage());
-            }
-        return deleted; 
-    }// delete adres_id ook uit koppelklantadres tabel
-                    
 }
