@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MAIN;
-page 
-
-import DAOs.Impl.ArtikelDAOImpl;
+package View;
 
 /**
  *
- * @author Anne
+ * @author Wendy
  */
 public class ArtikelView {
+     /*
     public String zoekOpArtikelNaam(){
         Scanner scan = new Scanner();
         String artikelNaam = scan.next();
@@ -41,7 +39,7 @@ public class ArtikelController{
         
         view.printBestellingMetArtikel()
         
-    }
+    }  
     
     
 }
