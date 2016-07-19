@@ -20,9 +20,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.validator.ValidatorException;
+//import org.apache.commons.validator.ValidatorException;
 import org.apache.commons.validator.routines.EmailValidator;
-
 
 /**
  *
@@ -119,7 +118,7 @@ public static boolean isValidEmailAddress(String email) {
     }
     
     @Override  // werkt
-    public Klant findKlantByKlantId(int klantId) throws SQLException, ClassNotFoundException {
+    public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException {
         
        KlantBuilder klantBuilder = new KlantBuilder();
        Klant klant = new Klant(klantBuilder);

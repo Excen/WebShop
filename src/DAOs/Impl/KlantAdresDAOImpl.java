@@ -107,7 +107,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
                 while (rs.next()) {  
                     
                     int klantId = rs.getInt("klant_id");
-                    Klant klant = klantDao.findKlantByKlantId(klantId);
+                    Klant klant = klantDao.findByKlantId(klantId);
                     klantenlijst.add(klant);            
                     //voeg klant toe aan lijst :Klant klant = findByKlantId(int klantId); klantenlijst.add(klant);                       
         }  
