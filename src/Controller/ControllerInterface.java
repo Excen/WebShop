@@ -11,7 +11,7 @@ package Controller;
  */
 public interface ControllerInterface {
     
-    //Alle methoden die we nodig hebben in de controller. De controller krijgt input van de view (in de vorm dat de 
+    // Alle methoden die we nodig hebben in de controller. De controller krijgt input van de view (in de vorm dat de 
     // view alle methoden kan aanroepen) en spreek zelf de implementatie van de verschillende DAO methoden aan om de mogelijke 
     // taken te doen.
     
