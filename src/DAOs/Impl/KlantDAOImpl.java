@@ -66,7 +66,7 @@ public static boolean isValidEmailAddress(String email) {
             // Validate a variable containing an email address
                  
     } catch (Exception ex) {
-        System.out.println(email + " is not a valid E-mail address. Probeer opnieuw: ");   
+        System.out.println(email + " is not a valid E-mail address. Probeer opnieuw. ");   
         result = false;
     }
         return result;

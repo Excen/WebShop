@@ -74,9 +74,14 @@ public class Main {
 
         System.out.println("connected with "+ con.toString());
 
+        KlantDAOImpl klantDAO = new KlantDAOImpl();
+       Klant klant = klantDAO.insertKlant();
+       System.out.println(klant.getKlantId());
+       System.out.println("-----");
+        
        KlantAdresDAOImpl klantAdres = new KlantAdresDAOImpl();
        
-       boolean created = klantAdres.createKlantAdres(2,8);
+       boolean created = klantAdres.createKlantAdres(16,7);
        System.out.println(created);
        System.out.println("-----");
        
@@ -89,10 +94,7 @@ public class Main {
        
         
         /*
-        KlantDAOImpl klantDAO = new KlantDAOImpl();
-       Klant klant = klantDAO.insertKlant();
-       System.out.println(klant.getKlantId());
-       System.out.println("-----");
+        
         
         ArrayList<Klant> klanten = klantDAO.findByAdresId(3);
         for (int i = 0; i< klanten.size(); i++){
