@@ -135,7 +135,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         
         ArrayList<Artikel>artikelLijst = new ArrayList<>();
         
-        String sqlQuery = "select * from koppelbestellingartikel where bestelling_id = " + bestelling_id;
+        String sqlQuery = "select artikel_id, aantal from koppelbestellingartikel where bestelling_id = " + bestelling_id;
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -150,19 +150,13 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         ArtikelDAOInterface artikelDao = new ArtikelDAOImpl();
             
         while (rs.next()) {
-
-            try {
-                int bestelling_idtje = rs.getInt("bestelling_id");
-                int artikel_idtje = rs.getInt("artikel_id");
-                int aantal = rs.getInt("aantal");
-                
-                Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
-                for (int i = 0; i < aantal; i++){
-                artikelLijst.add(artikeltje);
-            }
+       
+            int artikel_idtje = rs.getInt("artikel_id");
+            int aantal = rs.getInt("aantal");
             
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
+            for (int i = 0; i < aantal; i++){
+                artikelLijst.add(artikeltje);
             }
             
             }    
@@ -171,14 +165,13 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
     }   
     
     @Override
-    public ArrayList<Bestelling> findByArtikelId(int artikel_id) throws SQLException {
+    public ArrayList<Bestelling> findBestellingByArtikelId(int artikel_id) throws SQLException {
         
         ArrayList<Bestelling>bestellingLijst = new ArrayList<>();
         
         String sqlQuery = "select bestelling_id from koppelbestellingartikel where artikel_id = " + artikel_id;
         
         try {
-            // Voeg library toe om classnotfoundexception te voorkomen
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -187,12 +180,15 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
-            
+        
+        BestellingDAOInterface bestellingDao = new BestellingDAOImpl();
+        
+        
         while (rs.next()) {
             
             Bestelling bestelling = new Bestelling();
-            BestellingDAOInterface bestellingDao = new BestellingDAOImpl();
-            bestelling = bestellingDao.findById(rs.getInt("artikel_id"));
+            
+            bestelling = bestellingDao.findById(rs.getInt("bestelling_id"));
 
             // zet in arraylist
             bestellingLijst.add(bestelling);
