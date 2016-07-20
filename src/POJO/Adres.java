@@ -51,10 +51,6 @@ public class Adres {
         return toevoeging;
     }
 
-    public void setToevoeging(String toevoeging) {
-        this.toevoeging = toevoeging;
-    }
-
     public int getHuisNummer() {
         return huisNummer;
     }

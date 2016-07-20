@@ -15,7 +15,7 @@ import DAOs.Interface.KlantDAOInterface;
  * @author Wendy
  */
 public class KlantDAOFactory {
-    public static KlantDAOInterface createKlantDao(){
+    public static KlantDAOInterface createKlantDAO(){
         return new KlantDAOImpl();
                 
     }
