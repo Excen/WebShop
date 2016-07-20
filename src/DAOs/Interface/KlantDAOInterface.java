@@ -22,7 +22,7 @@ public interface KlantDAOInterface {
             throws SQLException, ClassNotFoundException;
     public Klant findByEmail(String email) throws SQLException, ClassNotFoundException;
     
-    public Klant insertKlant() throws SQLException;
+    public Klant insertKlant(Klant klant) throws SQLException;
     public void updateVoorNaam() throws SQLException;
     public void updateAchterNaam() throws SQLException; 
     public void updateTussenVoegsel() throws SQLException; 

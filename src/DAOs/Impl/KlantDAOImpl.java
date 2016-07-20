@@ -327,31 +327,19 @@ public static boolean isValidEmailAddress(String email) {
         return klant;
     }
     
-   @Override // werkt
-    public Klant insertKlant() throws SQLException {
+   @Override // inserten werkt
+    public Klant insertKlant(Klant klant) throws SQLException {
         
         KlantBuilder klantBuilder = new KlantBuilder();
-        Klant klant = new Klant(klantBuilder);
+        Klant klantInserted = null; 
         
-        Scanner input = new Scanner(System.in);
-        System.out.print("Voornaam: ");
-        String voornaam = input.next().trim();
+        String voornaam = klant.getVoorNaam();
+        String achternaam = klant.getAchterNaam();        
+        String tussenvoegsel = klant.getTussenVoegsel();
+        String email = klant.getEmail();
         
-        System.out.print("Achternaam: ");
-        String achternaam = input.next().trim();
-        
-        System.out.print("tussenvoegsel: ");
-        String tussenvoegsel = input.next().trim();
-        
-        System.out.print("email: ");
-        String email = input.next().trim();
-        
-        isValidEmailAddress(email);
-        // doe iets als result = false
-                   
-  
         try {
-      // create a mysql database connection      
+        // create a mysql database connection      
         Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
@@ -363,10 +351,10 @@ public static boolean isValidEmailAddress(String email) {
                  // create the mysql insert preparedstatement
                 stmt = conn.prepareStatement(sqlQuery,
                          PreparedStatement.RETURN_GENERATED_KEYS);
-                 stmt.setString (1, voornaam);
-                 stmt.setString (2, achternaam);
-                 stmt.setString (3, tussenvoegsel);
-                 stmt.setString (4, email);
+                stmt.setString (1, voornaam);
+                stmt.setString (2, achternaam);
+                stmt.setString (3, tussenvoegsel);
+                stmt.setString (4, email);
                  // execute the preparedstatement
                  
                  rs = stmt.getGeneratedKeys();
@@ -377,17 +365,16 @@ public static boolean isValidEmailAddress(String email) {
                      klantBuilder.voorNaam(rs.getString("voornaam"));
                      klantBuilder.achterNaam(rs.getString("achternaam"));
                      klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-                     klantBuilder.email(rs.getString("email"));
-            
-            // build Klant
-                    klant = klantBuilder.build();
-                 }
+                     klantBuilder.email(rs.getString("email"));            
+                    
+                 } 
+                 // build Klant
+                 klantInserted = klantBuilder.build();
                  
                  int affectedRows = stmt.executeUpdate();
                  if (affectedRows == 0) {
                     throw new SQLException("Creating user failed, no rows affected.");
-                 }
-                 
+                 }                 
              }
     }
     catch (ClassNotFoundException | SQLException e)
@@ -395,7 +382,7 @@ public static boolean isValidEmailAddress(String email) {
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
-         return klant;
+         return klantInserted;
   }  
     
     @Override // werkt
