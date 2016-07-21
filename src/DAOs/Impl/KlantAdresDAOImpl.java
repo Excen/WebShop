@@ -159,7 +159,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     }
 
     @Override // werkt
-    public boolean createKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException {
+    public boolean insertKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException {
         
         boolean created = false; 
         try{

@@ -26,7 +26,7 @@ public class Klant {
     }
     
     public Klant(){
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     public static Klant getInstance(){

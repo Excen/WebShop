@@ -20,7 +20,7 @@ public interface KlantAdresDAOInterface {
     public ArrayList<Klant> findKlantByAdresId(int bestelling_id) throws SQLException, ClassNotFoundException;
     public ArrayList<Adres> findAdresByKlantId(int artikel_id) throws SQLException, ClassNotFoundException;
     
-    public boolean createKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException;
+    public boolean insertKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException;
         
     public boolean deleteAll() throws SQLException, ClassNotFoundException;
     public boolean deleteKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException;

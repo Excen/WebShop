@@ -13,7 +13,7 @@ import DAOs.Interface.KlantAdresDAOInterface;
  * @author Wendy
  */
 public class KlantAdresDAOFactory {
-    public static KlantAdresDAOInterface createKlantAdresDao(){
+    public static KlantAdresDAOInterface createKlantAdresDAO(){
         return new KlantAdresDAOImpl();
 }
 }
