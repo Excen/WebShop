@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -256,63 +257,55 @@ public class AdresDAOImpl implements AdresDAOInterface {
     }
     
    
-    @Override // inserten werkt - 
-        public Adres insertAdres(Adres adres) throws SQLException, ClassNotFoundException {
+    @Override // werkt
+        public int insertAdres(Adres adres) throws SQLException, ClassNotFoundException {
         
-        AdresBuilder adresBuilder = new AdresBuilder();
-        Adres adresInserted = null;
-        
+        int adresId = 0; 
+                
         String straatnaam = adres.getStraatNaam();
         int huisnummer = adres.getHuisNummer();
         String toevoeging = adres.getToevoeging();
         String postcode = adres.getPostCode();
         String woonplaats = adres.getWoonPlaats();
+         // the mysql update statement
                 
-        try {
-        // create a mysql database connection
-      
-        Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                 // the mysql update statement
-                String sqlQuery = "insert into adres (straatnaam, huisnummer," +
+        String sqlQuery = "insert into adres (straatnaam, huisnummer," +
                          " toevoeging, postcode, woonplaats) values (?, ?, ?, ?,?)";
-                 
-                // create the mysql insert preparedstatement
-               
-                PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery,
-                         PreparedStatement.RETURN_GENERATED_KEYS);
-                preparedStmt.setString (1, straatnaam);
-                preparedStmt.setInt (2, huisnummer);
-                preparedStmt.setString (3, toevoeging);
-                preparedStmt.setString (4, postcode);
-                preparedStmt.setString (5, woonplaats);
-                 
-                rs = preparedStmt.getGeneratedKeys();
-                if (rs.isBeforeFirst()){
-                     
-                    rs.next(); 
-                    adresBuilder.adresId(rs.getInt(1));
-                    adresBuilder.straatNaam(rs.getString("straatnaam"));
-                    adresBuilder.huisNummer(rs.getInt("huisnummer"));
-                    adresBuilder.toevoeging(rs.getString("toevoeging"));
-                    adresBuilder.postCode(rs.getString("postcode"));
-                    adresBuilder.woonPlaats(rs.getString("woonplaats"));            
-                    
-                }  // build Adres
-                    adresInserted = adresBuilder.build();                    
-                 
-                int affectedRows = preparedStmt.executeUpdate();
-                if (affectedRows == 0) {
+       
+        // create a mysql database connection
+            Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+            try (Connection conn = DriverManager.getConnection(url, user, pw);                
+                // create the mysql insert preparedstatement               
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery,
+                         Statement.RETURN_GENERATED_KEYS) ){
+                
+                 preparedStmt.setString (1, straatnaam);
+                 preparedStmt.setInt (2, huisnummer);
+                 preparedStmt.setString (3, toevoeging);
+                 preparedStmt.setString (4, postcode);
+                 preparedStmt.setString (5, woonplaats);
+                
+                 int affectedRows = preparedStmt.executeUpdate();
+                 if (affectedRows == 0) {
                     throw new SQLException("Creating user failed, no rows affected.");
-                }
-    
+                 } 
+                
+                rs = preparedStmt.getGeneratedKeys();
+                if (rs.isBeforeFirst()){ 
+                   if (rs.next())                    
+                         adresId = rs.getInt(1);                               
+                }     
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }                    
             }
-        } catch (ClassNotFoundException | SQLException e){
-        System.err.println("Got an exception!");
-        System.err.println(e.getMessage());
-        }
-    return adresInserted;
+            catch (SQLException e){
+                System.err.println("Got an exception!");
+                System.err.println(e.getMessage());
+            }
+            
+    return adresId;
 }       
     
     @Override // werkt

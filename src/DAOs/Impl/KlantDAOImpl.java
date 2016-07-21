@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList; 
 //import java.util.Set;
 //import java.util.HashSet;
@@ -327,62 +328,55 @@ public static boolean isValidEmailAddress(String email) {
         return klant;
     }
     
-   @Override // inserten werkt
-    public Klant insertKlant(Klant klant) throws SQLException {
+   @Override // werkt
+    public int insertKlant(Klant klant) throws SQLException, ClassNotFoundException {
         
-        KlantBuilder klantBuilder = new KlantBuilder();
-        Klant klantInserted = null; 
+        int klantId = 0;        
         
         String voornaam = klant.getVoorNaam();
         String achternaam = klant.getAchterNaam();        
         String tussenvoegsel = klant.getTussenVoegsel();
         String email = klant.getEmail();
         
-        try {
+        // the mysql insert statement
+        String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel, email)"
+                         + " values (?, ?, ?, ?)";
+    
         // create a mysql database connection      
         Class.forName(driver);
-             // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+        // create a sql date object so we can use it in our INSERT statement
+        try (Connection conn = DriverManager.getConnection(url, user, pw);
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt  = conn.prepareStatement(sqlQuery,
+                Statement.RETURN_GENERATED_KEYS) ) {
                  
-                 // the mysql insert statement
-                 String sqlQuery = "insert into Klant (voornaam, achternaam, tussenvoegsel, email)"
-                         + " values (?, ?, ?, ?)";
-                 
-                 // create the mysql insert preparedstatement
-                stmt = conn.prepareStatement(sqlQuery,
-                         PreparedStatement.RETURN_GENERATED_KEYS);
-                stmt.setString (1, voornaam);
-                stmt.setString (2, achternaam);
-                stmt.setString (3, tussenvoegsel);
-                stmt.setString (4, email);
+                preparedStmt.setString (1, voornaam);
+                preparedStmt.setString (2, achternaam);
+                preparedStmt.setString (3, tussenvoegsel);
+                preparedStmt.setString (4, email);
                  // execute the preparedstatement
                  
-                 rs = stmt.getGeneratedKeys();
-                 if (rs.isBeforeFirst()){
-                     
-                     rs.next(); 
-                     klantBuilder.klantId(rs.getInt(1));
-                     klantBuilder.voorNaam(rs.getString("voornaam"));
-                     klantBuilder.achterNaam(rs.getString("achternaam"));
-                     klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-                     klantBuilder.email(rs.getString("email"));            
-                    
-                 } 
-                 // build Klant
-                 klantInserted = klantBuilder.build();
-                 
-                 int affectedRows = stmt.executeUpdate();
+                 int affectedRows = preparedStmt.executeUpdate();
                  if (affectedRows == 0) {
                     throw new SQLException("Creating user failed, no rows affected.");
-                 }                 
-             }
-    }
-    catch (ClassNotFoundException | SQLException e)
-    {
-      System.err.println("Got an exception!");
-      System.err.println(e.getMessage());
-    }
-         return klantInserted;
+                 } 
+                 
+                 rs = preparedStmt.getGeneratedKeys();
+                 if (rs.isBeforeFirst()){
+                    if (rs.next()) 
+                        klantId = rs.getInt(1);                         
+                 } 
+                 
+                 //int affectedRows = preparedStmt.executeUpdate();
+                 //if (affectedRows == 0) {
+                   // throw new SQLException("Creating user failed, no rows affected.");
+                 //}                 
+        }
+        catch (SQLException e){
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+    return klantId;
   }  
     
     @Override // werkt

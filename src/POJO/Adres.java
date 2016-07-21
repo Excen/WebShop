@@ -69,6 +69,7 @@ public class Adres {
         private String woonPlaats;       
     
         public AdresBuilder(){
+            
         }
         
         public AdresBuilder adresId(int adresId){
@@ -78,7 +79,7 @@ public class Adres {
         
         public AdresBuilder straatNaam(String straatNaam){
            this.straatNaam = straatNaam;
-            return this; 
+                return this; 
         }
         
         public AdresBuilder postCode (String postCode){

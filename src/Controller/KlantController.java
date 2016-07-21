@@ -1,14 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controller;
 
+import DAOs.Factory.AdresDAOFactory;
+import DAOs.Factory.KlantAdresDAOFactory;
+import DAOs.Factory.KlantDAOFactory;
+import DAOs.Impl.AdresDAOImpl;
+import DAOs.Impl.KlantAdresDAOImpl;
 import DAOs.Impl.KlantDAOImpl;
+import POJO.Adres;
+import POJO.Adres.AdresBuilder;
 import POJO.Klant;
 import POJO.Klant.KlantBuilder;
+import View.AdresView;
 import View.KlantView;
+import java.sql.SQLException;
 
 /**
  *
@@ -16,64 +21,109 @@ import View.KlantView;
  */
 
 public class KlantController {
-    KlantDAOImpl klantDAO = new KlantDAOImpl();
+    KlantDAOImpl klantDAO = (KlantDAOImpl) KlantDAOFactory.createKlantDAO();
     KlantView klantView = new KlantView();
-    
+    AdresDAOImpl adresDAO = (AdresDAOImpl) AdresDAOFactory.createAdresDAO();
+    AdresView adresView = new AdresView();
+    AdresController adresController = new AdresController();
+    KlantAdresDAOImpl klantAdresDAO = (KlantAdresDAOImpl) KlantAdresDAOFactory.createKlantAdresDAO();
    
-    // return klnatId en adresId
-    public int VoegNieuweKlantToe(){
-        int klantId; 
-        int adresId;
-        /*
-        klantView.haalKlantGegevensOp();
-        isValidEmailAdress();
-        Klant klant = createKlant();
-                    
-        Adres adres = createAdres();
-        klantDAO.insert(klant);
-        adresDAO.insert(adres);
-        klantId = klant.getKlantId();
-        adresId = adres.getAdresId();
-        klantAdresDAO.insert(klant_id, adres_id); 
+    
+    // return klantId + check: //klopppen datatypes / isValidEmailAdress();
+    public int voegNieuweKlantToe() throws SQLException, ClassNotFoundException {
         
-*/
-        return "U heeft klant met klantId " + klantId + "en adresId " + adresId + " toegevoegd."; 
+        KlantBuilder klantBuilder = new KlantBuilder();
+        AdresBuilder adresBuilder = new AdresBuilder();
+        Adres adres = new Adres (adresBuilder); 
+        
+        Klant klantNieuw = createKlant();           
+        int klantId = klantDAO.insertKlant(klantNieuw);
+        klantBuilder.klantId(klantId);
+        klantNieuw = klantBuilder.build(); // klant bouwen om eventueel voor vervolgstappen te gebruiken
+                
+        //adres = adresController.createAdres();
+        //int adresId = adresDAO.insertAdres(adres); // return type werkt nog niet
+        
+        int adresId = 12;       
+        boolean toegevoegd = klantAdresDAO.insertKlantAdres(klantId, adresId); 
+        // wilt u nog een andere actie: of terug naar hoofdmenu
+        
+        System.out.println("U heeft de klant- en adresgegevens van toegevoegd van klantId: " + klantId + " en adresId " + adresId);
+        return klantId;
+                
     }
     
-    public Klant ZoekKlantGegevens(){
+    public void zoekKlantGegevens() throws SQLException, ClassNotFoundException{
         
         Klant klant = new Klant();
+        KlantBuilder klantBuilder = new KlantBuilder(); 
+        int klantId = 0;
         
-        int klantId = klantView.voerKlantIdIn();
-            if (klantId!= 000){ 
-                // klantDAO.findByKlantId(); return klant.
+        int input = klantView.isKlantIdBekend();
+        if (input == 1){
+            klantId = klantView.voerKlantIdIn();
+            klant = klantDAO.findByKlantId(klantId);                    
+        }
+        else if (input == 2){
+            int keuze = klantView.hoeWiltUZoeken(); 
+            switch (keuze) {
+                case 1:
+                    String achterNaam = klantView.haalAchterNaamOp();
+                    String voorNaam = klantView.haalVoorNaamOp();
+                    klant = klantDAO.findByVoorNaamAchterNaam(achterNaam, voorNaam);
+                    break;
+                case 2:
+                    String email = klantView.haalEmailOp();
+                    klant = klantDAO.findByEmail(email);
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
             }
-            else{
-            //roep methode aan om te zoeken met andere gegevens. 
-            // klantView.gegevensBekend(); a. voornaam en achternaam b. achternaam c. email
-            // klantDOA.findBy...() bv voor en achternaam, email
-           
-            }            
+        }
+        else {}
+                   
+        klantView.toonKlantGegevens(klant);
         
-        return klant;
     }
     
     
-    public Klant WijzigKlantGegevens(){
-        Klant klant = new Klant(); 
+    public Klant WijzigKlantGegevens() throws SQLException, ClassNotFoundException{
+       Klant klant = new Klant(); 
+       int klantId = 0;
         
-        int klantId = klantView.voerKlantIdIn();
-            if (klantId!= 000){ 
-                // klantView.invoerWijzigGegevens();
-                //klantDAO.update()
+       int input = klantView.isKlantIdBekend();
+        
+       if (input == 1){
+            klantId = klantView.voerKlantIdIn();
+       }
+       
+       else if (input == 2) {
+            int keuze = klantView.hoeWiltUZoeken();
+            switch (keuze) {
+                case 1:
+                    String achterNaam = klantView.haalAchterNaamOp();
+                    String voorNaam = klantView.haalVoorNaamOp();
+                    klant = klantDAO.findByVoorNaamAchterNaam(achterNaam, voorNaam);
+                    break;
+                case 2:
+                    String email = klantView.haalEmailOp();
+                    klant = klantDAO.findByEmail(email);
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
             }
-            else{
             // roep methode aan om te zoeken met andere gegevens. 
             //roep methode aan om te zoeken met andere gegevens. 
             // klantView.gegevensBekend(); a. voornaam en achternaam b. achternaam c. email
-            }            
+       }
+       
+       else {}
         
-        return klant; 
+       return klant; 
     }
    
     
@@ -81,7 +131,7 @@ public class KlantController {
         
         boolean deleted = false; 
         
-        //klantview.watWiltUWijzigen();  1 klant of alle klanten
+        //klantview.watWiltUVerwijderen;  1 klant of alle klanten
         //klantDAO.delete();
         //klantDAO.deleteAll();
         
@@ -89,19 +139,15 @@ public class KlantController {
         return deleted; 
     }
     
-  
     
-    
-    // waar moet deze methde worden geplaatst?
     public Klant createKlant(){
         
-        int klantId = 0;  // 
-        String achternaam = null; // klantView.haalAchterNaamOp();
-        String voornaam = null; // klantView.haalVoorNaamOp();
-        String tussenvoegsel = null; //  klantView.haalTussenVoegsel();
-        String email = null; // klantView.haalEmailOp();
+        //int klantId = 0;   
+        String achternaam = klantView.haalAchterNaamOp();
+        String voornaam = klantView.haalVoorNaamOp();
+        String tussenvoegsel = klantView.haalTussenVoegselOp();
+        String email = klantView.haalEmailOp();
         
-        // of klantView.haalKlantGegevensOp();
         
         KlantBuilder klantBuilder = new KlantBuilder();
         
@@ -116,5 +162,5 @@ public class KlantController {
         
         return klant;        
     }
-    
+      
 }
