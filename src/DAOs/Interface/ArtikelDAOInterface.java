@@ -19,7 +19,7 @@ public interface ArtikelDAOInterface {
     public Artikel findByArtikelID(int artikelID);
     public Artikel findByArtikelNaam(String artikelNaam);
     public Artikel findByArtikelPrijs (double artikelPrijs);
-    public boolean insertArtikel (int artikelID, String artikelNaam, double artikelPrijs);
+    public Artikel insertArtikel (String artikelNaam, double artikelPrijs);
     public boolean deleteArtikel(int artikelID);
     public void update(Artikel artikel) throws SQLException, ClassNotFoundException;
     

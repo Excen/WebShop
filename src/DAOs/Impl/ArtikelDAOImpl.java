@@ -136,38 +136,53 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
     }
 
     @Override
-    public boolean insertArtikel(int artikelID, String artikelNaam, double artikelPrijs) {
+    public Artikel insertArtikel(String artikelNaam, double artikelPrijs) {
         //boolean return als gelukt is? 
-        boolean isAdded = true;
+        Artikel artikel = new Artikel();
+        int artikelId = 0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
-            String sqlUpdate = "insert into artikel (artikel_id, artikel_naam, artikel_prijs)"
-                    + "values (?, ?, ?)";
-            pstmt = con.prepareStatement(sqlUpdate);
+            String sqlUpdate = "insert into artikel (artikel_naam, artikel_prijs)"
+                    + "values (?, ?)";
+            pstmt = con.prepareStatement(sqlUpdate, Statement.RETURN_GENERATED_KEYS);
 
-            pstmt.setInt(1, artikelID);
-            pstmt.setString(2, artikelNaam);
-            pstmt.setDouble(3, artikelPrijs);
+           
+            pstmt.setString(1, artikelNaam);
+            pstmt.setDouble(2, artikelPrijs);
 
             pstmt.executeUpdate();
+            
+            rs = pstmt.getGeneratedKeys();
+            if (rs.isBeforeFirst()) {
+                if (rs.next()) {
+                    artikelId = rs.getInt(1);
+                }
+            }
+            artikel.setArtikelID(artikelId);
+            artikel.setArtikelNaam(artikelNaam);
+            artikel.setArtikelPrijs(artikelPrijs);
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data entry failed.");
             ex.printStackTrace();
-            isAdded = false;
+            
         }
-        return isAdded;
+                
+        return artikel;
     }
+    
+    
+    
 
     // delete methode
     @Override
-    public boolean deleteArtikel(int artikelID) {
+    public boolean deleteArtikel(int artikelId) {
         boolean isDeleted = false;
         try {
            Class.forName(driver);
            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
-           String artikelZoeken = "select * from artikel where artikel_id = " + artikelID;
+           String artikelZoeken = "select * from artikel where artikel_id = " + artikelId;
            pstmt = con.prepareStatement(artikelZoeken);
            rs = pstmt.executeQuery(artikelZoeken);
            boolean artikelFound = rs.next();
@@ -175,14 +190,11 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
            if (artikelFound) {
             String sqlUpdate = "delete from artikel where artikel_id = ?";
             pstmt = con.prepareStatement(sqlUpdate);
-            pstmt.setInt(1, artikelID);
+            pstmt.setInt(1, artikelId);
             pstmt.executeUpdate(); 
             isDeleted = true;
             }
-           
-           else {
-               System.out.println("Het artikel met artikel id " + artikelID + " staat niet in de database.");
-           }
+             
         }
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Deleting failed.");
