@@ -45,9 +45,17 @@ public class ArtikelController {
             verwijderArtikelGegevens();
             
         }
+        if (userInput == 5) {
+            terugNaarHoofdMenu();
+        }
         
         
     }
+    
+    public void terugNaarHoofdMenu() {
+        HoofdMenuController hoofdMenu = new HoofdMenuController();
+        hoofdMenu.start();
+}
     
     public Artikel voegNieuwArtikelToe(Artikel artikel) {
         String artikelNaam = artikel.getArtikelNaam();
@@ -59,7 +67,15 @@ public class ArtikelController {
     }
     
     public void zoekArtikelGegevens() {
-        
+        Artikel artikel = new Artikel();
+        int userInput = artikelView.isArtikelIdBekend();
+        if (userInput == 1) {
+            int artikelId = artikelView.voerArtikelIdIn();
+            artikel = artikelDAO.findByArtikelID(artikelId);
+        }
+        else if (userInput == 2) {
+            
+        }
     }
     public void wijzigArtikelGegevens() {
         
