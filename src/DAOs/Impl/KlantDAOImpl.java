@@ -42,6 +42,8 @@ public class KlantDAOImpl implements KlantDAOInterface {
     ArrayList <String> voornaamLijst = new ArrayList<>();
     ArrayList <String> achternaamLijst = new ArrayList<>();
     ArrayList <String> tussenvoegselLijst = new ArrayList<>();
+    
+    KlantBuilder klantBuilder = new KlantBuilder();
     /*
     private void connectToDB () {
     
@@ -75,7 +77,6 @@ public static boolean isValidEmailAddress(String email) {
     @Override  // werkt - niet met foreach loop
     public ArrayList<Klant> findAllKlanten() throws SQLException, ClassNotFoundException {
        
-        KlantBuilder klantBuilder = new KlantBuilder();     
         ArrayList<Klant> klantenLijst = new ArrayList<>();
         
         try{
@@ -120,8 +121,7 @@ public static boolean isValidEmailAddress(String email) {
     
     @Override  // werkt
     public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException {
-        
-       KlantBuilder klantBuilder = new KlantBuilder();
+       
        Klant klant = new Klant(klantBuilder);
        
         //load driver
@@ -162,7 +162,6 @@ public static boolean isValidEmailAddress(String email) {
     @Override    // werkt
     public Klant findByVoorNaam(String voorNaam) throws SQLException, ClassNotFoundException {
         
-        KlantBuilder klantBuilder = new KlantBuilder();
         Klant klant = new Klant(klantBuilder);
        
         //load driver
@@ -205,7 +204,6 @@ public static boolean isValidEmailAddress(String email) {
     @Override // werkt
     public Klant findByAchterNaam(String achterNaam) throws SQLException, ClassNotFoundException {
         
-        KlantBuilder klantBuilder = new KlantBuilder();
         Klant klant = new Klant(klantBuilder);
        
         //load driver
@@ -246,7 +244,6 @@ public static boolean isValidEmailAddress(String email) {
     @Override // werkt
     public Klant findByEmail(String email) throws SQLException, ClassNotFoundException {
         
-        KlantBuilder klantBuilder = new KlantBuilder();
         Klant klant = new Klant(klantBuilder);
        
         //load driver
@@ -288,7 +285,6 @@ public static boolean isValidEmailAddress(String email) {
     public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) 
             throws SQLException, ClassNotFoundException {
        
-        KlantBuilder klantBuilder = new KlantBuilder();
         Klant klant = new Klant(klantBuilder);
        
         //load driver
@@ -329,7 +325,7 @@ public static boolean isValidEmailAddress(String email) {
     }
     
    @Override // werkt
-    public int insertKlant(Klant klant) throws SQLException, ClassNotFoundException {
+    public Klant insertKlant(Klant klant) throws SQLException, ClassNotFoundException {
         
         int klantId = 0;        
         
@@ -367,17 +363,77 @@ public static boolean isValidEmailAddress(String email) {
                         klantId = rs.getInt(1);                         
                  } 
                  
-                 //int affectedRows = preparedStmt.executeUpdate();
-                 //if (affectedRows == 0) {
-                   // throw new SQLException("Creating user failed, no rows affected.");
-                 //}                 
+                klantBuilder.klantId(klantId);
+                klantBuilder.voorNaam(voornaam);
+                klantBuilder.achterNaam(achternaam);
+                klantBuilder.tussenVoegsel(tussenvoegsel);
+                klantBuilder.email(email);
+                 
+                klant = klantBuilder.build();
+                 
         }
         catch (SQLException e){
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
         }
-    return klantId;
+    return klant;
   }  
+    
+    public Klant updateGegevens(Klant klant){
+    
+    int klantId = klant.getKlantId();
+    String voornaam = klant.getVoorNaam();
+    String achternaam = klant.getAchterNaam();        
+    String tussenvoegsel = klant.getTussenVoegsel();
+    String email = klant.getEmail();            
+        
+    try {
+    // create a mysql database connection
+      
+    Class.forName(driver);
+    // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                
+                 String sqlQuery = "Update Klant set voornaam = ? , achternaam = ?, tussenvoegsel = ?, email = ? where klant_id = ?"; 
+				                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                 preparedStmt.setString (1, voornaam);
+		 preparedStmt.setString (2, achternaam);
+		 preparedStmt.setString (3, tussenvoegsel);
+		 preparedStmt.setString (4, email);
+                 preparedStmt.setInt(5, klantId);
+                 
+                 // execute the preparedstatement
+                 preparedStmt.executeUpdate();
+                 
+		// Now you can extract all the records
+		// to see the updated records
+                sqlQuery = "SELECT klant_id, voornaam, tussenvoegsel, achternaam, email FROM klant where klant_id = ? ";
+
+                preparedStmt = conn.prepareStatement(sqlQuery);
+                preparedStmt.setInt(1, klantId);
+
+                while(rs.next()){
+                klantBuilder.klantId(rs.getInt("klant_id"));
+                klantBuilder.voorNaam(rs.getString("voornaam"));
+                klantBuilder.achterNaam(rs.getString("achternaam"));
+                klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+                klantBuilder.email(rs.getString("email"));
+            
+                // build Klant
+                klant = klantBuilder.build();  
+      }
+             }
+    }
+    catch (ClassNotFoundException | SQLException e) {
+		System.err.println("Got an exception!");
+		System.err.println(e.getMessage());
+    }
+        
+  return klant; 
+}
+    
     
     @Override // werkt
     public void updateVoorNaam() throws SQLException {
@@ -528,15 +584,12 @@ public static boolean isValidEmailAddress(String email) {
     }
     
     @Override  //werkt
-    public void deleteByKlantId() throws SQLException {
+    public boolean deleteByKlantId(int klantId) throws SQLException {
+            
+        boolean deleted = false; 
         
-        Scanner input = new Scanner(System.in);
-        System.out.print("Klant ID: ");
-        int klantId = input.nextInt();
-       
-        
-      try{  
-      Class.forName(driver);
+        try{  
+        Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
                  // create a sql date object so we can use it in our INSERT statement
@@ -549,32 +602,26 @@ public static boolean isValidEmailAddress(String email) {
                    preparedStmt.setInt(1, klantId);
                  // execute the preparedstatement
                  int rowsAffected = preparedStmt.executeUpdate(); 
-                 //System.out.println(rowsAffected);
+                 if (rowsAffected != 0)
+                     deleted = true;
              }
-      }
-    
-            catch (ClassNotFoundException | SQLException e)
-            {
+        }    
+        catch (ClassNotFoundException | SQLException e){
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
-            }
-    }   
+        }
+    return deleted;
+}   
         
     @Override // werkt
-    public void deleteByKlantNaam() throws SQLException {
-        
-        Scanner input = new Scanner(System.in);
-        System.out.print("Voornaam: ");
-        String voornaam = input.next();
-        System.out.print("Achternaam: ");
-        String achternaam = input.next();
-        System.out.print("Tussenvoegsel: ");
-        String tussenvoegsel = input.next();       
-        
-      try{  
+    public boolean deleteByKlantNaam(String achternaam, String tussenvoegsel, String voornaam) throws SQLException {
+             
+        boolean deleted = false;  
+      
+        try{
         Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+            try (Connection conn = DriverManager.getConnection(url, user, pw)) {
                  // create a sql date object so we can use it in our INSERT statement
                  
                  // the mysql insert statement.first parent, than child
@@ -589,17 +636,23 @@ public static boolean isValidEmailAddress(String email) {
                  
                  // execute the preparedstatement
                  int rowsAffected = preparedStmt.executeUpdate();   
-                 System.out.println("rows affected: " + rowsAffected);
-             }
-      }    
-      catch (ClassNotFoundException | SQLException e) {
-        System.err.println("Got an exception!");
-        System.err.println(e.getMessage());
-       }
+                 System.out.println("Aantal klanten verwijderd: " + rowsAffected);
+                 if (rowsAffected >= 1)
+                     deleted = true; 
+                 
+            }
+        }   
+        catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+      return deleted; 
     } 
     
     @Override
-    public void deleteAll() throws SQLException {
+    public int deleteAll() throws SQLException {
+        
+        int rowsAffected = 0; 
         
         try{  
             
@@ -615,16 +668,17 @@ public static boolean isValidEmailAddress(String email) {
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                                                  
                  // execute the preparedstatement
-                 preparedStmt.executeUpdate();
+                 rowsAffected = preparedStmt.executeUpdate();   
                  
-             }
-      }
+        }
+        }
     
             catch (ClassNotFoundException | SQLException e)
             {
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
-            }        
+            }    
+        return rowsAffected; 
     }  // delete klnat_id ook uit koppelklantadres tabel
 
     /*
