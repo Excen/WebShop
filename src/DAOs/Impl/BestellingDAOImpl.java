@@ -29,48 +29,33 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
     ResultSet rs;
     PreparedStatement stmt;
     
-    /* 
-    Overzicht SQL db
-    CREATE TABLE IF NOT EXISTS bestelling (
-    bestelling_id INT(11) NOT NULL AUTO_INCREMENT,
-    klant_id INT(11) NULL DEFAULT NULL,
-    datum_aangemaakt DATE NULL DEFAULT NULL,
-    totaal_prijs DECIMAL(10,2) NULL DEFAULT NULL,
-    PRIMARY KEY (bestelling_id),
-    INDEX fk_klant_id_idx (klant_id ASC),
-
-    CONSTRAINT fk_klant_id
-    FOREIGN KEY (klant_id)
-    REFERENCES klant (klant_id)
-    */
-
-    /*
-    Haalt gegevens uit de tabel Bestelling.
-    Deze gegevens zijn:
-    bestelling_id
-    klant_id
-    datum
-    */
-    
     @Override
-    public void createBestelling(Bestelling bestelling) throws SQLException {
+    public int insertBestelling(int klantId) throws SQLException {
         
-        // haal waardes uit Bestelling object.
-        int bestelling_id = bestelling.getBestelling_id();
-        int klant_id = bestelling.getKlant_id();
-        java.util.Date datum = bestelling.getDatum();
+        java.util.Date datum = new java.util.Date();
+        int bestellingId = 0;
         
         // Schrijf waarden weg in SQL tabel.
-        String sqlQuery = "insert into bestelling (bestelling_id, klant_id, datum_aangemaakt)"
-        + " values (?, ?, ?)";
+        String sqlQuery = "insert into bestelling (klant_id, datum_aangemaakt)"
+        + " values (?, ?)";
         
+        // Maak connectie 
         con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        stmt.setInt(1, bestelling_id);
-        stmt.setInt(2, klant_id);
-        stmt.setDate(3, new java.sql.Date(datum.getTime()));
-        stmt.execute();
+        stmt = con.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+        stmt.setInt(1, klantId);
+        stmt.setDate(2, new java.sql.Date(datum.getTime()));
+        int affectedRows = stmt.executeUpdate();
+                 
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating user failed, no rows affected.");
+                } 
         
+                rs = stmt.getGeneratedKeys();
+                 if (rs.isBeforeFirst()){
+                    if (rs.next()) 
+                        bestellingId = rs.getInt(1);                         
+                } 
+                return bestellingId;
     }
     
     @Override
@@ -149,6 +134,7 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BestellingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();

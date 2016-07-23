@@ -45,7 +45,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
     
     @Override
     public void createBestellingArtikel(BestellingArtikel bestellingArtikel) throws SQLException{
-        
+   
         // haal waardes uit BestellingArtikel object.
         int bestelling_id = bestellingArtikel.getBestelling_id();
         int artikel_id = bestellingArtikel.getArtikel_id();
@@ -135,7 +135,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         
         ArrayList<Artikel>artikelLijst = new ArrayList<>();
         
-        String sqlQuery = "select artikel_id, aantal from koppelbestellingartikel where bestelling_id = " + bestelling_id;
+        String sqlQuery = "select artikel_id from koppelbestellingartikel where bestelling_id = " + bestelling_id;
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -152,12 +152,10 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         while (rs.next()) {
        
             int artikel_idtje = rs.getInt("artikel_id");
-            int aantal = rs.getInt("aantal");
+            
             
             Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
-            for (int i = 0; i < aantal; i++){
-                artikelLijst.add(artikeltje);
-            }
+            artikelLijst.add(artikeltje);
             
             }    
             return artikelLijst;
@@ -209,6 +207,28 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
         stmt.setInt(2, artikel_id);        
         stmt.executeUpdate();
       
+    }
+    
+    @Override
+    public int findAantalByArtikelID(int bestelling_id, int artikel_id) throws SQLException{
+        
+        String sqlQuery = "select aantal from koppelbestellingartikel where bestelling_id = " + bestelling_id + " and artikel_id = " + artikel_id;
+        int artikelAantal = 0;
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        con = DriverManager.getConnection(url, user, pw);
+        stmt = con.prepareStatement(sqlQuery);
+        rs = stmt.executeQuery();
+        
+        while (rs.next()){
+            artikelAantal = rs.getInt("aantal"); 
+        }
+        return artikelAantal;
     }
     
     @Override
