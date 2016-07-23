@@ -70,6 +70,28 @@ public class ArtikelView {
             */
     }
     
+    public int isArtikelIdBekend() {
+        System.out.println("Is het ariktel id bekend?");
+        System.out.println("1. Ja.");
+        System.out.println("2. Nee.");
+        
+        try{
+            userInput = scanner.nextInt();  
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;  
+    }
+    
+    public int voerArtikelIdIn() {
+        System.out.println("Voer het artikel id in.");
+        userInput = scanner.nextInt();
+        return userInput;
+    }
+    
+    
     public int printVerwijderMenu() {
         System.out.println("Wat wilt u verwijderen uit het artikelenbestand?");
         System.out.println("1. één artikel.");
