@@ -39,8 +39,8 @@ public class KlantController {
     HoofdMenuView startView = new HoofdMenuView();
     
     
-    public void inlogSchermKlant() throws SQLException, ClassNotFoundException{
-        System.out.println();
+    public void klantMenu() throws SQLException, ClassNotFoundException{
+        
         int keuze = klantView.startMenuKlant();
         
         switch(keuze){
@@ -89,7 +89,7 @@ public class KlantController {
         klantView.printString(string);
         System.out.println();
         
-        inlogSchermKlant();
+        klantMenu();
      
     } // eind methode voegNieuweKlantToe
     
@@ -129,7 +129,7 @@ public class KlantController {
                 break;
         }
         
-        inlogSchermKlant();
+        klantMenu();
     } // eind methode zoekKlantGegevens
     
     
@@ -181,7 +181,7 @@ public class KlantController {
                 break;    
         }
        
-        inlogSchermKlant();
+        klantMenu();
                           
     } // einde methode wijzigKlantGegevens
    
@@ -248,7 +248,7 @@ public class KlantController {
             default:
                 break;
         }
-        inlogSchermKlant();
+        klantMenu();
     }// eind methode verwijderKlantGegevens
     
       

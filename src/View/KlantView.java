@@ -16,6 +16,8 @@ public class KlantView {
          
     
     public int startMenuKlant(){
+        System.out.println();
+        System.out.println("Werken in klantenbestand");
         System.out.println("Keuzes in het klantenbestand. Wat wilt u doen?");
         System.out.println("1. Nieuw klant toevoegen in het klantenbestand.");
         System.out.println("2. Klantgegevens opzoeken.");
@@ -23,6 +25,7 @@ public class KlantView {
         System.out.println("4. Klantgegevens verwijderen uit het klantenbestand.");
         System.out.println("5. Terug naar het hoofdmenu.");
         System.out.println("6. Afsluiten.");
+        System.out.println();
         
         try{
             userInput = Integer.parseInt(scanner.nextLine());            
