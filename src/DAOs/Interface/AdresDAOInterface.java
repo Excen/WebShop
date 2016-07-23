@@ -21,7 +21,7 @@ public interface AdresDAOInterface {
     public Adres findByPostcodeHuisNummer(String postCode, int huisNummer) throws SQLException, ClassNotFoundException;
     public Adres findByWoonplaats(String woonPlaats) throws SQLException, ClassNotFoundException;
     
-    public int insertAdres(Adres adres) throws SQLException, ClassNotFoundException ;
+    public Adres insertAdres(Adres adres) throws SQLException, ClassNotFoundException ;
     public boolean updateStraatNaam() throws SQLException;
     public boolean updatePostCode() throws SQLException;
     public boolean updateHuisNummer() throws SQLException;

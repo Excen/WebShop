@@ -30,7 +30,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
-    
+    AdresBuilder adresBuilder = new AdresBuilder();
     
     @Override //werkt
     public ArrayList <Adres> findAllAdresses() throws SQLException, 
@@ -258,7 +258,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
    
     @Override // werkt
-        public int insertAdres(Adres adres) throws SQLException, ClassNotFoundException {
+        public Adres insertAdres(Adres adres) throws SQLException, ClassNotFoundException {
         
         int adresId = 0; 
                 
@@ -298,14 +298,24 @@ public class AdresDAOImpl implements AdresDAOInterface {
                 }     
                 else {
                     throw new SQLException("Creating user failed, no ID obtained.");
-                }                    
+                }     
+                
+                adresBuilder.adresId(adresId);
+                adresBuilder.straatNaam(straatnaam);
+                adresBuilder.huisNummer(huisnummer);
+                adresBuilder.toevoeging(toevoeging);
+                adresBuilder.postCode(postcode);
+                adresBuilder.woonPlaats(woonplaats);
+                 
+                adres = adresBuilder.build();
+                
             }
             catch (SQLException e){
                 System.err.println("Got an exception!");
                 System.err.println(e.getMessage());
             }
             
-    return adresId;
+    return adres;
 }       
     
     @Override // werkt

@@ -254,5 +254,37 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
       return deleted; 
 
     }
+    
+    
+    public int deleteKlantAdresByKlantId(int klantId) throws SQLException, ClassNotFoundException {
+
+    int rowsAffected = 0; 
+    
+      try{  
+        Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+                 
+                 String sqlQuery = "delete from koppelklantadres where klant_id = ? " ;
+                 
+                 // create the mysql preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                    
+                 preparedStmt.setInt(1, klantId);
+                 
+                 // execute the preparedstatement
+                 rowsAffected = preparedStmt.executeUpdate();   
+                                
+             }
+      }
+    
+      catch (ClassNotFoundException | SQLException e){
+        System.err.println("Got an exception!");
+        System.err.println(e.getMessage());
+      }
+      
+      return rowsAffected; 
+
+    }
   
 }

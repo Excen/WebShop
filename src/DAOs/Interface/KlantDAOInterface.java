@@ -22,15 +22,15 @@ public interface KlantDAOInterface {
             throws SQLException, ClassNotFoundException;
     public Klant findByEmail(String email) throws SQLException, ClassNotFoundException;
     
-    public int insertKlant(Klant klant) throws SQLException, ClassNotFoundException ;
+    public Klant insertKlant(Klant klant) throws SQLException, ClassNotFoundException ;
     public void updateVoorNaam() throws SQLException;
     public void updateAchterNaam() throws SQLException; 
     public void updateTussenVoegsel() throws SQLException; 
     public void updateEmail() throws SQLException; 
     
-    public void deleteByKlantId() throws SQLException; 
-    public void deleteByKlantNaam() throws SQLException;
-    public void deleteAll() throws SQLException;    
+    public boolean deleteByKlantId(int klantId) throws SQLException; 
+    public boolean deleteByKlantNaam(String achternaam, String tussenvoegsel, String voornaam) throws SQLException;
+    public int deleteAll() throws SQLException;    
     
     
     
