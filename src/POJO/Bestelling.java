@@ -17,25 +17,6 @@ public class Bestelling {
     private int klant_id;
     private java.util.Date datum;
     
-    /*
-    java.sql.Date d= new java.sql.Date(format.parse(source).getTime());
-    
-    String source="2008/4/5";              
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");                       
-        java.sql.Date d=(Date) format.parse(source);
-        
-        ---
-        
-        java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-
-            pstmt.setTimestamp(1, date);
-    
-        ---    
-    
-        proc_stmt.setTimestamp(1, new java.sql.Timestamp(fromDate.getTime());
-        
-    */
-    
     // Constructor
     public Bestelling(int bestelling_id, int klant_id){
         this.bestelling_id = bestelling_id;
