@@ -16,7 +16,7 @@ public interface ControllerInterface {
     // taken te doen.
     
     // Checken of klant als bestaat aan de hand van klantId
-    public boolean doesKlantExist (int klant_id);
+    
     
     // 
     

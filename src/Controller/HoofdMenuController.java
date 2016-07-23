@@ -6,95 +6,69 @@
 package Controller;
 
 import View.HoofdMenuView;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+
+
+
 
 /**
  *
  * @author Excen
  */
 public class HoofdMenuController implements ControllerInterface {
-    Scanner scanner = new Scanner(System.in);
-    int userInput;
+   // data fields 
+   KlantController klantController = new KlantController(); 
+   //ArtikelController artikelController = new ArtikelController();
+   BestellingController bestellingController = new BestellingController();
+   AdresController adresController = new AdresController();
+   
+   HoofdMenuView hoofdMenuView = new HoofdMenuView();
+    
+   Scanner scanner = new Scanner(System.in);
+   int userInput;
     
     // beginpunt
-    public void start(){
-        HoofdMenuView startView = new HoofdMenuView();
-        int userInput = startView.startVraag();
-        if (userInput == 1){
-            System.out.println("Optie 1, u bent gebruiker");
-            userInput = startView.bestaandeKlant();
-            
-            if (userInput == 1){
-                System.out.println("Optie 1, u bent een nieuwe klant");
-                // create klant - 
-            }
-            else if (userInput == 2){
-                System.out.println("Optie 2, u bent een bestaande klant");
-                // ga naar opties voor bestaande klant --
-            }
-            else if (userInput == 3){
-                System.out.println("Optie 3, terug naar hoofdmenu");
-                userInput = startView.startVraag();
-                // 
-            }
-            else {
-            
-            }
-             
-            
-        }
-        else if (userInput == 2){
-            System.out.println("Optie 2");
-            
-            userInput = startView.eigenaar();
-            
-            if (userInput == 1){
-                System.out.println("Werken in klantenbestand");
-                startView.optiesEigenaarKlantBestand();
-                // 
-            }
-            else if (userInput == 2){
-                
-                startView.optiesEigenaarArtikelBestand();
-                // artikell
-            }
-            else if (userInput == 3){
-                
-                startView.optiesEigenaarBestellingBestand();
-                // bestelling
-            }
-            else if (userInput == 4){
-                
-                startView.optiesEigenaarAdresBestand();
-                //adres
-            }
-            else if (userInput == 5){
-                //hoofdmenu
-            }
-            
-            
-        }
-        else if (userInput == 3){
-            System.out.println("Optie 3, terug naar hoofdmenu");
-            userInput = startView.startVraag();
-        }
+    public void start() throws SQLException, ClassNotFoundException{
+       
+        userInput = hoofdMenuView.hoofdMenu();
         
-        else {
-            System.out.println("Foutieve optie. Probeer opnieuw: ");
-            userInput = startView.startVraag();
-        }
+            switch (userInput) {
+                case 1: // ga naar klantMenu
+                    //klantController.klantMenu();
+                    break;
+                case 2: // ga naar artikelMenu
+                    //artikelController.startArtikelController();                    
+                    break;
+                case 3: // ga naar bestellingmenu
+                    //bestellingController.bestellingStart();                                 
+                    break;
+                case 4:// ga naar adresmenu
+                    //adresController.adresMenu();                
+                    break;
+                case 5: 
+                    afsluiten();
+                    break;
+                default:
+                    break;
+            }
+        } 
+
+    
+    public void afsluiten(){
+       userInput = hoofdMenuView.bevestigingsVraag();
+       
+       if (userInput == 1){
+           // code om af te sluiten
+           
+       }
+       else if (userInput == 2){
+           userInput = hoofdMenuView.hoofdMenu();
+       }           
+        
     }
-    
-    
-    
-    
-    @Override
-    public boolean doesKlantExist(int klant_id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
     
     
 }
