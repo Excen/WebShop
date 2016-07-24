@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class HoofdMenuController implements ControllerInterface {
    // data fields 
    KlantController klantController = new KlantController(); 
-   //ArtikelController artikelController = new ArtikelController();
+   ArtikelController artikelController = new ArtikelController();
    BestellingController bestellingController = new BestellingController();
    AdresController adresController = new AdresController();
    
@@ -40,10 +40,10 @@ public class HoofdMenuController implements ControllerInterface {
                     klantController.klantMenu();
                     break;
                 case 2: // ga naar artikelMenu
-                    //artikelController.startArtikelController();                    
+                    artikelController.artikelMenu();                    
                     break;
                 case 3: // ga naar bestellingmenu
-                    //bestellingController.bestellingStart();                                 
+                    bestellingController.bestellingMenu();                                 
                     break;
                 case 4:// ga naar adresmenu
                     //adresController.adresMenu();                

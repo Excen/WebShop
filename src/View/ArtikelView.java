@@ -39,7 +39,7 @@ public class ArtikelView {
     
     public String voerArtikelNaamIn() {
         System.out.print("Artikelnaam: ");
-        String artikelNaam = scanner.next().trim();
+        String artikelNaam = scanner.next();
         scanner.nextLine();
         return artikelNaam;   
     }

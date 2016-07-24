@@ -413,6 +413,7 @@ public static boolean isValidEmailAddress(String email) {
 
                preparedStmt = conn.prepareStatement(sqlQuery);
                preparedStmt.setInt(1, klantId);
+               rs = preparedStmt.executeQuery();   
 
                while(rs.next()){
                klantBuilder.klantId(rs.getInt("klant_id"));

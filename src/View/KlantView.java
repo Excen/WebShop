@@ -99,16 +99,16 @@ public class KlantView {
                 userInput = Integer.parseInt(scanner.nextLine());            
 
                 
-                if (userInput == 1 || userInput == 2){
+                if (userInput == 1 || userInput == 2 || userInput == 3){
                     doorgaan = true;
                 } 
 
                 if(doorgaan == false){             
-                    System.out.println("Foutieve input, voer 1 of 2 in.");
+                    System.out.println("Foutieve input, voer 1, 2, 3 in.");
                 } 
                 // foutafhandeling werkt niet
             }catch(InputMismatchException ex){
-                System.out.println("Error. Voer het  cijfer 1 of 2 in. ");
+                System.out.println("Error. Voer het  cijfer 1, 2, 3 in. ");
                 scanner.nextLine();
             }
             

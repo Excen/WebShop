@@ -318,6 +318,71 @@ public class AdresDAOImpl implements AdresDAOInterface {
     return adres;
 }       
     
+        
+    public Adres updateGegevens(Adres adres){
+    
+        int adresId = adres.getAdresId();
+        String straatnaam = adres.getStraatNaam();
+	int huisnummer = adres.getHuisNummer();
+	String toevoeging = adres.getToevoeging();
+	String postcode = adres.getPostCode();
+	String woonplaats = adres.getWoonPlaats(); 
+        
+    try {
+    // create a mysql database connection
+      
+    Class.forName(driver);
+    // create a sql date object so we can use it in our INSERT statement
+        try (Connection conn = DriverManager.getConnection(url, user, pw)) {
+
+                String sqlQuery = "Update Adres set straatnaam = ? , huisnummer = ?, toevoeging = ?, postcode = ?, woonplaats = ? where adres_id = ?"; 
+
+				// create the mysql insert preparedstatement
+                PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+				
+                 preparedStmt.setString (1, straatnaam);
+                 preparedStmt.setInt (2, huisnummer);
+                 preparedStmt.setString (3, toevoeging);
+                 preparedStmt.setString (4, postcode);
+                 preparedStmt.setString (5, woonplaats);
+                 preparedStmt.setInt(6, adresId);
+				 
+                 int affectedRows = preparedStmt.executeUpdate();
+                 if (affectedRows == 0) {
+                    throw new SQLException("Creating user failed, no rows affected.");
+                 } 
+				
+               // Now you can extract all the records
+               // to see the updated records
+               sqlQuery = "SELECT adres_id, straatnaam, huisnummer, toevoeging, postcode, woonplaats FROM adres where adres_id = ? ";
+
+               preparedStmt = conn.prepareStatement(sqlQuery);
+               preparedStmt.setInt(1, adresId);
+               rs = preparedStmt.executeQuery();   
+
+               while(rs.next()){
+                    adresBuilder.adresId(rs.getInt("adres_id"));
+                    adresBuilder.straatNaam(rs.getString("straatnaam"));
+                    adresBuilder.huisNummer(rs.getInt("huisnummer"));
+                    adresBuilder.toevoeging(rs.getString("toevoeging"));
+                    adresBuilder.postCode(rs.getString("postcode"));
+                    adresBuilder.woonPlaats(rs.getString("woonplaats"));
+
+                    adres = adresBuilder.build();
+			    
+               }
+            }
+        }
+        catch (ClassNotFoundException | SQLException e) {
+                    System.err.println("Got an exception!");
+                    System.err.println(e.getMessage());
+        }
+        
+    return adres; 
+}
+    
+      
+        
     @Override // werkt
     public boolean updateStraatNaam() throws SQLException {
         
