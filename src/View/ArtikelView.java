@@ -17,7 +17,8 @@ public class ArtikelView {
     int userInput;
     Scanner scanner = new Scanner(System.in);
     
-    public int printStartMenu() {
+    public int startArtikelMenu() {
+        System.out.println();
         System.out.println("Werken in het artikelbestand. Wat wilt u doen?");
         System.out.println("1. Nieuw artikel toevoegen in het artikelenbestand.");
         System.out.println("2. Een artikel opzoeken.");
@@ -36,20 +37,20 @@ public class ArtikelView {
         
     }
     
-    public String haalArtikelNaamOp() {
+    public String voerArtikelNaamIn() {
         System.out.print("Artikelnaam: ");
         String artikelNaam = scanner.next().trim();
         scanner.nextLine();
         return artikelNaam;   
     }
     
-    public double haalArtikelPrijsOp() {
+    public double voerAtrikelPrijsIn() {
         System.out.print("ArtikelPrijs: ");
         double artikelPrijs = scanner.nextDouble();
         return artikelPrijs;
     }
     public void printArtikelOverzicht(Artikel artikel) {
-        System.out.println("U heeft de volgende gegevens ingevoerd:");
+        System.out.println("Het artikel heeft de volgende gegevens:");
         System.out.println("artikel id: " + artikel.getArtikelID());
         System.out.println("artikel naam: " + artikel.getArtikelNaam());
         System.out.println("artikel prijs: " + artikel.getArtikelPrijs() + "\n");
@@ -68,6 +69,23 @@ public class ArtikelView {
         
             return userInput;
             */
+    }
+    
+    public int hoeWiltUZoeken() {
+        System.out.println("Kies met wat u wilt zoeken:");
+        System.out.println("1. Zoeken met artikel id.");
+        System.out.println("2. Zoeken met artikel naam.");
+        System.out.println("3. Zoeken met artikel prijs.");
+        System.out.println("4. Terug naar het artikel hoofd menu.");
+        try{
+            userInput = scanner.nextInt();  
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;  
+        
     }
     
     public int isArtikelIdBekend() {
@@ -89,6 +107,22 @@ public class ArtikelView {
         System.out.println("Voer het artikel id in.");
         userInput = scanner.nextInt();
         return userInput;
+    }
+    
+    public int checkInputString(String inputString) {
+        System.out.println("Is het volgende gegeven juist: " + inputString + "?");
+        System.out.println("1. ja.");
+        System.out.println("2. nee");
+        
+        try{
+            userInput = scanner.nextInt();  
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+        
     }
     
     
