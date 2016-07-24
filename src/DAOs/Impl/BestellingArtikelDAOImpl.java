@@ -78,7 +78,7 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
             Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-            
+  
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
@@ -199,12 +199,13 @@ public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
     @Override
     public void updateBestellingArtikelAantal(int bestelling_id, int artikel_id, int newArtikel_aantal) throws SQLException {
         
-        String sqlQuery = "update koppelbestellingartikel set aantal = " + newArtikel_aantal + "where bestelling_id = ? and artikel_id = ?";
+        String sqlQuery = "update koppelbestellingartikel set aantal = ? where bestelling_id = ? and artikel_id = ?";
 
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
-        stmt.setInt(1, bestelling_id);
-        stmt.setInt(2, artikel_id);        
+        stmt.setInt(1, newArtikel_aantal);
+        stmt.setInt(2, bestelling_id);
+        stmt.setInt(3, artikel_id);        
         stmt.executeUpdate();
       
     }
