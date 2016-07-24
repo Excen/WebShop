@@ -49,7 +49,7 @@ public class BestellingController {
         
         // Todo
         // Check inbouwen of KlantId al bestaat.
-        // Testen of methoden werken
+        // 
         //
         //
         
@@ -103,8 +103,6 @@ public class BestellingController {
                     break;
         }
         
-        
-        
     }
     
     public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
@@ -113,10 +111,6 @@ public class BestellingController {
     }
     
     public void plaatsBestelling() throws SQLException {
-                    
-                    // TODO
-                    // Als er een bestelling word aangemaakt moet hij OOK in de koppelbestellingartikeltabel
-                    // worden gezet.
                     
                     int klantID = bestellingView.voerKlantIdIn();
                     int bestellingID = bestellingDAO.insertBestelling(klantID);
@@ -230,6 +224,8 @@ public class BestellingController {
   
     }
     
+    
+    // Optionele methoden
     
     public BestellingArtikel createBestellingArtikel(){
         
