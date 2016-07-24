@@ -3,6 +3,7 @@ package View;
 
 import static DAOs.Impl.KlantDAOImpl.isValidEmailAddress;
 import POJO.Klant;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -154,7 +155,7 @@ public class KlantView {
     
     public int checkInputString(String string){
                 
-        System.out.println("Is dit juist? : " + string);
+        System.out.println(string + ". Is dit juist? : " );
         System.out.println("1. ja");
         System.out.println("2. nee");
         
@@ -205,7 +206,7 @@ public class KlantView {
         return userInput;
     }
     
-    public int printVerwijderMenu() {
+    public int menuKlantVerwijderen() {
         System.out.println("Wat wilt u verwijderen uit het klantenbestand?");
         System.out.println("1. één klant.");
         System.out.println("2. alle klanten.");
@@ -221,6 +222,26 @@ public class KlantView {
         
         return userInput;
     }
+    
+    public int menuKlantZoeken(){
+        
+        System.out.println("Wat wilt u zoeken in het klantenbestand?");
+        System.out.println("1. naar één klant.");
+        System.out.println("2. naar alle klanten.");
+        System.out.println("3. terug naar het menu Klant.");
+        
+        try{
+            userInput = Integer.parseInt(scanner.nextLine());            
+
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+    }
+        
+    
    
     public int bevestigingsVraag(){
         
@@ -239,6 +260,18 @@ public class KlantView {
         
     }
     
+    public void printKlantenLijst(ArrayList<Klant> lijst){
+        System.out.println();
+        System.out.println("KlantId\t\tVoornaam\t\tTussenvoegsel\t\tAchternaam\t\tEmail");
+            for (int i = 0; i< lijst.size(); i++){
+
+            System.out.println ((lijst.get(i)).getKlantId() + "\t" +
+            (lijst.get(i)).getVoorNaam() + "\t" +(lijst.get(i)).getTussenVoegsel() +
+            "\t" + (lijst.get(i)).getAchterNaam() + "\t" + (lijst.get(i)).getEmail());
+        }        
+    }
+    
+    
     public void printString(String string ){
         
         System.out.println(string);
@@ -248,5 +281,7 @@ public class KlantView {
     
        System.out.println(getal);
     }
+    
+    
     
 }

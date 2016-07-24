@@ -15,6 +15,7 @@ import View.AdresView;
 import View.HoofdMenuView;
 import View.KlantView;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -36,7 +37,8 @@ public class KlantController {
     
     KlantAdresDAOImpl KlantAdresDAO = (KlantAdresDAOImpl) KlantAdresDAOFactory.createKlantAdresDAO();
     
-    HoofdMenuView startView = new HoofdMenuView();
+    HoofdMenuController hoofdMenuController;
+    HoofdMenuView hoofdMenuView;
     
     
     public void klantMenu() throws SQLException, ClassNotFoundException{
@@ -57,23 +59,20 @@ public class KlantController {
                 verwijderKlantGegevens();
                 break;
             case 5: 
-                // methode om a al start die weer opnieuw opstart, maar dan een paar vragen verder dan start();
-                // startController.terugNaarHoofdMenu();
+                terugNaarHoofdMenu();
                 break;
-            case 6: 
-                // methode om programma af te sluiten
-                // startController.afsluiten();
+            case 6: // programma afsluiten
+                hoofdMenuController.afsluiten();
                 break;            
         }        
-        // na uitvoer van de methode in case - automatisch terug naar hoofdmenu
-        // startController.terugNaarHoofdMenu();
+        
     }
     
     
     public void voegNieuweKlantToe() throws SQLException, ClassNotFoundException {
         
         klantView.printString("U gaat een klant toevoegen. Voer de gegevens in.");
-        klant = creeerKlantObject();           
+        klant = createKlant();           
         klant = klantDAO.insertKlant(klant); //klant inclusief klantId
         int klantId = klant.getKlantId();                
         
@@ -96,38 +95,55 @@ public class KlantController {
     
     public void zoekKlantGegevens() throws SQLException, ClassNotFoundException{
         
-        int klantId = 0;        
-        int input = klantView.isKlantIdBekend();
+        int klantId = 0;   
+        int x = 0;
         
-        // klantId is bekend:
+        int input = klantView.menuKlantZoeken();
         switch (input) {
-            case 1:
-                klantId = klantView.voerKlantIdIn();
-                klant = klantDAO.findByKlantId(klantId);
-                klantView.printKlantGegevens(klant);
+            case 1: // één klnat zoeken        
+            x = klantView.isKlantIdBekend();           
+            // klantId is bekend:
+            switch (x) {
+                case 1:
+                    klantId = klantView.voerKlantIdIn();
+                    klant = klantDAO.findByKlantId(klantId);
+                    klantView.printKlantGegevens(klant);
+                    break;
+                case 2:
+                    int keuze = klantView.hoeWiltUZoeken();
+                    switch (keuze) {
+                        case 1: // zoeken op voor-/achternaam
+                            String achterNaam = klantView.voerAchterNaamIn();
+                            String voorNaam = klantView.voerVoorNaamIn();
+                            klant = klantDAO.findByVoorNaamAchterNaam(achterNaam, voorNaam);
+                            klantView.printKlantGegevens(klant);
+                            break;
+                        case 2: //zoeken op email
+                            String email = klantView.voerEmailIn();
+                            klant = klantDAO.findByEmail(email);
+                            klantView.printKlantGegevens(klant);
+                            break;
+                        case 3: // direct door naar einde switch: methode naar inlogschermklant()
+                            break;
+                        default:
+                            break;
+                    }   
+                default:
+                    break;
+                    
+            } // eind zoeken naar 1 klant
+            break;
+            case 2: // zoeken naar alle klanten
+                ArrayList <Klant> klantenLijst = klantDAO.findAllKlanten();
+                System.out.println("Alle klanten in het bestand");
+                klantView.printKlantenLijst(klantenLijst);  
+                break; 
+            case 3: // direct door naar einde switch: methode naar inlogschermklant()
                 break;
-            case 2:
-                int keuze = klantView.hoeWiltUZoeken();
-                switch (keuze) {
-                    case 1: // zoeken op voor-/achternaam
-                        String achterNaam = klantView.voerAchterNaamIn();
-                        String voorNaam = klantView.voerVoorNaamIn();
-                        klant = klantDAO.findByVoorNaamAchterNaam(achterNaam, voorNaam);
-                        klantView.printKlantGegevens(klant);
-                        break;
-                    case 2: //zoeken op email
-                        String email = klantView.voerEmailIn();
-                        klant = klantDAO.findByEmail(email);
-                        klantView.printKlantGegevens(klant);
-                        break;
-                    case 3: // direct door naar einde switch: methode naar inlogschermklant()
-                        break;
-                    default:
-                        break;
-                }   
-            default:
-                break;
-        }
+            default: 
+                break; 
+        } // eind zoeken naar 1 klant of alle klanten
+        
         
         klantMenu();
     } // eind methode zoekKlantGegevens
@@ -144,11 +160,12 @@ public class KlantController {
             case 1:
                 klantId = klantView.voerKlantIdIn();
                 klant = klantDAO.findByKlantId(klantId);
-                gewijzigdeKlant = wijzigingenInKlantGegevens(klant);
+                gewijzigdeKlant = voerWijzigingenKlantIn(klant);
+                 gewijzigdeKlant = klantDAO.updateGegevens(gewijzigdeKlant);                                               
                 klantView.printString("Oude klantgegevens:");
                 klantView.printKlantGegevens(klant);
-                klantView.printString("Nieuwe klantgegevens:");
-                klantView.printKlantGegevens(gewijzigdeKlant); 
+                klantView.printString("Nieuwe klantgegevens:");                
+                klantView.printKlantGegevens(gewijzigdeKlant);
                 break;
             case 2:
                 int keuze = klantView.hoeWiltUZoeken();
@@ -157,20 +174,22 @@ public class KlantController {
                         String achterNaam = klantView.voerAchterNaamIn();
                         String voorNaam = klantView.voerVoorNaamIn();
                         klant = klantDAO.findByVoorNaamAchterNaam(achterNaam, voorNaam);
-                        gewijzigdeKlant = wijzigingenInKlantGegevens(klant);  
+                        gewijzigdeKlant = voerWijzigingenKlantIn(klant);                         
+                        gewijzigdeKlant = klantDAO.updateGegevens(gewijzigdeKlant);                                               
                         klantView.printString("Oude klantgegevens:");
                         klantView.printKlantGegevens(klant);
-                        klantView.printString("Nieuwe klantgegevens:");
+                        klantView.printString("Nieuwe klantgegevens:");                        
                         klantView.printKlantGegevens(gewijzigdeKlant); 
                         break;
                     case 2: // wijzigen op basis van email                        
                         String email = klantView.voerEmailIn();
                         klant = klantDAO.findByEmail(email);
-                        gewijzigdeKlant = wijzigingenInKlantGegevens(klant); 
+                        gewijzigdeKlant = voerWijzigingenKlantIn(klant);                         
+                        gewijzigdeKlant = klantDAO.updateGegevens(gewijzigdeKlant);                       
                         System.out.println("Oude klantgegevens:");
                         klantView.printKlantGegevens(klant);
-                        System.out.println("Nieuwe klantgegevens:");
-                        klantView.printKlantGegevens(gewijzigdeKlant); 
+                        System.out.println("Nieuwe klantgegevens:");                        
+                        klantView.printKlantGegevens(gewijzigdeKlant);          
                         break;
                     case 3: // direct door naar einde switch: methode naar inlogschermklant()
                         break;
@@ -192,7 +211,7 @@ public class KlantController {
         int klantId = 0;
         int x = 0;
         
-        int userInput = klantView.printVerwijderMenu();
+        int userInput = klantView.menuKlantVerwijderen();
         
         switch (userInput) {
             case 1: // één klnat verwijderen
@@ -214,11 +233,10 @@ public class KlantController {
                 int verwijderd = klantAdresDAO.deleteKlantAdresByKlantId(klantId);
 
                     if (deleted == true){
-                        klantView.printString("De volgende klant is verwijderd uit het bestand: ");
+                        System.out.println("De volgende klant is verwijderd uit het bestand: ");
                         System.out.println();
                         klantView.printKlantGegevens(klant);
-                        klantView.printInt(verwijderd);
-                        klantView.printString(" koppeling(en) van klant met een adres zijn verwijderd");                                            
+                        System.out.println(verwijderd + " koppeling(en) van klant met een adres zijn verwijderd");                                                                   
                     }
                     else{
                         klantView.printString("De volgende klant is NIET verwijderd uit het bestand: ");
@@ -251,10 +269,13 @@ public class KlantController {
         klantMenu();
     }// eind methode verwijderKlantGegevens
     
-      
+    
+    public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
+        hoofdMenuController.start2();
+    }    
     
     //----------------- waar moeten onderstaande methoden komen?
-    public Klant creeerKlantObject(){
+    public Klant createKlant(){
         
         //int klantId = 0;   
         String achternaam = klantView.voerAchterNaamIn();
@@ -272,13 +293,14 @@ public class KlantController {
         klant = klantBuilder.build();
 
         return klant;        
-    } // eind methode creeerKlantObject
+    } // eind methode createKlant
  
 
-    public Klant wijzigingenInKlantGegevens(Klant klant) throws SQLException, ClassNotFoundException{
+    public Klant voerWijzigingenKlantIn(Klant klant) throws SQLException, ClassNotFoundException{
         int juist = 0 ;
         
 	String voornaam = klant.getVoorNaam();
+        System.out.println("Uw voornaam: ");
 	juist = klantView.checkInputString(voornaam); // iets dergelijks als "is dit juist?: "+ voormaam 1/true 2/false
             if (juist == 2) { 
                 voornaam = klantView.voerVoorNaamIn();
@@ -311,6 +333,6 @@ public class KlantController {
         // build Klant
         klant = klantBuilder.build();  
 	return klant;  
-    } // eind methode wijzigingenInKlantGegevens
+    } // eind methode voerWijzigingenKlantIn
 
 }  // end class KlantController

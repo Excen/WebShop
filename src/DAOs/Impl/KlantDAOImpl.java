@@ -392,39 +392,39 @@ public static boolean isValidEmailAddress(String email) {
       
     Class.forName(driver);
     // create a sql date object so we can use it in our INSERT statement
-             try (Connection conn = DriverManager.getConnection(url, user, pw)) {
-                
-                 String sqlQuery = "Update Klant set voornaam = ? , achternaam = ?, tussenvoegsel = ?, email = ? where klant_id = ?"; 
-				                 
-                 // create the mysql insert preparedstatement
-                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
-                 preparedStmt.setString (1, voornaam);
-		 preparedStmt.setString (2, achternaam);
-		 preparedStmt.setString (3, tussenvoegsel);
-		 preparedStmt.setString (4, email);
-                 preparedStmt.setInt(5, klantId);
-                 
-                 // execute the preparedstatement
-                 preparedStmt.executeUpdate();
-                 
-		// Now you can extract all the records
-		// to see the updated records
-                sqlQuery = "SELECT klant_id, voornaam, tussenvoegsel, achternaam, email FROM klant where klant_id = ? ";
+        try (Connection conn = DriverManager.getConnection(url, user, pw)) {
 
-                preparedStmt = conn.prepareStatement(sqlQuery);
-                preparedStmt.setInt(1, klantId);
+                String sqlQuery = "Update Klant set voornaam = ? , achternaam = ?, tussenvoegsel = ?, email = ? where klant_id = ?"; 
 
-                while(rs.next()){
-                klantBuilder.klantId(rs.getInt("klant_id"));
-                klantBuilder.voorNaam(rs.getString("voornaam"));
-                klantBuilder.achterNaam(rs.getString("achternaam"));
-                klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
-                klantBuilder.email(rs.getString("email"));
-            
-                // build Klant
-                klant = klantBuilder.build();  
-      }
-             }
+                // create the mysql insert preparedstatement
+                PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                preparedStmt.setString (1, voornaam);
+                preparedStmt.setString (2, achternaam);
+                preparedStmt.setString (3, tussenvoegsel);
+                preparedStmt.setString (4, email);
+                preparedStmt.setInt(5, klantId);
+
+                // execute the preparedstatement
+                preparedStmt.executeUpdate();
+
+               // Now you can extract all the records
+               // to see the updated records
+               sqlQuery = "SELECT klant_id, voornaam, tussenvoegsel, achternaam, email FROM klant where klant_id = ? ";
+
+               preparedStmt = conn.prepareStatement(sqlQuery);
+               preparedStmt.setInt(1, klantId);
+
+               while(rs.next()){
+               klantBuilder.klantId(rs.getInt("klant_id"));
+               klantBuilder.voorNaam(rs.getString("voornaam"));
+               klantBuilder.achterNaam(rs.getString("achternaam"));
+               klantBuilder.tussenVoegsel(rs.getString("tussenvoegsel"));
+               klantBuilder.email(rs.getString("email"));
+
+               // build Klant
+               klant = klantBuilder.build();  
+               }
+        }
     }
     catch (ClassNotFoundException | SQLException e) {
 		System.err.println("Got an exception!");
