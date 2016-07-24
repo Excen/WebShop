@@ -24,15 +24,10 @@ import java.util.Scanner;
  * @author Excen
  */
 
-// Eisen
-// create bestelling
-/*
-create (toevoegen); 
-read; (bijv. opties met zoeken, per id, naam, etc)
-update; (wat te updaten; code schrijven om alleen één ding te updaten)
-delete; (bijv delete all, of één item)
-terug naar het hoofdmenu;
-*/
+// Todo
+// Artikel toevoegen aan bestelling
+// Artikel verwijderen uit bestelling
+
 
 
 public class BestellingController {
@@ -54,7 +49,7 @@ public class BestellingController {
         
         // Todo
         // Check inbouwen of KlantId al bestaat.
-        //
+        // Testen of methoden werken
         //
         //
         
@@ -64,7 +59,7 @@ public class BestellingController {
                 {
                     
                     plaatsBestelling();
-                    terugNaarHoofdMenu();
+                    // terugNaarHoofdMenu();
                     break;
                 }
             // bestellinginfo ophalen
@@ -72,7 +67,7 @@ public class BestellingController {
                 {
                           
                     haalBestellingInfoOp();
-                    terugNaarHoofdMenu();
+                    // terugNaarHoofdMenu();
                     break;
                 }
             // Bestelling wijzigen
@@ -80,7 +75,7 @@ public class BestellingController {
                 {
   
                     wijzigBestelling();
-                    terugNaarHoofdMenu();
+                    // terugNaarHoofdMenu();
                     break;
                 }
                 
@@ -89,20 +84,21 @@ public class BestellingController {
                 {
             
                     verwijderBestelling();
-                    terugNaarHoofdMenu();
+                    // terugNaarHoofdMenu();
                     break;
                 }
             
-            // Terug naar hoofdmenu    
+            // Terug naar bestellingmenu
             case 5:
             {
-                    
-                System.out.println("Exit, gaat terug naar hoofdmenu");
+                      
                     terugNaarHoofdMenu();
                     break;
             }
+            
+            // Terug naar hoofd menu
             default:
-                    System.out.println("That option is not available.");
+                    System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
                     terugNaarHoofdMenu();
                     break;
         }
@@ -117,8 +113,12 @@ public class BestellingController {
     }
     
     public void plaatsBestelling() throws SQLException {
-       
-        int klantID = bestellingView.voerKlantIdIn();
+                    
+                    // TODO
+                    // Als er een bestelling word aangemaakt moet hij OOK in de koppelbestellingartikeltabel
+                    // worden gezet.
+                    
+                    int klantID = bestellingView.voerKlantIdIn();
                     int bestellingID = bestellingDAO.insertBestelling(klantID);
                     int anotherOne = 0;
                     boolean checker = true;
@@ -127,12 +127,23 @@ public class BestellingController {
                     ArrayList<BestellingArtikel>AL = new ArrayList<>();
                     BestellingArtikel BS = new BestellingArtikel();
                     
+                    // Overzicht beschikbare artikelen
+                    System.out.println("Beschikbare artikelen: ");
+                    ArrayList<Artikel>artikelLijst = new ArrayList<>();
+                    artikelLijst = artikelDAO.findAll();
+                    
+                    for (Artikel ar: artikelLijst){
+                        System.out.println(ar.getArtikelID() + " " + ar.getArtikelNaam());
+                    }
+                    
+                    // begin artikel toevoeg loop
                     do {
                     BS = createBestellingArtikel();
                     BS.setBestelling_id(bestellingID);
+                    bestellingArtikelDAO.createBestellingArtikel(BS);
                     AL.add(BS);
                         
-                    System.out.println("Wil je nog een artikel toevoegen?\n1 - ja\n2 - nee");
+                    System.out.println("Wil je nog een artikel toevoegen?\n1 ja\n2 nee");
                         
                         try{
                         anotherOne = scanner.nextInt();    
@@ -140,19 +151,21 @@ public class BestellingController {
                             System.out.println("Voer een integer in.");
                         }
                         
-                        if (anotherOne == 1){
+                        if (anotherOne == 1) {
                             checker = true;
                         }
-                        else{
+                        
+                        else {
                             checker = false;
                         }
                     } while (checker);
                     
                     System.out.println("De artikelen van Klant " + klantID + " zijn toegevoegd aan bestelling ID: " + bestellingID);
-                    System.out.println("De artikelen zijn: ");
+                    System.out.println("De toegevoegde artikelen zijn: ");
                     for (BestellingArtikel bar: AL){
-                        System.out.println(artikelDAO.findByArtikelID(bar.getArtikel_id()) + " " + bar.getArtikel_aantal() + " keer.");
+                        System.out.println(artikelDAO.findByArtikelID(bar.getArtikel_id()).getArtikelNaam() + " " + bar.getArtikel_aantal() + " keer");
                     }
+
     }
     
     public void haalBestellingInfoOp() throws SQLException {
@@ -180,6 +193,9 @@ public class BestellingController {
         int bestellingId = bestellingView.zoekBestellingInfo();
         
         artikelLijst = bestellingArtikelDAO.findByBestellingId(bestellingId);
+        
+        
+        
         int welkArtikel = bestellingView.wijzigBestellingInfo(artikelLijst, bestellingId);
         int watTeDoenMetArtikel = bestellingView.wijzigBestellingKeuze();
         
@@ -194,7 +210,7 @@ public class BestellingController {
             int nieuwAantal = bestellingView.wijzigAantal();
             bestellingArtikelDAO.updateBestellingArtikelAantal(bestellingId, welkArtikel, nieuwAantal);
             System.out.println("Bestelling: " + bestellingId + " heeft een update gehad.");
-            System.out.println("Het artikel " + artikelDAO.findByArtikelID(welkArtikel) + " staat nu " + nieuwAantal + " keer in de bestelling.");
+            System.out.println("Het artikel " + artikelDAO.findByArtikelID(welkArtikel).getArtikelNaam() + " staat nu " + nieuwAantal + " keer in de bestelling.");
         }
 
     }

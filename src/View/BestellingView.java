@@ -36,7 +36,7 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         System.out.println("2 bestellingsinformatie ophalen");
         System.out.println("3 bestelling wijzigen");
         System.out.println("4 bestelling verwijderen");
-        System.out.println("5 exit");
+        System.out.println("5 terug naar hoofdmenu");
         
         userInput = scanner.nextInt();
         scanner.nextLine();
@@ -87,6 +87,8 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         
         int userInput2 = 0;
         
+        
+        System.out.println("Artikellen aanwezig in Bestelling " + bestellingId);
         for (Artikel ar: x){
         System.out.println(ar.getArtikelID() + " " + ar.getArtikelNaam() + ": " + bestellingArtikelDAO.findAantalByArtikelID(bestellingId, ar.getArtikelID()) + " keer");
     } 
