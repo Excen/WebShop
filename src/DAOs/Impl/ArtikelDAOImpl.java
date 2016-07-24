@@ -206,7 +206,8 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
     
     // update method
     @Override
-    public void update(Artikel artikel) {
+    public boolean update(Artikel artikel) {
+        boolean gelukt = false;
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
@@ -218,12 +219,14 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
             pstmt.setDouble(3, artikel.getArtikelPrijs());
 
             pstmt.executeUpdate();
+            gelukt = true;
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Update failed.");
             ex.printStackTrace();
         }
-
+        
+        return gelukt;
     }
 
 }

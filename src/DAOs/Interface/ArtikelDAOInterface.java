@@ -21,6 +21,6 @@ public interface ArtikelDAOInterface {
     public Artikel findByArtikelPrijs (double artikelPrijs);
     public Artikel insertArtikel (String artikelNaam, double artikelPrijs);
     public boolean deleteArtikel(int artikelID);
-    public void update(Artikel artikel) throws SQLException, ClassNotFoundException;
+    public boolean update(Artikel artikel) throws SQLException, ClassNotFoundException;
     
 }
