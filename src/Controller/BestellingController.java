@@ -59,7 +59,7 @@ public class BestellingController {
                 {
                     
                     plaatsBestelling();
-                    // terugNaarHoofdMenu();
+                   
                     break;
                 }
             // bestellinginfo ophalen
@@ -67,7 +67,7 @@ public class BestellingController {
                 {
                           
                     haalBestellingInfoOp();
-                    // terugNaarHoofdMenu();
+                    
                     break;
                 }
             // Bestelling wijzigen
@@ -75,7 +75,7 @@ public class BestellingController {
                 {
   
                     wijzigBestelling();
-                    // terugNaarHoofdMenu();
+                  
                     break;
                 }
                 
@@ -84,7 +84,7 @@ public class BestellingController {
                 {
             
                     verwijderBestelling();
-                    // terugNaarHoofdMenu();
+                    
                     break;
                 }
             
@@ -92,17 +92,17 @@ public class BestellingController {
             case 5:
             {
                       
-                    terugNaarHoofdMenu();
+                    
                     break;
             }
             
-            // Terug naar hoofd menu
+            
             default:
                     System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
-                    terugNaarHoofdMenu();
+                    
                     break;
         }
-        
+        terugNaarHoofdMenu();
     }
     
     public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
@@ -110,7 +110,7 @@ public class BestellingController {
         hoofdMenu.start();
     }
     
-    public void plaatsBestelling() throws SQLException {
+    public void plaatsBestelling() throws SQLException, ClassNotFoundException {
                     
                     int klantID = bestellingView.voerKlantIdIn();
                     int bestellingID = bestellingDAO.insertBestelling(klantID);
@@ -159,10 +159,11 @@ public class BestellingController {
                     for (BestellingArtikel bar: AL){
                         System.out.println(artikelDAO.findByArtikelID(bar.getArtikel_id()).getArtikelNaam() + " " + bar.getArtikel_aantal() + " keer");
                     }
-
+                    
+           bestellingMenu();         
     }
     
-    public void haalBestellingInfoOp() throws SQLException {
+    public void haalBestellingInfoOp() throws SQLException, ClassNotFoundException {
         
         int bestellingID = bestellingView.zoekBestellingInfo();
                     Bestelling bestelling = bestellingDAO.findById(bestellingID);
@@ -177,10 +178,10 @@ public class BestellingController {
                         System.out.println(ar.getArtikelNaam() + ": " + bestellingArtikelDAO.findAantalByArtikelID(bestellingID, ar.getArtikelID()) + " keer");
                         
                     }     
- 
+        bestellingMenu();            
     }
     
-    public void wijzigBestelling() throws SQLException {
+    public void wijzigBestelling() throws SQLException, ClassNotFoundException {
         
         ArrayList<Artikel>artikelLijst = new ArrayList<>();
         
@@ -206,11 +207,11 @@ public class BestellingController {
             System.out.println("Bestelling: " + bestellingId + " heeft een update gehad.");
             System.out.println("Het artikel " + artikelDAO.findByArtikelID(welkArtikel).getArtikelNaam() + " staat nu " + nieuwAantal + " keer in de bestelling.");
         }
-
+    bestellingMenu();
     }
     
     
-    public void verwijderBestelling() throws SQLException {
+    public void verwijderBestelling() throws SQLException, ClassNotFoundException {
         
     int bestellingID = bestellingView.zoekBestellingInfo();
                 bestellingDAO.deleteBestelling(bestellingID);
@@ -221,7 +222,7 @@ public class BestellingController {
                 
                 bestellingArtikelDAO.deleteBestellingArtikel(bestellingID);
                 System.out.println(bestellingID + " is verwijderd.");    
-  
+        bestellingMenu();        
     }
     
     

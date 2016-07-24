@@ -46,7 +46,7 @@ public class HoofdMenuController implements ControllerInterface {
                     bestellingController.bestellingMenu();                                 
                     break;
                 case 4:// ga naar adresmenu
-                    //adresController.adresMenu();                
+                    adresController.adresMenu();                
                     break;
                 case 5: 
                     afsluiten();
@@ -86,7 +86,7 @@ public class HoofdMenuController implements ControllerInterface {
        userInput = hoofdMenuView.bevestigingsVraag();
        
        if (userInput == 1){
-           // code om af te sluiten
+           // 
            
        }
        else if (userInput == 2){

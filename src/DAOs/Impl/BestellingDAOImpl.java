@@ -164,11 +164,12 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
     @Override
     public void updateKlantId(int bestelling_id, int klant_id) throws SQLException {
  
-        String sqlQuery = "update bestelling set klant_id = " + klant_id + " where bestelling_id = ?";
+        String sqlQuery = "update bestelling set klant_id = ? where bestelling_id = ?";
 
         con = DriverManager.getConnection(url, user, pw);
         stmt = con.prepareStatement(sqlQuery);
-        stmt.setInt(1, bestelling_id);        
+        stmt.setInt(1, klant_id);
+        stmt.setInt(2, bestelling_id);        
         stmt.executeUpdate();
 
     }

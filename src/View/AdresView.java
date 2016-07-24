@@ -28,7 +28,7 @@ public class AdresView {
         System.out.println("5. Terug naar het hoofdmenu.");
         
         try {
-            userInput = scanner.nextInt();
+             userInput = Integer.parseInt(scanner.nextLine());
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -43,7 +43,7 @@ public class AdresView {
         System.out.println("2. nee");
         
         try {
-            userInput = scanner.nextInt();
+             userInput = Integer.parseInt(scanner.nextLine());
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -53,20 +53,20 @@ public class AdresView {
     
      public int voerKlantIdIn() {
         System.out.println("Klant id: ");
-        int klantId = scanner.nextInt();
+        int klantId = Integer.parseInt(scanner.nextLine());
         return klantId;
     }
     
      public int voerAdresIdIn() {
         System.out.println("Adres id: ");
-        int adresId = scanner.nextInt();
+        int adresId = Integer.parseInt(scanner.nextLine());
         return adresId;
     }
     
     public String voerStraatnaamIn() {
         System.out.println("Straatnaam: ");
-        String achternaam = scanner.nextLine().trim();
-        return achternaam;
+        String straatnaam = scanner.nextLine();
+        return straatnaam;
     }
     
     public int voerHuisnummerIn() {
@@ -77,23 +77,16 @@ public class AdresView {
     }
     public String voerToevoegingIn() {
         String toevoeging;
-        try {
-            System.out.println("Huisnummer toevoeging: ");
-            toevoeging = scanner.nextLine().trim(); 
-        }
-        catch (InputMismatchException ex) {
-            System.out.println("U toevoeging is een nummer?");
-            System.out.println("Voer deze opnieuw in.");
-            int nummerToevoeging = scanner.nextInt();
-            scanner.nextLine();
-            toevoeging = String.valueOf(nummerToevoeging);
-        }
+        
+        System.out.println("Huisnummer toevoeging: ");
+        toevoeging = scanner.nextLine().trim(); 
+
         return toevoeging;
     }
     
     public String voerPostcodeIn() {
         System.out.println("Postcode: ");
-        String postcode = scanner.nextLine().trim();
+        String postcode = scanner.nextLine();
         return postcode;
     }
     public String voerWoonplaatsIn() {

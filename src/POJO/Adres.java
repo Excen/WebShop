@@ -27,8 +27,7 @@ public class Adres {
         this.woonPlaats = adresBuilder.woonPlaats;
     }
     
-    public Adres() {
-        throw new UnsupportedOperationException("Not supported."); 
+    public Adres() {         
     }
     
     /*public static Adres getInstance(){
