@@ -27,7 +27,7 @@ public class ArtikelView {
         System.out.println("5. Terug naar het hoofdmenu.");
         
         try{
-            userInput = scanner.nextInt();  
+             userInput = Integer.parseInt(scanner.nextLine());
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -47,6 +47,7 @@ public class ArtikelView {
     public double voerAtrikelPrijsIn() {
         System.out.print("ArtikelPrijs: ");
         double artikelPrijs = scanner.nextDouble();
+        scanner.nextLine();
         return artikelPrijs;
     }
     public void printArtikelOverzicht(Artikel artikel) {
@@ -79,6 +80,7 @@ public class ArtikelView {
         System.out.println("4. Terug naar het artikel hoofd menu.");
         try{
             userInput = scanner.nextInt();  
+            scanner.nextLine();
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -95,6 +97,7 @@ public class ArtikelView {
         
         try{
             userInput = scanner.nextInt();  
+            scanner.nextLine();
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -106,6 +109,7 @@ public class ArtikelView {
     public int voerArtikelIdIn() {
         System.out.println("Voer het artikel id in.");
         userInput = scanner.nextInt();
+        scanner.nextLine();
         return userInput;
     }
     
@@ -116,6 +120,7 @@ public class ArtikelView {
         
         try{
             userInput = scanner.nextInt();  
+            scanner.nextLine();
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -134,6 +139,7 @@ public class ArtikelView {
         
         try{
             userInput = scanner.nextInt();  
+            scanner.nextLine();
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -147,6 +153,7 @@ public class ArtikelView {
         
         try{
             userInput = scanner.nextInt();  
+            scanner.nextLine();
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, voer het artikel id in.");

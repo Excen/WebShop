@@ -20,12 +20,15 @@ public class AdresController {
             
     AdresView adresView = new AdresView();
     AdresDAOImpl adresDao = new AdresDAOImpl();
-    Adres adres = new Adres();
+    Adres adres;
     AdresBuilder adresBuilder = new AdresBuilder();
-    int userInput;
+    
     KlantController klantController = new KlantController();
     KlantAdresDAOImpl klantAdresDao = new KlantAdresDAOImpl();
-    HoofdMenuController hoofdMenuController = new HoofdMenuController();
+    
+    HoofdMenuController hoofdMenuController;
+    
+    int userInput;
     
     public void adresMenu() throws SQLException, ClassNotFoundException{
         userInput = adresView.startArtikelMenu();
@@ -52,7 +55,7 @@ public class AdresController {
         }   
     }
     
-    public void voegNieuwAdresToe() throws SQLException, ClassNotFoundException {
+    public int voegNieuwAdresToe() throws SQLException, ClassNotFoundException {
         System.out.println("U wilt een nieuw adres toevoegen. Voer hieronder de gegevens in.");
         int klantId = adresView.voerKlantIdIn();
         adres = createAdres();
@@ -60,14 +63,14 @@ public class AdresController {
         //voeg toe in adrestabel
         adres = adresDao.insertAdres(adres);
         int adresId = adres.getAdresId();
-        
+        System.out.println(adresId);
         // voeg toe in koppeltabel
         boolean toegevoegd = klantAdresDao.insertKlantAdres(klantId, adresId);
         
         System.out.println("U heeft het volgende adres toegevoegd.");
         adresView.printAdresOverzicht(adres);
         
-        adresMenu();
+        return adresId;
             
     }
     

@@ -48,7 +48,7 @@ public class ArtikelController {
         
     }
     
-     public void voegNieuwArtikelToe(Artikel artikel) {
+     public void voegNieuwArtikelToe(Artikel artikel) throws SQLException, ClassNotFoundException {
         String artikelNaam = artikel.getArtikelNaam();
         double artikelPrijs = artikel.getArtikelPrijs();
         
@@ -56,6 +56,8 @@ public class ArtikelController {
         
         System.out.println("U heeft de volgende gegevens ingevoerd:");
         artikelView.printArtikelOverzicht(artikel); 
+        
+        artikelMenu();
     }
      
     public Artikel createArtikel() {
@@ -93,6 +95,7 @@ public class ArtikelController {
                 artikelMenu();
                 break;
         }
+        artikelMenu();
     }
     
     
@@ -114,6 +117,7 @@ public class ArtikelController {
                 artikelMenu();
                 break;
         }
+        artikelMenu();
     }
     
     public void updateOpArtikelId() {
@@ -193,7 +197,7 @@ public class ArtikelController {
     }
     
     
-    public void verwijderArtikelGegevens() {
+    public void verwijderArtikelGegevens() throws SQLException, ClassNotFoundException {
         
         int userInput = artikelView.printVerwijderMenu();
         if (userInput == 1) {
@@ -201,7 +205,13 @@ public class ArtikelController {
             boolean deleted = artikelDAO.deleteArtikel(artikelId);
             artikelView.printDeleteResultaat(deleted, artikelId);        
         }
-        
+        else if (userInput == 2){
+            // code
+        }
+        else if (userInput == 3){
+            // door naar einde methode > naar artikelmenu();
+        }
+        artikelMenu();
     }
     
     public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
@@ -212,6 +222,8 @@ public class ArtikelController {
     public void afsluiten() {
         
     }
+    
+    
     
     
         

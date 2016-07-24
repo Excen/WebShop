@@ -25,17 +25,17 @@ import java.util.ArrayList;
 public class KlantController {
     // datafields in klantcontroller
     KlantDAOImpl klantDAO = (KlantDAOImpl) KlantDAOFactory.createKlantDAO();
-    KlantView klantView = new KlantView();
-    KlantAdresDAOImpl klantAdresDAO = (KlantAdresDAOImpl) KlantAdresDAOFactory.createKlantAdresDAO();
+    KlantView klantView = new KlantView();    
     KlantBuilder klantBuilder = new KlantBuilder();
     Klant klant;
     
     AdresDAOImpl adresDAO = (AdresDAOImpl) AdresDAOFactory.createAdresDAO();
-    AdresView adresView = new AdresView();
-    AdresController adresController = new AdresController();
+    AdresView adresView;
+    AdresController adresController;
     AdresBuilder adresBuilder = new AdresBuilder();
-    
-    KlantAdresDAOImpl KlantAdresDAO = (KlantAdresDAOImpl) KlantAdresDAOFactory.createKlantAdresDAO();
+    Adres adres; 
+           
+    KlantAdresDAOImpl klantAdresDAO = (KlantAdresDAOImpl) KlantAdresDAOFactory.createKlantAdresDAO();
     
     HoofdMenuController hoofdMenuController;
     HoofdMenuView hoofdMenuView;
@@ -69,19 +69,18 @@ public class KlantController {
     }
     
     
-    public void voegNieuweKlantToe() throws SQLException, ClassNotFoundException {
+    public int voegNieuweKlantToe() throws SQLException, ClassNotFoundException {
+        
+        adresController = new AdresController();
         
         klantView.printString("U gaat een klant toevoegen. Voer de gegevens in.");
         klant = createKlant();           
         klant = klantDAO.insertKlant(klant); //klant inclusief klantId
         int klantId = klant.getKlantId();                
         
-        //Adres adresNieuw = adresController.createAdres();
-        //adresNieuw = adresDAO.insertAdres(adres); // adres inclusief adresId
-        //int adresId = adresNieuw.getAdresId();
-        
-        int adresId = 15;   // dit weg wanneer adres ook werkt    
-        boolean toegevoegd = klantAdresDAO.insertKlantAdres(klantId, adresId); 
+        int adresId = adresController.voegNieuwAdresToe();
+        //int adresId = 30; 
+        //boolean toegevoegd = klantAdresDAO.insertKlantAdres(klantId, adresId); 
         
         String string = "U heeft de klant- en adresgegevens toegevoegd van klantId: " 
                 + klantId + " en adresId " + adresId; 
@@ -89,7 +88,8 @@ public class KlantController {
         System.out.println();
         
         klantMenu();
-     
+        
+      return klantId;
     } // eind methode voegNieuweKlantToe
     
     
@@ -271,6 +271,7 @@ public class KlantController {
     
     
     public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
+        HoofdMenuController hoofdMenuController = new HoofdMenuController();
         hoofdMenuController.start();
     }    
     
