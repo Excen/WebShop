@@ -207,17 +207,23 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
     // update method
     @Override
     public boolean update(Artikel artikel) {
+        
+    int artikelId = artikel.getArtikelID();
+    String artikelNaam = artikel.getArtikelNaam();
+    double artikelPrijs = artikel.getArtikelPrijs();         
+        
+        
         boolean gelukt = false;
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
-            String sqlUpdate = "update artikel set artikel_id = ?, artikel_naam = ?, artikel_prijs = ?";
+            String sqlUpdate = "update artikel set artikel_naam = ?, artikel_prijs = ? WHERE artikel_id = ?";
             pstmt = con.prepareStatement(sqlUpdate);
-
-            pstmt.setInt(1, artikel.getArtikelID());
-            pstmt.setString(2, artikel.getArtikelNaam());
-            pstmt.setDouble(3, artikel.getArtikelPrijs());
-
+            
+            pstmt.setString(1, artikelNaam);
+            pstmt.setDouble(2, artikelPrijs);
+            pstmt.setInt(3, artikelId);
+            
             pstmt.executeUpdate();
             gelukt = true;
         } 

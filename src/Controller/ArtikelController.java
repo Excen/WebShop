@@ -4,6 +4,7 @@ package Controller;
 import View.ArtikelView;
 import DAOs.Impl.ArtikelDAOImpl;
 import POJO.Artikel;
+import java.sql.SQLException;
 
 
 public class ArtikelController {
@@ -20,7 +21,7 @@ public class ArtikelController {
     ArtikelDAOImpl artikelDAO = new ArtikelDAOImpl();
     Artikel artikel = new Artikel();
     
-    public void artikelMenu() {
+    public void artikelMenu() throws SQLException, ClassNotFoundException {
         int userInput = artikelView.startArtikelMenu();
         
         switch (userInput) {
@@ -68,7 +69,7 @@ public class ArtikelController {
         return artikel;
     } 
      
-    public void zoekArtikelGegevens() {
+    public void zoekArtikelGegevens() throws SQLException, ClassNotFoundException {
         artikel = new Artikel();
         int userInput = artikelView.hoeWiltUZoeken();
         
@@ -96,7 +97,7 @@ public class ArtikelController {
     
     
     
-    public void wijzigArtikelGegevens() {
+    public void wijzigArtikelGegevens() throws SQLException, ClassNotFoundException {
         
         int userInput = artikelView.hoeWiltUZoeken();
         switch (userInput) {
@@ -169,6 +170,7 @@ public class ArtikelController {
     }
         
     public Artikel invoerNieuweArtikelGegevens(Artikel artikel) {
+        
         int juist = 0;
         
         String artikelNaam = artikel.getArtikelNaam();
@@ -183,10 +185,10 @@ public class ArtikelController {
             artikelPrijs = artikelView.voerAtrikelPrijsIn();
         }
         
-        artikel.setArtikelNaam(artikelNaam);
-        artikel.setArtikelPrijs(artikelPrijs);
+        int artikelId = artikel.getArtikelID();
+        Artikel artikelNieuw = new Artikel(artikelId, artikelNaam, artikelPrijs);
         
-        return artikel;
+        return artikelNieuw;
         
     }
     
@@ -202,7 +204,7 @@ public class ArtikelController {
         
     }
     
-    public void terugNaarHoofdMenu() {
+    public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
         HoofdMenuController hoofdMenu = new HoofdMenuController();
         hoofdMenu.start();
     }

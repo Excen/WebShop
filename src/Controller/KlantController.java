@@ -271,7 +271,7 @@ public class KlantController {
     
     
     public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
-        hoofdMenuController.start2();
+        hoofdMenuController.start();
     }    
     
     //----------------- waar moeten onderstaande methoden komen?
