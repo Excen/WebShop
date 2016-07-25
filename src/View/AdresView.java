@@ -18,7 +18,7 @@ public class AdresView {
     int userInput;
     Scanner scanner = new Scanner(System.in);
     
-    public int startArtikelMenu() {
+    public int startAdresMenu() {
         System.out.println();
         System.out.println("Werken in het adressenbestand. Wat wilt u doen?");
         System.out.println("1. Een nieuw adres toevoegen in het adressenbestand. ");
@@ -114,7 +114,7 @@ public class AdresView {
         System.out.println("5. Terug naar adres menu.");
         
         try {
-            userInput = scanner.nextInt();
+            userInput = Integer.parseInt(scanner.nextLine());
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -122,5 +122,54 @@ public class AdresView {
         return userInput;
     }
     
+    public int checkInputString(String input) {
+        System.out.println("Is het volgende gegeven juist: " + input + " ?");
+        System.out.println("1. Ja.");
+        System.out.println("2. Nee.");
+        
+        try {
+            userInput = Integer.parseInt(scanner.nextLine());
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        return userInput;
+    }
     
+    public int printVerwijderAdresMenu() {
+        System.out.println("Wat wilt u verwijderen uit het adressenbestand?");
+        System.out.println("1. één adres.");
+        System.out.println("2. alle adressen.");
+        System.out.println("3. terug naar het adres menu.");
+        
+        try{
+            userInput = scanner.nextInt();  
+            scanner.nextLine();
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+    }
+    
+    
+    
+    public int bevestigingsVraag(){
+        
+        System.out.println("Weet u zeker dat u alle klantgegevens definitief verwijderen wil?");
+        System.out.println("1. ja");
+        System.out.println("2. nee");
+        
+        try{
+            userInput = Integer.parseInt(scanner.nextLine());        
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+        
+    }
+        
 }
