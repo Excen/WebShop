@@ -76,71 +76,71 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
 
    @Override //werkt
-    public Adres findByAdresID(int adresId) throws SQLException, ClassNotFoundException  {
+    public Adres findByAdresID(int adresId)  {
         AdresBuilder adresBuilder = new AdresBuilder();
         Adres adres = new Adres(adresBuilder);
         
-        //load driver
-        Class.forName(driver);
-        System.out.println("Driver loaded");
-        //establish a connection
-        con = DriverManager.getConnection(url,
+        try {
+            //load driver
+            Class.forName(driver);
+            System.out.println("Driver loaded");
+            //establish a connection
+            con = DriverManager.getConnection(url,
                 user, pw);
-        System.out.println("Database Connected");
+            System.out.println("Database Connected");
         
-        
-           try{
-               String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
-                    "woonplaats from Adres where adres_id = ? ";
+           
+            String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+                "woonplaats from Adres where adres_id = ? ";
                     
-                    stmt = con.prepareStatement(sqlQuery);                  
+            stmt = con.prepareStatement(sqlQuery);                  
             
-                    stmt.setInt(1, adresId);      
-                    rs = stmt.executeQuery();   
+            stmt.setInt(1, adresId);      
+            rs = stmt.executeQuery();   
             
-                        while (rs.next()) {   
+            while (rs.next()) {   
                         
-                        adresBuilder.adresId(rs.getInt("adres_id"));
-                        adresBuilder.straatNaam(rs.getString("straatnaam"));
-                        adresBuilder.huisNummer(rs.getInt("huisnummer"));
-                        adresBuilder.toevoeging(rs.getString("toevoeging"));
-                        adresBuilder.postCode(rs.getString("postcode"));
-                        adresBuilder.woonPlaats(rs.getString("woonplaats"));
+                adresBuilder.adresId(rs.getInt("adres_id"));
+                adresBuilder.straatNaam(rs.getString("straatnaam"));
+                adresBuilder.huisNummer(rs.getInt("huisnummer"));
+                adresBuilder.toevoeging(rs.getString("toevoeging"));
+                adresBuilder.postCode(rs.getString("postcode"));
+                adresBuilder.woonPlaats(rs.getString("woonplaats"));
             
-                        // build Klant
-                        adres = adresBuilder.build();
+                // build Klant
+                adres = adresBuilder.build();
                                    
-                        } 
+            } 
                              
-                    con.close();  
+            con.close();  
             
-                   }// end try
-                  catch(SQLException ex){
-                  System.out.println(ex.getMessage());
-                  }
+        }// end try
+        catch (ClassNotFoundException | SQLException e) {
+                System.err.println("Got an exception!");
+                System.err.println(e.getMessage());
+        }        
              
     return adres;        
 }
       
     
     @Override //werkt
-    public Adres findByStraatNaam(String straatNaam) throws SQLException, ClassNotFoundException {
+    public Adres findByStraatNaam(String straatNaam) {
         AdresBuilder adresBuilder = new AdresBuilder();
         Adres adres = new Adres(adresBuilder);
-        
-        //load driver
-        Class.forName(driver);
-        System.out.println("Driver loaded");
-        //establish a connection
-        con = DriverManager.getConnection(url,
+        try { 
+            //load driver
+            Class.forName(driver);
+            System.out.println("Driver loaded");
+            //establish a connection
+            con = DriverManager.getConnection(url,
                 user, pw);
-        System.out.println("Database Connected");
+            System.out.println("Database Connected");
         
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+            String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
                 "woonplaats from Adres where straatnaam = ? ";
-        stmt = con.prepareStatement(sqlQuery);
-        
-        try{
+             stmt = con.prepareStatement(sqlQuery);
+       
             stmt.setString(1, straatNaam);      
             rs = stmt.executeQuery();          
             
@@ -158,8 +158,9 @@ public class AdresDAOImpl implements AdresDAOInterface {
             con.close();            
         }        
         }
-        catch(SQLException ex){
-        System.out.println(ex.getMessage());
+        catch (ClassNotFoundException | SQLException e) {
+                System.err.println("Got an exception!");
+                System.err.println(e.getMessage());
         }
                 
         return adres;
@@ -167,24 +168,24 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
     
     @Override //werkt
-    public Adres findByWoonplaats(String woonPlaats) throws SQLException, ClassNotFoundException {
+    public Adres findByWoonplaats(String woonPlaats) {
                 
         AdresBuilder adresBuilder = new AdresBuilder();
         Adres adres = new Adres(adresBuilder); 
-        
-        //load driver
-        Class.forName(driver);
-        System.out.println("Driver loaded");
-        //establish a connection
-        con = DriverManager.getConnection(url,
+        try { 
+            //load driver
+            Class.forName(driver);
+            System.out.println("Driver loaded");
+            //establish a connection
+            con = DriverManager.getConnection(url,
                 user, pw);
-        System.out.println("Database Connected");
+            System.out.println("Database Connected");
         
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+            String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
                 "woonplaats from Adres where woonplaats = ? ";
-        stmt = con.prepareStatement(sqlQuery);
+            stmt = con.prepareStatement(sqlQuery);
         
-        try{
+        
             stmt.setString(1, woonPlaats);      
             rs = stmt.executeQuery();          
             
@@ -203,8 +204,9 @@ public class AdresDAOImpl implements AdresDAOInterface {
         }    
             con.close();     
         }
-        catch(SQLException ex){
-        System.out.println(ex.getMessage());
+        catch (ClassNotFoundException | SQLException e) {
+               System.err.println("Got an exception!");
+               System.err.println(e.getMessage());
         }
                 
         return adres;
@@ -212,25 +214,24 @@ public class AdresDAOImpl implements AdresDAOInterface {
 
     
     @Override //werkt
-    public Adres findByPostcodeHuisNummer(String postCode, int huisNummer) 
-            throws SQLException, ClassNotFoundException {
+    public Adres findByPostcodeHuisNummer(String postCode, int huisNummer)  {
                 
         AdresBuilder adresBuilder = new AdresBuilder();
         Adres adres = new Adres(adresBuilder); 
-        
-        //load driver
-        Class.forName(driver);
-        System.out.println("Driver loaded");
-        //establish a connection
-        con = DriverManager.getConnection(url,
+        try { 
+            //load driver
+            Class.forName(driver);
+            System.out.println("Driver loaded");
+            //establish a connection
+            con = DriverManager.getConnection(url,
                 user, pw);
-        System.out.println("Database Connected");
+            System.out.println("Database Connected");
                 
-        String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
+            String sqlQuery = "select adres_id,straatnaam,huisnummer,toevoeging,postcode, " + 
                 "woonplaats from Adres where postcode = ? and huisnummer = ?";
-        stmt = con.prepareStatement(sqlQuery);
+            stmt = con.prepareStatement(sqlQuery);
         
-        try{
+        
             stmt.setString(1, postCode);    
             stmt.setInt(2, huisNummer);
             rs = stmt.executeQuery();          
@@ -250,9 +251,10 @@ public class AdresDAOImpl implements AdresDAOInterface {
             }  
             con.close();       
         }
-        catch(SQLException ex){
-        System.out.println(ex.getMessage());
-        }                
+        catch (ClassNotFoundException | SQLException e) {
+                System.err.println("Got an exception!");
+                System.err.println(e.getMessage());
+        }
         return adres;
     }
     
@@ -578,13 +580,11 @@ public class AdresDAOImpl implements AdresDAOInterface {
 
     @Override // werkt
     // delete adres_id ook uit koppelklantadres tabel
-    public boolean deleteAdres() throws SQLException {
+    public boolean deleteAdres(int adresId) throws SQLException {
     
     boolean deleted = false; 
         
-    Scanner input = new Scanner(System.in);
-    System.out.print("Adres ID: ");
-    int adresId = input.nextInt();
+    
        
         
       try{  
