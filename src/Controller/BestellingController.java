@@ -87,15 +87,31 @@ public class BestellingController {
                     
                     break;
                 }
-            
-            // Terug naar bestellingmenu
+            // Alle bestellingen tonen
             case 5:
-            {
-                      
+                {
+                
+                    toonAlleBestellingen();
                     
                     break;
-            }
-            
+
+                }
+            // Verwijder alle bestellingen
+            case 6:
+                {
+                    verwijderAlleBestellingen();  
+                    
+                    break;
+                }
+            // terug naar hoofdmenu
+            case 7:
+                {   
+                
+                    terugNaarHoofdMenu();    
+                    
+                    break;
+                    
+                }
             
             default:
                     System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
@@ -154,11 +170,14 @@ public class BestellingController {
                         }
                     } while (checker);
                     
+                    System.out.println(" ");
+                    
                     System.out.println("De artikelen van Klant " + klantID + " zijn toegevoegd aan bestelling ID: " + bestellingID);
                     System.out.println("De toegevoegde artikelen zijn: ");
                     for (BestellingArtikel bar: AL){
                         System.out.println(artikelDAO.findByArtikelID(bar.getArtikel_id()).getArtikelNaam() + " " + bar.getArtikel_aantal() + " keer");
                     }
+                    System.out.println(" ");
                     
            bestellingMenu();         
     }
@@ -225,8 +244,52 @@ public class BestellingController {
         bestellingMenu();        
     }
     
+    public void toonAlleBestellingen() throws SQLException {
+        
+        
+        
+        //  bestellingen uit bestelling tabel
+        ArrayList<Bestelling>bestellingLijst = bestellingDAO.findAll();
+        bestellingView.printBestellingLijst(bestellingLijst);
+        
+        
+        // TODO implementatie van onderstaande bestellingartikel lijst
+        // bestellingen uit bestellingartikel koppel tabel
+        // ArrayList<BestellingArtikel>bestellingArtikelLijst = bestellingArtikelDAO.findAll();
+        // bestellingView.printBestellingLijst(bestellingArtikelLijst);
+        
+        
+       
+        
+    }
     
-    // Optionele methoden
+    public void verwijderAlleBestellingen() throws SQLException{
+        
+        int verwijderConfirmatie = 0;
+        
+        System.out.println("Weet je het zeker?\n1 ja\n2 nee");
+        
+        try{
+            verwijderConfirmatie = scanner.nextInt();
+        } catch (InputMismatchException ex){
+            System.out.println("Vul een van de opties in");
+        }
+        
+        if (verwijderConfirmatie == 1){
+            bestellingDAO.deleteAll();
+            bestellingArtikelDAO.deleteAll();
+            System.out.println("Alles is verwijderd.\n");  
+        }
+        
+        else {
+            System.out.println("Verwijderen afgebroken.\n");
+        }
+        
+
+    }
+
+
+    // Aanvullende methoden
     
     public BestellingArtikel createBestellingArtikel(){
         

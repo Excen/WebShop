@@ -79,8 +79,7 @@ public class BestellingDAOImpl implements BestellingDAOInterface {
             Bestelling bestelling = new Bestelling();
             bestelling.setBestelling_id(rs.getInt("bestelling_id"));
             bestelling.setKlant_id(rs.getInt("klant_id"));
-            // Timestamp?
-            java.sql.Date sqlDate = rs.getDate("datum");
+            java.sql.Date sqlDate = rs.getDate("datum_aangemaakt");
             
             bestelling.setDatum(new java.util.Date(sqlDate.getTime()));
 

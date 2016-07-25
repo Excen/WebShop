@@ -36,7 +36,9 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         System.out.println("2 bestellingsinformatie ophalen");
         System.out.println("3 bestelling wijzigen");
         System.out.println("4 bestelling verwijderen");
-        System.out.println("5 terug naar hoofdmenu");
+        System.out.println("5 toon alle bestellingen");
+        System.out.println("6 verwijder alle bestellingen");
+        System.out.println("7 terug naar hoofdmenu");
         
         userInput = scanner.nextInt();
         scanner.nextLine();
@@ -51,6 +53,7 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         System.out.println("U wilt een nieuwe bestelling aanmaken.");
         System.out.println("Wat is uw klant ID?");
         int klantID = scanner.nextInt();
+        System.out.println(" ");
         return klantID;
     }
 
@@ -65,6 +68,8 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         } catch (InputMismatchException ex){
             System.out.println("Vul een integer in.");
         }
+        
+        System.out.println(" ");
         
         return userInputZoek;
     }
@@ -83,7 +88,7 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         return artikelAantal;
     }
     
-    public int wijzigBestellingInfo(ArrayList<Artikel>x, int bestellingId) throws SQLException{
+    public int wijzigBestellingInfo(ArrayList<Artikel>x, int bestellingId) throws SQLException {
         
         int userInput2 = 0;
         
@@ -130,6 +135,21 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
         }
 
         return nieuwAantal;
+        
+    }
+    
+    public void printBestellingLijst(ArrayList<Bestelling>lijst){
+        
+        // TODO
+        // ook koppelbestellingartikel aanspreken om aantallen bij te kunnen voegen
+        
+        System.out.println("Aanwezige bestellingen");
+        for (Bestelling best: lijst){
+            System.out.println("Bestelling ID: " + best.getBestelling_id() + " - Klant ID: " + best.getKlant_id());
+        }
+        
+        
+        
         
     }
     
