@@ -6,6 +6,7 @@
 package View;
 
 import POJO.Adres;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -105,6 +106,24 @@ public class AdresView {
         System.out.println("woonplaats: " + adres.getWoonPlaats());
     }
     
+    public int menuAdresZoeken(){
+        
+        System.out.println("Wat wilt u zoeken in het adressenbestand?");
+        System.out.println("1. Één adres opzoeken.");
+        System.out.println("2. naar alle adressen.");
+        System.out.println("3. terug naar het adres menu.");
+        
+        try{
+            userInput = Integer.parseInt(scanner.nextLine());            
+
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+    }
+    
     public int hoeWiltUZoeken() {
         System.out.println("Kies met wat u wilt zoeken.");
         System.out.println("1. Bestelling id.");
@@ -120,6 +139,18 @@ public class AdresView {
             System.out.print("Foute input, kies van de opties hierboven.");
         }
         return userInput;
+    }
+    
+    public void printAdressenLijst(ArrayList<Adres> adressenLijst) {
+        System.out.println();
+        System.out.println("AdresId\tStraatnaam\t\tHuisnummer\tToevoeging\tPostcode\tWoonplaats");
+            for (int i = 0; i< adressenLijst.size(); i++){
+
+            System.out.println ((adressenLijst.get(i)).getAdresId() + "\t" +
+            (adressenLijst.get(i)).getStraatNaam() + "\t\t" +(adressenLijst.get(i)).getHuisNummer() +
+            "\t" + (adressenLijst.get(i)).getToevoeging() + "\t" + (adressenLijst.get(i)).getPostCode() +
+            "\t" + (adressenLijst.get(i)).getWoonPlaats());
+            }        
     }
     
     public int checkInputString(String input) {
@@ -157,7 +188,7 @@ public class AdresView {
     
     public int bevestigingsVraag(){
         
-        System.out.println("Weet u zeker dat u alle klantgegevens definitief verwijderen wil?");
+        System.out.println("Weet u zeker dat u alle adresgegevens definitief verwijderen wil?");
         System.out.println("1. ja");
         System.out.println("2. nee");
         

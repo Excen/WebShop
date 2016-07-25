@@ -159,7 +159,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     }
 
     @Override // werkt
-    public boolean insertKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException {
+    public boolean insertKlantAdres(int klantId, int adresId) {
         
         boolean created = false; 
         try{
@@ -191,7 +191,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     }    
 
     @Override // werkt
-    public boolean deleteAll() throws SQLException, ClassNotFoundException {
+    public boolean deleteAll() {
         
         boolean deleted = false;
         
@@ -223,7 +223,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     
 
     @Override // werkt
-    public boolean deleteKlantAdres(int klantId, int adresId) throws SQLException, ClassNotFoundException {
+    public boolean deleteKlantAdresByAdresId(int adresId) {
 
     boolean deleted = false; 
     
@@ -232,13 +232,13 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
              // create a sql date object so we can use it in our INSERT statement
              try (Connection conn = DriverManager.getConnection(url, user, pw)) {
                  
-                 String sqlQuery = "delete from koppelklantadres where klant_id = ? AND adres_id = ?" ;
+                 String sqlQuery = "delete from koppelklantadres where adres_id = ?" ;
                  
                  // create the mysql preparedstatement
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
                     
-                 preparedStmt.setInt(1, klantId);
-                 preparedStmt.setInt(2, adresId);
+                 preparedStmt.setInt(1, adresId);
+                 
                  // execute the preparedstatement
                  preparedStmt.executeUpdate();
                  

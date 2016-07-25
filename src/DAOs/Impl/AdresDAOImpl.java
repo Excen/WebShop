@@ -33,12 +33,12 @@ public class AdresDAOImpl implements AdresDAOInterface {
     AdresBuilder adresBuilder = new AdresBuilder();
     
     @Override //werkt
-    public ArrayList <Adres> findAllAdresses() throws SQLException, 
-            ClassNotFoundException {
+    public ArrayList <Adres> findAllAdresses() {
         
         ArrayList<Adres> adressenLijst = new ArrayList<>();
         AdresBuilder adresBuilder = new AdresBuilder();
        
+        try {
         //load driver
         Class.forName(driver);
         System.out.println("Driver loaded");
@@ -49,7 +49,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
         
         String sqlQuery = "select * from Adres";
         
-        try{
+        
         stmt = con.prepareStatement(sqlQuery);
         rs = stmt.executeQuery();
             while (rs.next()) {            
@@ -67,7 +67,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
             }        
             con.close();             
         }
-        catch(SQLException ex){
+        catch(SQLException | ClassNotFoundException ex){
             System.out.println(ex.getMessage());
          }
         // arrayList van adressen 
@@ -260,7 +260,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     
    
     @Override // werkt
-        public Adres insertAdres(Adres adres) throws SQLException, ClassNotFoundException {
+        public Adres insertAdres(Adres adres) {
         
         int adresId = 0; 
                 
@@ -273,14 +273,14 @@ public class AdresDAOImpl implements AdresDAOInterface {
                 
         String sqlQuery = "insert into adres (straatnaam, huisnummer," +
                          " toevoeging, postcode, woonplaats) values (?, ?, ?, ?,?)";
-       
+       try {
         // create a mysql database connection
             Class.forName(driver);
              // create a sql date object so we can use it in our INSERT statement
-            try (Connection conn = DriverManager.getConnection(url, user, pw);                
+            Connection conn = DriverManager.getConnection(url, user, pw);                
                 // create the mysql insert preparedstatement               
                  PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery,
-                         Statement.RETURN_GENERATED_KEYS) ){
+                         Statement.RETURN_GENERATED_KEYS) ;
                 
                  preparedStmt.setString (1, straatnaam);
                  preparedStmt.setInt (2, huisnummer);
@@ -312,7 +312,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
                 adres = adresBuilder.build();
                 
             }
-            catch (SQLException e){
+            catch (SQLException | ClassNotFoundException e){
                 System.err.println("Got an exception!");
                 System.err.println(e.getMessage());
             }
@@ -580,7 +580,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
 
     @Override // werkt
     // delete adres_id ook uit koppelklantadres tabel
-    public boolean deleteAdres(int adresId) throws SQLException {
+    public boolean deleteAdres(int adresId) {
     
     boolean deleted = false; 
         
@@ -617,7 +617,7 @@ public class AdresDAOImpl implements AdresDAOInterface {
     @Override
     //Got an exception!
 //Cannot delete or update a parent row: a foreign key constraint fails (`winkel`.`koppelklantadres`, CONSTRAINT `koppelklantadres_ibfk_2` FOREIGN KEY (`adres_id`) REFERENCES `adres` (`adres_id`))
-    public boolean  deleteAll() throws SQLException {
+    public boolean  deleteAll() {
         boolean deleted = false;
         
         try{  
