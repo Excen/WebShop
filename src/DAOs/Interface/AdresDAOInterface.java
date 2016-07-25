@@ -15,20 +15,20 @@ import java.util.ArrayList;
  */
 public interface AdresDAOInterface {
     
-    public ArrayList <Adres> findAllAdresses() throws Exception;
+    public ArrayList <Adres> findAllAdresses();
     public Adres findByAdresID(int adresId);
     public Adres findByStraatNaam(String straatNaam);
     public Adres findByPostcodeHuisNummer(String postCode, int huisNummer);
     public Adres findByWoonplaats(String woonPlaats);
     
-    public Adres insertAdres(Adres adres) throws SQLException, ClassNotFoundException ;
+    public Adres insertAdres(Adres adres);
     public boolean updateStraatNaam() throws SQLException;
     public boolean updatePostCode() throws SQLException;
     public boolean updateHuisNummer() throws SQLException;
     public boolean updateToevoeging() throws SQLException;
     public boolean updateWoonplaats() throws SQLException;
-    public boolean deleteAdres(int adresId) throws SQLException;
-    public boolean deleteAll() throws SQLException;
+    public boolean deleteAdres(int adresId);
+    public boolean deleteAll();
     
     //public ArrayList<Adres> findByKlantId (int klantId) throws Exception;
 }

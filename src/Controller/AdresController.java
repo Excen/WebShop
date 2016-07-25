@@ -11,6 +11,7 @@ import POJO.Adres;
 import POJO.Adres.AdresBuilder;
 import View.AdresView;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,7 +31,7 @@ public class AdresController {
     
     int userInput;
     
-    public void adresMenu() throws SQLException, ClassNotFoundException{
+    public void adresMenu() throws SQLException, ClassNotFoundException {
         userInput = adresView.startAdresMenu();
         switch (userInput) {
             case 1:
@@ -55,7 +56,7 @@ public class AdresController {
         
     }
     
-    public int voegNieuwAdresToe() throws SQLException, ClassNotFoundException {
+    public int voegNieuwAdresToe() {
         System.out.println("U wilt een nieuw adres toevoegen. Voer hieronder de gegevens in.");
         int klantId = adresView.voerKlantIdIn();
         adres = createAdres();
@@ -94,38 +95,54 @@ public class AdresController {
     }
     
     public void zoekAdresGegevens() throws SQLException, ClassNotFoundException {
-        userInput = adresView.hoeWiltUZoeken();
+        userInput = adresView.menuAdresZoeken();
         switch (userInput) {
-            case 1:
-                int adresId = adresView.voerAdresIdIn();
-                adres = adresDao.findByAdresID(adresId);
-                adresView.printAdresOverzicht(adres);
-                break;
+            case 1:        
+                // één artikel zoeken
+                userInput = adresView.hoeWiltUZoeken();
+                switch (userInput) {
+                    case 1:
+                        int adresId = adresView.voerAdresIdIn();
+                        adres = adresDao.findByAdresID(adresId);
+                        adresView.printAdresOverzicht(adres);
+                        break;
+                    case 2:
+                        String straatnaam = adresView.voerStraatnaamIn();
+                        adres = adresDao.findByStraatNaam(straatnaam);
+                        adresView.printAdresOverzicht(adres);
+                        break;
+                    case 3:
+                        String postcode = adresView.voerPostcodeIn();
+                        int huisnummer = adresView.voerHuisnummerIn();
+                        adres = adresDao.findByPostcodeHuisNummer(postcode, huisnummer);
+                        adresView.printAdresOverzicht(adres);
+                        break;
+                    case 4:
+                        String woonplaats = adresView.voerWoonplaatsIn();
+                        adres = adresDao.findByWoonplaats(woonplaats);
+                        adresView.printAdresOverzicht(adres);
+                        break;
+                    case 5:
+                        break; // doorsturen einde switch; terug naar adres menu
+                    default: 
+                        break;
+                }
+            break;
             case 2:
-                String straatnaam = adresView.voerStraatnaamIn();
-                adres = adresDao.findByStraatNaam(straatnaam);
-                adresView.printAdresOverzicht(adres);
-                break;
+                // alle adressen zoeken
+                ArrayList <Adres> adressenLijst = adresDao.findAllAdresses();
+                System.out.println("Alle adressen in het adressenbestand");
+                adresView.printAdressenLijst(adressenLijst);  
+                break; 
             case 3:
-                String postcode = adresView.voerPostcodeIn();
-                int huisnummer = adresView.voerHuisnummerIn();
-                adres = adresDao.findByPostcodeHuisNummer(postcode, huisnummer);
-                adresView.printAdresOverzicht(adres);
                 break;
-            case 4:
-                String woonplaats = adresView.voerWoonplaatsIn();
-                adres = adresDao.findByWoonplaats(woonplaats);
-                adresView.printAdresOverzicht(adres);
-                break;
-            case 5:
-                break; // doorsturen einde switch; terug naar adres menu
-            default: 
+            default:
                 break;
         }
         adresMenu();
     }
     
-    public void wijzigAdresGegevens() throws SQLException, ClassNotFoundException{
+    public void wijzigAdresGegevens() throws SQLException, ClassNotFoundException {
                 
         userInput = adresView.hoeWiltUZoeken();
         switch (userInput) {
@@ -256,21 +273,48 @@ public class AdresController {
         return adres;
     }
     
-    public void verwijderAdresGegevens(){
-        boolean isDeleted = false;
+    public void verwijderAdresGegevens() throws SQLException, ClassNotFoundException{
+        klantAdresDao = new KlantAdresDAOImpl();
+        boolean isDeletedInAdres = false;
+        boolean isDeletedInKlantAdres = false;
         
         userInput = adresView.printVerwijderAdresMenu();
         switch (userInput) {
             case 1:
                 System.out.println("Voer het bestelling id in: ");
                 int adresId = adresView.voerAdresIdIn();
-                isDeleted = adresDao.deleteAdres(adresId);
+                adres = adresDao.findByAdresID(adresId);
+                isDeletedInAdres = adresDao.deleteAdres(adresId);
+                isDeletedInKlantAdres = klantAdresDao.deleteKlantAdresByAdresId(adresId);
+                if (isDeletedInAdres == true && isDeletedInKlantAdres == true) {
+                    System.out.println("Het volgende adres is verwijderd uit het bestand: ");
+                    System.out.println();
+                    adresView.printAdresOverzicht(adres);
+                    System.out.println("Alle koppelingen van klant met adres zijn ook verwijderd.");
+                }
+                else {
+                    System.out.println("Het volgende adres is NIET verwijderd uit het bestand: ");
+                    System.out.println();
+                    adresView.printAdresOverzicht(adres);
+                }   
+                break;
             case 2:
+                userInput = adresView.bevestigingsVraag();
+                if (userInput == 1) {
+                    isDeletedInAdres = adresDao.deleteAll();
+                    isDeletedInKlantAdres = klantAdresDao.deleteAll();
+                    System.out.println("Alle adressen zijn verwijderd.");                    
+                    System.out.println("alle koppelingen van klant en adres zijn verwijderd");
+                }
+            case 3:
+                break;
+            default:
+                break;
         }
-        
-        
-        
+        adresMenu();      
+           
     }
+    
     public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
         hoofdMenuController.start();
     }
