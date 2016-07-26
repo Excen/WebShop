@@ -10,62 +10,61 @@ package POJO;
  * @author Excen
  */
 public class BestellingArtikel {
-    private int bestelling_id;
-    private int artikel_id;
-    private int artikel_aantal;
+    private int bestellingId;
+    private int artikelId;
+    private int artikelAantal;
     
     // Constructor
-    public BestellingArtikel(int bestelling_id, int artikel_id, int artikel_aantal){
-        this.bestelling_id = bestelling_id;
-        this.artikel_id = artikel_id;
-        this.artikel_aantal = artikel_aantal;
+    public BestellingArtikel(int bestellingId, int artikelId, int artikelAantal){
+        this.bestellingId = bestellingId;
+        this.artikelId = artikelId;
+        this.artikelAantal = artikelAantal;
     }
     
     public BestellingArtikel(){
         
-    }
+    }    
     
-    
     /**
-     * @return the bestelling_id
+     * @return the bestellingId
      */
-    public int getBestelling_id() {
-        return bestelling_id;
+    public int getBestellingId() {
+        return bestellingId;
     }
 
     /**
-     * @param bestelling_id the bestelling_id to set
+     * @param bestellingId the bestellingId to set
      */
-    public void setBestelling_id(int bestelling_id) {
-        this.bestelling_id = bestelling_id;
+    public void setBestellingId(int bestellingId) {
+        this.bestellingId = bestellingId;
     }
 
     /**
-     * @return the artikel_id
+     * @return the artikelId
      */
-    public int getArtikel_id() {
-        return artikel_id;
+    public int getArtikelId() {
+        return artikelId;
     }
 
     /**
-     * @param artikel_id the artikel_id to set
+     * @param artikelId the artikelId to set
      */
-    public void setArtikel_id(int artikel_id) {
-        this.artikel_id = artikel_id;
+    public void setArtikelId(int artikelId) {
+        this.artikelId = artikelId;
     }
 
     /**
-     * @return the artikel_aantal
+     * @return the artikelAantal
      */
-    public int getArtikel_aantal() {
-        return artikel_aantal;
+    public int getArtikelAantal() {
+        return artikelAantal;
     }
 
     /**
-     * @param artikel_aantal the artikel_aantal to set
+     * @param artikelAantal the artikelAantal to set
      */
-    public void setArtikel_aantal(int artikel_aantal) {
-        this.artikel_aantal = artikel_aantal;
+    public void setArtikelAantal(int artikelAantal) {
+        this.artikelAantal = artikelAantal;
     }
     
     

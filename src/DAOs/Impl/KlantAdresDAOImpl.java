@@ -28,7 +28,6 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     
     String driver = "com.mysql.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
-    //String url = "jdbc:mysql://localhost3306/winkel";
     String user = "Anjewe"; 
     String pw = "Koetjes"; 
     Connection con;
@@ -37,19 +36,15 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     
     
    @Override // werkt
-   public ArrayList<KlantAdres> findAll() throws SQLException, ClassNotFoundException{        
+   public ArrayList<KlantAdres> findAll(){        
         
         ArrayList<KlantAdres> klantAdresLijst = new ArrayList<>();
         
         try{
             //load driver
             Class.forName(driver);
-            System.out.println("Driver loaded");
             //establish a connection
-            con = DriverManager.getConnection(url,
-                user, pw);
-            System.out.println("Database Connected");
-        
+            con = DriverManager.getConnection(url,user, pw);                 
         
             String sqlQuery = "SELECT * FROM koppelklantadres";
             
@@ -77,7 +72,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     
 
     @Override // werkt
-    public ArrayList<Klant> findKlantByAdresId(int adresId) throws SQLException, ClassNotFoundException {
+    public ArrayList<Klant> findKlantByAdresId(int adresId) {
         
         ArrayList<Klant> klantenlijst = new ArrayList<>();
         KlantDAOInterface klantDao = new KlantDAOImpl();
@@ -85,22 +80,13 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         try{
             //load driver
             Class.forName(driver);
-            System.out.println("Driver loaded");
             //establish a connection
-            con = DriverManager.getConnection(url,
-                user, pw);
-            System.out.println("Database Connected");
-        } 
-        catch(ClassNotFoundException ex){
-            Logger.getLogger(KlantAdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            con = DriverManager.getConnection(url,user, pw);         
         
-        String sqlQuery = "SELECT klant_id FROM Koppelklantadres WHERE adres_id = ?";
+            String sqlQuery = "SELECT klant_id FROM Koppelklantadres WHERE adres_id = ?";
+
+            stmt = con.prepareStatement(sqlQuery);
         
-        stmt = con.prepareStatement(sqlQuery);
-        
-        
-        try{
             stmt.setInt(1, adresId);      
             rs = stmt.executeQuery();          
             
@@ -110,37 +96,32 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
                     Klant klant = klantDao.findByKlantId(klantId);
                     klantenlijst.add(klant);            
                     //voeg klant toe aan lijst :Klant klant = findByKlantId(int klantId); klantenlijst.add(klant);                       
-        }  
-        con.close();      
+                }  
+                con.close();       
         }
-        catch(SQLException ex){}       
+        catch(ClassNotFoundException | SQLException ex){
+            Logger.getLogger(KlantAdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }     
         
         return klantenlijst;
     }
+    
 
     @Override // werkt
-    public ArrayList<Adres> findAdresByKlantId(int klantId) throws SQLException, ClassNotFoundException {
+    public ArrayList<Adres> findAdresByKlantId(int klantId) {
         ArrayList<Adres> adressenLijst = new ArrayList<>();
         AdresDAOInterface adresDao = new AdresDAOImpl();
         
         try{
             //load driver
             Class.forName(driver);
-            System.out.println("Driver loaded");
             //establish a connection
-            con = DriverManager.getConnection(url,
-                user, pw);
-            System.out.println("Database Connected");
-        } 
-        catch(ClassNotFoundException ex){
-            Logger.getLogger(KlantAdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            con = DriverManager.getConnection(url,user, pw);
+            
+            String sqlQuery = "SELECT adres_id FROM Koppelklantadres WHERE klant_id = ?";
         
-        String sqlQuery = "SELECT adres_id FROM Koppelklantadres WHERE klant_id = ?";
+            stmt = con.prepareStatement(sqlQuery);  
         
-        stmt = con.prepareStatement(sqlQuery);        
-        
-        try{
             stmt.setInt(1, klantId);      
             rs = stmt.executeQuery();          
             
@@ -150,13 +131,16 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
                     Adres adres = adresDao.findByAdresID(adresId);
                     adressenLijst.add(adres);
              
+                }  
+                con.close(); 
+        } 
+        catch(ClassNotFoundException | SQLException ex){
+            Logger.getLogger(KlantAdresDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }  
-        con.close();      
-        }
-        catch(SQLException ex){}        
         
         return adressenLijst;
     }
+    
 
     @Override // werkt
     public boolean insertKlantAdres(int klantId, int adresId) {
@@ -165,12 +149,10 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         try{
             //load driver
             Class.forName(driver);
-            System.out.println("Driver loaded");
             //establish a connection
             con = DriverManager.getConnection(url,
                 user, pw);
-            System.out.println("Database Connected");
-                
+                          
             // schrijf ze weg in SQL tabel. 
             String sqlQuery = "INSERT INTO koppelklantadres (klant_id, adres_id) values (?, ?)";
                    
@@ -189,6 +171,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
         
        return created; 
     }    
+    
 
     @Override // werkt
     public boolean deleteAll() {
@@ -211,14 +194,12 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
                  
                  deleted = true; 
              }
-      }
-    
-            catch (ClassNotFoundException | SQLException e)
-            {
-            System.err.println("Got an exception!");
-            System.err.println(e.getMessage());
-            }
-        return deleted; 
+        } catch (ClassNotFoundException | SQLException e)
+        {
+        System.err.println("Got an exception!");
+        System.err.println(e.getMessage());
+    }
+    return deleted; 
     }
     
 
@@ -256,7 +237,7 @@ public class KlantAdresDAOImpl implements KlantAdresDAOInterface {
     }
     
     
-    public int deleteKlantAdresByKlantId(int klantId) throws SQLException, ClassNotFoundException {
+    public int deleteKlantAdresByKlantId(int klantId) {
 
     int rowsAffected = 0; 
     

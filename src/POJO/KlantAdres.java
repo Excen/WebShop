@@ -12,7 +12,7 @@ public class KlantAdres {
     private int adresId;
     
     public KlantAdres(){
-        throw new UnsupportedOperationException("Not supported yet.");
+       
     }
     
     public KlantAdres(int klantId, int adresId) {

@@ -6,40 +6,25 @@
 package DAOs.Interface;
 
 import POJO.Klant;
-import java.sql.SQLException;
 import java.util.ArrayList;
-
 /**
  *
  * @author Wendy
  */
 public interface KlantDAOInterface {
-    public ArrayList <Klant> findAllKlanten() throws Exception;
-    public Klant findByKlantId(int klantId) throws SQLException, ClassNotFoundException;
-    public Klant findByVoorNaam(String voorNaam) throws SQLException, ClassNotFoundException;
-    public Klant findByAchterNaam(String achterNaam) throws SQLException, ClassNotFoundException;
-    public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam) 
-            throws SQLException, ClassNotFoundException;
-    public Klant findByEmail(String email) throws SQLException, ClassNotFoundException;
     
-    public Klant insertKlant(Klant klant) throws SQLException, ClassNotFoundException ;
-    public void updateVoorNaam() throws SQLException;
-    public void updateAchterNaam() throws SQLException; 
-    public void updateTussenVoegsel() throws SQLException; 
-    public void updateEmail() throws SQLException; 
-    
-    public boolean deleteByKlantId(int klantId) throws SQLException; 
-    public boolean deleteByKlantNaam(String achternaam, String tussenvoegsel, String voornaam) throws SQLException;
-    public int deleteAll() throws SQLException;    
-    
-    
-    
+    public ArrayList <Klant> findAllKlanten();
+    public Klant findByKlantId(int klantId) ;
+    public Klant findByVoorNaamAchterNaam(String voorNaam, String achterNaam);            
+    public Klant findByEmail(String email);    
+    public Klant insertKlant(Klant klant) ;    
+    public boolean deleteByKlantId(int klantId) ; 
+    public boolean deleteByKlantNaam(String achternaam, String tussenvoegsel, String voornaam);
+    public int deleteAll() ;   
 
     /*public int[] addBatchKlanten() throws Exception; >> later bij tijd over
     public void vulVoornaamLijst ();
     public void vulAchternaamLijst ();
     public void vulTussenvoegselLijst ();*/
-    
-    //public ArrayList<Klant> findByAdresId (int adresId) throws Exception;  
-    //public void updateAdresKlant (int adresId) throws Exception;
+   
 }

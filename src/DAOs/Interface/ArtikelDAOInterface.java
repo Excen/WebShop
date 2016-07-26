@@ -5,10 +5,8 @@
  */
 package DAOs.Interface;
 
-import POJO.Artikel; // anders doet die niet?
-import java.sql.SQLException;
+import POJO.Artikel; 
 import java.util.ArrayList;
-import java.sql.*;
 
 /**
  *
@@ -21,6 +19,7 @@ public interface ArtikelDAOInterface {
     public Artikel findByArtikelPrijs (double artikelPrijs);
     public Artikel insertArtikel (String artikelNaam, double artikelPrijs);
     public boolean deleteArtikel(int artikelID);
-    public boolean update(Artikel artikel) throws SQLException, ClassNotFoundException;
+    public int deleteAll();
+    public boolean update(Artikel artikel);
     
 }

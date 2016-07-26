@@ -1,75 +1,69 @@
 package POJO;
 
-import java.util.ArrayList;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.util.Date;
 
 /**
  *
  * @author Excen
  */
 public class Bestelling {
-    private int bestelling_id;
-    private int klant_id;
-    private java.util.Date datum;
+    
+    private int bestellingId;
+    private int klantId;
+    private Date datum;
     
     // Constructor
-    public Bestelling(int bestelling_id, int klant_id){
-        this.bestelling_id = bestelling_id;
-        this.klant_id = klant_id;
-        datum = new java.util.Date();
-        java.sql.Date sqlDatum = new java.sql.Date(datum.getTime());
+    public Bestelling(int bestellingId, int klantId){
+        this.bestellingId = bestellingId;
+        this.klantId = klantId;
+        datum = new Date();
+        Date sqlDatum = new java.sql.Date(datum.getTime());
     }
     
     public Bestelling(){
-        datum = new java.util.Date();
-        java.sql.Date sqlDatum = new java.sql.Date(datum.getTime());
-    }
+        datum = new Date();
+        Date sqlDatum = new java.sql.Date(datum.getTime());
+    }    
     
-    
     /**
-     * @return the bestelling_id
+     * @return the bestellingId
      */
-    public int getBestelling_id() {
-        return bestelling_id;
+    public int getBestellingId() {
+        return bestellingId;
     }
 
     /**
-     * @param bestelling_id the bestelling_id to set
+     * @param bestellingId the bestellingId to set
      */
-    public void setBestelling_id(int bestelling_id) {
-        this.bestelling_id = bestelling_id;
+    public void setBestellingId(int bestellingId) {
+        this.bestellingId = bestellingId;
     }
 
     /**
-     * @return the klant_id
+     * @return the klantId
      */
-    public int getKlant_id() {
-        return klant_id;
+    public int getKlantId() {
+        return klantId;
     }
 
     /**
-     * @param klant_id the klant_id to set
+     * @param klantId the klantId to set
      */
-    public void setKlant_id(int klant_id) {
-        this.klant_id = klant_id;
+    public void setKlantId(int klantId) {
+        this.klantId = klantId;
     }
 
     /**
      * @return the datum
      */
-    public java.util.Date getDatum() {
+    public Date getDatum() {
         return datum;
     }
 
     /**
      * @param datum the datum to set
      */
-    public void setDatum(java.util.Date datum) {
+    public void setDatum(Date datum) {
         this.datum = datum;
     }
     

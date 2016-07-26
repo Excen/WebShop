@@ -25,248 +25,239 @@ import java.util.logging.Logger;
  * @author Excen
  */
 public class BestellingArtikelDAOImpl implements BestellingArtikelDAOInterface {
-   
-    /*
-    Haalt gegevens uit de koppeltabel BestellingArtikel.
-    Deze gegevens zijn:
-    bestelling_id
-    artikel_id
-    artikel_aantal
-    */
-    
+       
     // Info inlog SQL
-    private String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
-    private String user = "Anjewe";
-    private String pw = "Koetjes";
+    private final String url = "jdbc:mysql://localhost:3306/winkel?autoReconnect=true&useSSL=false";
+    private final String user = "Anjewe";
+    private final String pw = "Koetjes";
+    private final String driver = "com.mysql.jdbc.Driver";
     
     Connection con;
     ResultSet rs;
     PreparedStatement stmt;
     
+       
     @Override
-    public void createBestellingArtikel(BestellingArtikel bestellingArtikel) throws SQLException{
+    public void deleteArtikel(int bestellingId, int artikelId) {
+        
+        String sqlQuery = "delete artikel_id from koppelbestellingartikel where bestelling_id = " + bestellingId + " and artikel_id = " + artikelId ;
+        
+        try{             
+        
+        con = DriverManager.getConnection(url, user, pw);
+        stmt = con.prepareStatement(sqlQuery);
+        stmt.executeUpdate();
+        
+        } 
+        catch ( SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void deleteBestellingArtikel(int bestellingId)  {
+
+        String sqlQuery = "delete from koppelbestellingartikel where bestelling_id = " + bestellingId;
+        
+        try{
+            
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            stmt.executeUpdate();
+
+        } 
+        catch (SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }    
+    
+    @Override
+    public void createBestellingArtikel(BestellingArtikel bestellingArtikel) {
    
         // haal waardes uit BestellingArtikel object.
-        int bestelling_id = bestellingArtikel.getBestelling_id();
-        int artikel_id = bestellingArtikel.getArtikel_id();
-        int artikel_aantal = bestellingArtikel.getArtikel_aantal();
+        int bestellingId = bestellingArtikel.getBestellingId();
+        int artikelId = bestellingArtikel.getArtikelId();
+        int artikelAantal = bestellingArtikel.getArtikelAantal();
         
         // schrijf ze weg in SQL tabel. 
         String sqlQuery = "insert into koppelbestellingartikel (bestelling_id, artikel_id, aantal)"
         + " values (?, ?, ?)";
         
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        stmt.setInt(1, bestelling_id);
-        stmt.setInt(2, artikel_id);
-        stmt.setInt(3, artikel_aantal);
-        stmt.execute();
-  
-    }
-    
-    @Override
-    public ArrayList<BestellingArtikel> findAll() throws SQLException {
-        
-        ArrayList<BestellingArtikel>bestellingArtikellijst = new ArrayList<>();
-        
-        String sqlQuery = "select * from koppelbestellingartikel";
-        
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-  
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
+        try{
             
-        while (rs.next()) {
-
-            BestellingArtikel bestelling = new BestellingArtikel();
-            bestelling.setBestelling_id(rs.getInt("bestelling_id"));
-            bestelling.setArtikel_id(rs.getInt("artikel_id"));
-            bestelling.setArtikel_aantal(rs.getInt("aantal"));
-
-            // add bestelling in de list
-            bestellingArtikellijst.add(bestelling);
-            }
-          
-          return bestellingArtikellijst;  
-          }
-    
-          // find info about ID - refactor - webshop.bestelingartikel
-    
-    
-    @Override
-    public ArrayList<Integer> findByBestellingId2 (int bestelling_id) throws SQLException {
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            stmt.setInt(1, bestellingId);
+            stmt.setInt(2, artikelId);
+            stmt.setInt(3, artikelAantal);
+            stmt.execute();
         
-        ArrayList<Integer>artikelLijst = new ArrayList<>();
-        
-        String sqlQuery = "select * from koppelbestellingartikel where bestelling_id = " + bestelling_id;
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch ( SQLException ex) {
             Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
-        while (rs.next()){
-            int b = rs.getInt("bestelling_id");
-            int a = rs.getInt("artikel_id");
-            int aa = rs.getInt("aantal");
-            
-            artikelLijst.add(a);
-        }
-        
-        return artikelLijst;
-        
+        }  
     }
     
     
-    @Override
-    public ArrayList<Artikel> findByBestellingId(int bestelling_id) throws SQLException {
-        
-        ArrayList<Artikel>artikelLijst = new ArrayList<>();
-        
-        String sqlQuery = "select artikel_id from koppelbestellingartikel where bestelling_id = " + bestelling_id;
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
-        ArtikelDAOInterface artikelDao = new ArtikelDAOImpl();
-            
-        while (rs.next()) {
-       
-            int artikel_idtje = rs.getInt("artikel_id");
-            
-            
-            Artikel artikeltje = artikelDao.findByArtikelID(artikel_idtje);
-            artikelLijst.add(artikeltje);
-            
-            }    
-            return artikelLijst;
-        
-    }   
-    
-    @Override
-    public ArrayList<Bestelling> findBestellingByArtikelId(int artikel_id) throws SQLException {
-        
-        ArrayList<Bestelling>bestellingLijst = new ArrayList<>();
-        
-        String sqlQuery = "select bestelling_id from koppelbestellingartikel where artikel_id = " + artikel_id;
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
-        BestellingDAOInterface bestellingDao = new BestellingDAOImpl();
-        
-        
-        while (rs.next()) {
-            
-            Bestelling bestelling = new Bestelling();
-            
-            bestelling = bestellingDao.findById(rs.getInt("bestelling_id"));
-
-            // zet in arraylist
-            bestellingLijst.add(bestelling);
-  
-        }
-        
-        return bestellingLijst;
-    }
-
-    @Override
-    public void updateBestellingArtikelAantal(int bestelling_id, int artikel_id, int newArtikel_aantal) throws SQLException {
+     @Override
+    public void updateBestellingArtikelAantal(int bestellingId, int artikelId, int nieuwArtikelAantal) {
         
         String sqlQuery = "update koppelbestellingartikel set aantal = ? where bestelling_id = ? and artikel_id = ?";
 
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        stmt.setInt(1, newArtikel_aantal);
-        stmt.setInt(2, bestelling_id);
-        stmt.setInt(3, artikel_id);        
-        stmt.executeUpdate();
+        try{ 
+            
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            stmt.setInt(1, nieuwArtikelAantal);
+            stmt.setInt(2, bestellingId);
+            stmt.setInt(3, artikelId);        
+            stmt.executeUpdate();
+        
+        } 
+        catch ( SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
       
     }
     
-    @Override
-    public int findAantalByArtikelID(int bestelling_id, int artikel_id) throws SQLException{
-        
-        String sqlQuery = "select aantal from koppelbestellingartikel where bestelling_id = " + bestelling_id + " and artikel_id = " + artikel_id;
-        int artikelAantal = 0;
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        rs = stmt.executeQuery();
-        
-        while (rs.next()){
-            artikelAantal = rs.getInt("aantal"); 
-        }
-        return artikelAantal;
-    }
-    
-    @Override
-    public void deleteAll() throws SQLException{
+      @Override
+    public void deleteAll() {
         
         String sqlQuery = "delete from koppelbestellingartikel";
         
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        stmt.executeUpdate();
+        try {
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            stmt.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
     @Override
-    public void deleteArtikel(int bestelling_id, int artikel_id) throws SQLException{
+    public ArrayList<BestellingArtikel> findAll() {
         
-        String sqlQuery = "delete artikel_id from koppelbestellingartikel where bestelling_id = " + bestelling_id + " and artikel_id = " + artikel_id ;
+        ArrayList<BestellingArtikel>bestellingArtikellijst = new ArrayList<>();
         
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        stmt.executeUpdate();
+        String sqlQuery = "select * from koppelbestellingartikel";        
         
+        try {
+            Class.forName(driver);
+            
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                BestellingArtikel bestelling = new BestellingArtikel();
+                bestelling.setBestellingId(rs.getInt("bestelling_id"));
+                bestelling.setArtikelId(rs.getInt("artikel_id"));
+                bestelling.setArtikelAantal(rs.getInt("aantal"));
+
+                // add bestelling in de list
+                bestellingArtikellijst.add(bestelling);
+                }
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      return bestellingArtikellijst;  
     }
+        
     
     @Override
-    public void deleteBestellingArtikel(int bestelling_id) throws SQLException {
-
-        String sqlQuery = "delete from koppelbestellingartikel where bestelling_id = " + bestelling_id;
+    public ArrayList<Artikel> findByBestellingId(int bestellingId) {
         
-        con = DriverManager.getConnection(url, user, pw);
-        stmt = con.prepareStatement(sqlQuery);
-        stmt.executeUpdate();
+        ArrayList<Artikel>artikelLijst = new ArrayList<>();
+        
+        String sqlQuery = "select artikel_id from koppelbestellingartikel where bestelling_id = " + bestellingId;
+        
+        try {
+            Class.forName(driver);        
+        
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
 
+            ArtikelDAOInterface artikelDao = new ArtikelDAOImpl();
+
+            while (rs.next()) {
+
+                int artikelId = rs.getInt("artikel_id");
+
+                Artikel artikeltje = artikelDao.findByArtikelID(artikelId);
+                artikelLijst.add(artikeltje);
+
+                }    
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return artikelLijst;        
+    }   
+    
+    
+    @Override
+    public ArrayList<Bestelling> findBestellingByArtikelId(int artikelId) {
+        
+        ArrayList<Bestelling>bestellingLijst = new ArrayList<>();
+        
+        String sqlQuery = "select bestelling_id from koppelbestellingartikel where artikel_id = " + artikelId;
+        
+        try {
+            Class.forName(driver);        
+
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
+
+            BestellingDAOInterface bestellingDao = new BestellingDAOImpl();
+
+            while (rs.next()) {
+                
+                Bestelling bestelling = new Bestelling();
+                bestelling = bestellingDao.findById(rs.getInt("bestelling_id"));
+                // zet in arraylist
+                bestellingLijst.add(bestelling);
+
+            }
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bestellingLijst;
     }
 
+ 
     
+    @Override
+    public int findAantalByArtikelID(int bestellingId, int artikelId) {
+        
+        int artikelAantal = 0;
+        
+        String sqlQuery = "select aantal from koppelbestellingartikel where bestelling_id = " + bestellingId + " and artikel_id = " + artikelId;
+        
+        
+        try {
+            Class.forName(driver);        
+        
+            con = DriverManager.getConnection(url, user, pw);
+            stmt = con.prepareStatement(sqlQuery);
+            rs = stmt.executeQuery();
 
-    
-    
+            while (rs.next()){
+                artikelAantal = rs.getInt("aantal"); 
+            }
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(BestellingArtikelDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+      return artikelAantal;
+    }
+       
 }

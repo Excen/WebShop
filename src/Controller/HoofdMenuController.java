@@ -31,7 +31,7 @@ public class HoofdMenuController implements ControllerInterface {
    int userInput;
     
     // beginpunt
-    public void start() throws SQLException, ClassNotFoundException{
+    public void start()  {
        
         userInput = hoofdMenuView.hoofdMenu();
         
@@ -56,44 +56,18 @@ public class HoofdMenuController implements ControllerInterface {
             }
         } 
     
-    public void start2() throws SQLException, ClassNotFoundException{
-       
-        userInput = hoofdMenuView.hoofdMenu();
-        
-            switch (userInput) {
-                case 1: // ga naar klantMenu
-                    klantController.klantMenu();
-                    break;
-                case 2: // ga naar artikelMenu
-                    //artikelController.startArtikelController();                    
-                    break;
-                case 3: // ga naar bestellingmenu
-                    //bestellingController.bestellingStart();                                 
-                    break;
-                case 4:// ga naar adresmenu
-                    //adresController.adresMenu();                
-                    break;
-                case 5: 
-                    afsluiten();
-                    break;
-                default:
-                    break;
-            }
-        } 
-
-    
     public void afsluiten(){
        userInput = hoofdMenuView.bevestigingsVraag();
        
-       if (userInput == 1){
+       if (userInput == 1){ // wel afsluiten
            // 
            
        }
-       else if (userInput == 2){
+       else if (userInput == 2){ // niet afsluiten
            userInput = hoofdMenuView.hoofdMenu();
        }           
         
     }
     
-    
+ 
 }

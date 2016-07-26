@@ -5,7 +5,7 @@ import POJO.Artikel;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 public class ArtikelDAOImpl implements ArtikelDAOInterface {
 
@@ -18,9 +18,11 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
     String gebruikersNaam = "Anjewe";
     String wachtwoord = "Koetjes";
 
+    
     @Override
     public ArrayList<Artikel> findAll() {
         ArrayList<Artikel> artikelList = new ArrayList<>();
+        
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
@@ -31,7 +33,7 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
             while (rs.next()) {
                 // get the fields from one artikel and store it in an Artikel object
                 Artikel artikel = new Artikel();
-                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelId(rs.getInt("artikel_id"));
                 artikel.setArtikelNaam(rs.getString("artikel_naam"));
                 artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
 
@@ -40,10 +42,9 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data search failed");
-            ex.printStackTrace();
         }
 
-        return artikelList;
+       return artikelList;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelId(rs.getInt("artikel_id"));
                 artikel.setArtikelNaam(rs.getString("artikel_naam"));
                 artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
             }
@@ -71,7 +72,6 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data search failed");
-            ex.printStackTrace();
         }
         return artikel;
     }
@@ -86,7 +86,7 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
             pstmt = con.prepareStatement(SQLZoeken);
             rs = pstmt.executeQuery(SQLZoeken);
             if (rs.next()) {
-                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelId(rs.getInt("artikel_id"));
                 artikel.setArtikelNaam(rs.getString("artikel_naam"));
                 artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
             } 
@@ -99,7 +99,6 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data search failed");
-            ex.printStackTrace();
         }
         return artikel;
     }
@@ -116,7 +115,7 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                artikel.setArtikelID(rs.getInt("artikel_id"));
+                artikel.setArtikelId(rs.getInt("artikel_id"));
                 artikel.setArtikelNaam(rs.getString("artikel_naam"));
                 artikel.setArtikelPrijs(rs.getDouble("artikel_prijs"));
             }
@@ -129,7 +128,6 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data search failed");
-            ex.printStackTrace();
         }
         return artikel;
 
@@ -159,26 +157,23 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
                     artikelId = rs.getInt(1);
                 }
             }
-            artikel.setArtikelID(artikelId);
+            artikel.setArtikelId(artikelId);
             artikel.setArtikelNaam(artikelNaam);
             artikel.setArtikelPrijs(artikelPrijs);
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Data entry failed.");
-            ex.printStackTrace();
             
-        }
-                
+        }                
         return artikel;
     }
-    
-    
     
 
     // delete methode
     @Override
     public boolean deleteArtikel(int artikelId) {
         boolean isDeleted = false;
+        
         try {
            Class.forName(driver);
            con = DriverManager.getConnection(url, gebruikersNaam, wachtwoord);
@@ -188,27 +183,56 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
            boolean artikelFound = rs.next();
            
            if (artikelFound) {
-            String sqlUpdate = "delete from artikel where artikel_id = ?";
-            pstmt = con.prepareStatement(sqlUpdate);
-            pstmt.setInt(1, artikelId);
-            pstmt.executeUpdate(); 
-            isDeleted = true;
-            }
-             
+                String sqlUpdate = "delete from artikel where artikel_id = ?";
+                pstmt = con.prepareStatement(sqlUpdate);
+                pstmt.setInt(1, artikelId);
+                pstmt.executeUpdate(); 
+                isDeleted = true;
+                }
+
         }
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Deleting failed.");
-            ex.printStackTrace();
         }
         return isDeleted;
     }
     
     
+     @Override
+    public int deleteAll() {
+        int rowsAffected = 0; 
+        
+        try{  
+            
+        Class.forName(driver);
+             // create a sql date object so we can use it in our INSERT statement
+             try (Connection conn = DriverManager.getConnection(url, gebruikersNaam, wachtwoord)) {
+                 // create a sql date object so we can use it in our INSERT statement
+                 
+                 // the mysql insert statement
+                 String sqlQuery = "delete from artikel";                         
+                 
+                 // create the mysql insert preparedstatement
+                 PreparedStatement preparedStmt = conn.prepareStatement(sqlQuery);
+                                                 
+                 // execute the preparedstatement
+                 rowsAffected = preparedStmt.executeUpdate();   
+                 
+            }
+        }    
+        catch (ClassNotFoundException | SQLException e){        
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }  
+        
+     return rowsAffected;
+    }
+    
     // update method
     @Override
     public boolean update(Artikel artikel) {
         
-    int artikelId = artikel.getArtikelID();
+    int artikelId = artikel.getArtikelId();
     String artikelNaam = artikel.getArtikelNaam();
     double artikelPrijs = artikel.getArtikelPrijs();         
         
@@ -229,7 +253,6 @@ public class ArtikelDAOImpl implements ArtikelDAOInterface {
         } 
         catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Update failed.");
-            ex.printStackTrace();
         }
         
         return gelukt;

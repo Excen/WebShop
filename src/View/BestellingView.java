@@ -22,115 +22,138 @@ public class BestellingView {
 
 BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();    
     
-    
     // data fields
     Scanner scanner = new Scanner(System.in);
     int userInput;
     int artikelId;
     int artikelAantal;
     
+    
     public int startBestellingMenu(){
-        try{
-        System.out.println("Maak een keuze:");
-        System.out.println("1 bestelling plaatsen");
-        System.out.println("2 bestellingsinformatie ophalen");
-        System.out.println("3 bestelling wijzigen");
-        System.out.println("4 bestelling verwijderen");
-        System.out.println("5 terug naar hoofdmenu");
         
-        userInput = scanner.nextInt();
-        scanner.nextLine();
+        try{
+            System.out.println();
+            System.out.println("Maak een keuze:");
+            System.out.println("1. Nieuwe bestelling plaatsen");
+            System.out.println("2. Bestellingsgegevens opzoeken");
+            System.out.println("3. Bestellinggegevens wijzigen");
+            System.out.println("4. Bestellinggegevens verwijderen");
+            System.out.println("5. Terug naar hoofdmenu");       
+
+            userInput = Integer.parseInt(scanner.nextLine());
+            
         } catch (InputMismatchException ex){
             System.out.print("Foute input, kies één van de opties hierboven.");
         }    
 
-        return userInput;
+    return userInput;
     }
     
+    
     public int voerKlantIdIn (){
+        
         System.out.println("U wilt een nieuwe bestelling aanmaken.");
         System.out.println("Wat is uw klant ID?");
-        int klantID = scanner.nextInt();
+        int klantID = Integer.parseInt(scanner.nextLine());
         return klantID;
     }
 
+    
     public int zoekBestellingInfo(){
+        
         System.out.println("Wat is het bestelling ID?");
-        int userInputZoek = 0;
+        userInput = 0;
         
         try{
-            
-            userInputZoek = scanner.nextInt();
-         
+            userInput = Integer.parseInt(scanner.nextLine());         
         } catch (InputMismatchException ex){
-            System.out.println("Vul een integer in.");
+            System.out.println("Vul een getal in.");
         }
         
-        return userInputZoek;
+        return userInput;
     }
     
+    
     public int voerArtikelIdIn(){
+        
         System.out.println("Voer een artikel ID in:");
-        artikelId = scanner.nextInt(); 
+        artikelId = Integer.parseInt(scanner.nextLine());
         
         return artikelId;
     }
     
+    
     public int voerAantalIn(){
+        
         System.out.println("Hoe vaak wil je dit artikel toevoegen?");
-        artikelAantal = scanner.nextInt();
+        artikelAantal = Integer.parseInt(scanner.nextLine());
         
         return artikelAantal;
     }
     
-    public int wijzigBestellingInfo(ArrayList<Artikel>x, int bestellingId) throws SQLException{
+    
+    public int wijzigBestellingInfo(ArrayList<Artikel>artikelLijst, int bestellingId){
         
-        int userInput2 = 0;
+        artikelId = 0;        
         
+        System.out.println("Artikellen aanwezig in bestelling " + bestellingId);
         
-        System.out.println("Artikellen aanwezig in Bestelling " + bestellingId);
-        for (Artikel ar: x){
-        System.out.println(ar.getArtikelID() + " " + ar.getArtikelNaam() + ": " + bestellingArtikelDAO.findAantalByArtikelID(bestellingId, ar.getArtikelID()) + " keer");
-    } 
+        for (Artikel ar: artikelLijst){
+            System.out.println(ar.getArtikelId() + " " + ar.getArtikelNaam() + ": " + bestellingArtikelDAO.findAantalByArtikelID(bestellingId, ar.getArtikelId()) + " keer");
+        } 
         
-        System.out.println("Welk Artikel ID wil je wijzigen?");
+        System.out.println("Welk artikel ID wil je wijzigen?");
         try{
-        userInput2 = scanner.nextInt();    
+            artikelId = Integer.parseInt(scanner.nextLine());  
         } catch (InputMismatchException ex){
-            System.out.println("Voer een integer in.");
+            System.out.println("Voer een getal in.");
         }
 
-        return userInput2;
+        return artikelId;
 
     }
     
     public int wijzigBestellingKeuze (){
         
-        System.out.println("Wat wil je doen met dit artikel?\n1 verwijderen\n2 aantal wijzigen");
-        int aanpasKeuze = 0;
+        System.out.println("Wat wil je doen met dit artikel?\n1. Verwijderen\n2. Aantal wijzigen");
+        userInput = 0;
         
         try{
-        aanpasKeuze = scanner.nextInt();   
+            userInput = Integer.parseInt(scanner.nextLine()); 
         } catch (InputMismatchException ex){
-            System.out.println("Vul een integer in.");
+            System.out.println("Vul een getal in.");
         }
 
-        return aanpasKeuze;
+        return userInput;
         
     }
     
     public int wijzigAantal() {
+        
         System.out.println("Wat moet het nieuwe aantal worden?");
-        int nieuwAantal = 0;
+        artikelAantal = 0;
         
         try{
-        nieuwAantal = scanner.nextInt();   
+        artikelAantal = Integer.parseInt(scanner.nextLine());
         } catch (InputMismatchException ex){
-            System.out.println("Vul een integer in.");
+            System.out.println("Vul een getal in.");
         }
 
-        return nieuwAantal;
+        return artikelAantal;
         
     }
     
+    public void printBestellingLijst(ArrayList<Bestelling>lijst){       
+        // TODO
+        // ook koppelbestellingartikel aanspreken om aantallen bij te kunnen voegen
+        
+        System.out.println("Aanwezige bestellingen: ");
+        for (Bestelling best: lijst){
+            System.out.println("Bestelling ID: " + best.getBestellingId() + " - Klant ID: " + best.getKlantId());
+        }
+        
+        
+        
+        
+    }
 }

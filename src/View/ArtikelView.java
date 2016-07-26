@@ -6,6 +6,7 @@
 package View;
 
 import POJO.Artikel;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -19,12 +20,12 @@ public class ArtikelView {
     
     public int startArtikelMenu() {
         System.out.println();
-        System.out.println("Werken in het artikelbestand. Wat wilt u doen?");
-        System.out.println("1. Nieuw artikel toevoegen in het artikelenbestand.");
-        System.out.println("2. Een artikel opzoeken.");
-        System.out.println("3. Een artikel wijzigen.");
-        System.out.println("4. Een artikel verwijderen uit het artikelenbestand.");
-        System.out.println("5. Terug naar het hoofdmenu.");
+        System.out.println("Maak uw keuze: ");
+        System.out.println("1. Nieuw artikel toevoegen.");
+        System.out.println("2. Artikelgegevens opzoeken.");
+        System.out.println("3. Artikelgegevens wijzigen.");
+        System.out.println("4. Artikelgevens verwijderen.");
+        System.out.println("5. Terug naar het hoofdmenu.");       
         
         try{
              userInput = Integer.parseInt(scanner.nextLine());
@@ -52,7 +53,7 @@ public class ArtikelView {
     }
     public void printArtikelOverzicht(Artikel artikel) {
         System.out.println("Het artikel heeft de volgende gegevens:");
-        System.out.println("artikel id: " + artikel.getArtikelID());
+        System.out.println("artikel id: " + artikel.getArtikelId());
         System.out.println("artikel naam: " + artikel.getArtikelNaam());
         System.out.println("artikel prijs: " + artikel.getArtikelPrijs() + "\n");
         
@@ -72,6 +73,25 @@ public class ArtikelView {
             */
     }
     
+    public int menuArtikelZoeken(){
+        System.out.println("Wat wilt u zoeken in het artikelbestand?");
+        System.out.println("1. naar één artikel.");
+        System.out.println("2. naar alle artikelen.");
+        System.out.println("3. terug naar het menu Artikel.");
+        
+        try{
+            userInput = Integer.parseInt(scanner.nextLine());            
+
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+    }
+    
+    
+    
     public int hoeWiltUZoeken() {
         System.out.println("Kies met wat u wilt zoeken:");
         System.out.println("1. Zoeken met artikel id.");
@@ -86,9 +106,20 @@ public class ArtikelView {
             System.out.print("Foute input, kies van de opties hierboven.");
         }
         
-        return userInput;  
-        
+        return userInput;          
     }
+    
+    
+    public void printArtikelenLijst(ArrayList<Artikel> lijst){
+        System.out.println();
+        System.out.println("ArtikelId\t\tArtikel naam\t\tArtikel prijs");
+            for (int i = 0; i< lijst.size(); i++){
+
+            System.out.println ((lijst.get(i)).getArtikelId() + "\t\t\t" +
+            (lijst.get(i)).getArtikelNaam() + "\t\t" +(lijst.get(i)).getArtikelPrijs());
+        }        
+    }
+    
     
     public int isArtikelIdBekend() {
         System.out.println("Is het ariktel id bekend?");
@@ -161,12 +192,31 @@ public class ArtikelView {
         
         return userInput;
     }
+    
+    
     public void printDeleteResultaat(boolean deleted, int artikelId) {
         if (deleted) 
             System.out.println("Het artikel met artikel id " + artikelId + " is verwijderd.");
         else
             System.out.println("Verwijderen mislukt.");
+    }   
+
+
+    public int bevestigingsVraag(){
+        
+        System.out.println("Weet u zeker dat u alle artikel gegevens definitief verwijderen wil?");
+        System.out.println("1. ja");
+        System.out.println("2. nee");
+        
+        try{
+            userInput = Integer.parseInt(scanner.nextLine());        
+        }
+        catch(InputMismatchException ex){
+            System.out.print("Foute input, kies van de opties hierboven.");
+        }
+        
+        return userInput;
+        
     }
-    
-}
  
+}// einde klasse

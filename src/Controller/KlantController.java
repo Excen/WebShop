@@ -41,7 +41,7 @@ public class KlantController {
     HoofdMenuView hoofdMenuView;
     
     
-    public void klantMenu() throws SQLException, ClassNotFoundException{
+    public void klantMenu() {
         
         int keuze = klantView.startMenuKlant();
         
@@ -69,22 +69,24 @@ public class KlantController {
     }
     
     
-    public int voegNieuweKlantToe() throws SQLException, ClassNotFoundException {
+    public int voegNieuweKlantToe() {
         
         adresController = new AdresController();
         
         klantView.printString("U gaat een klant toevoegen. Voer de gegevens in.");
         klant = createKlant();           
         klant = klantDAO.insertKlant(klant); //klant inclusief klantId
-        int klantId = klant.getKlantId();                
+        int klantId = klant.getKlantId();                     
         
-        int adresId = adresController.voegNieuwAdresToe();
-        //int adresId = 30; 
-        //boolean toegevoegd = klantAdresDAO.insertKlantAdres(klantId, adresId); 
+        // later vervangen door: int adresId = adresController.voegNieuwAdresToe();
+        System.out.println("Voer uw adres in:");
+        adres = adresController.createAdres();
+        adres = adresDAO.insertAdres(adres);
+        int adresId = adres.getAdresId(); 
+        boolean toegevoegd = klantAdresDAO.insertKlantAdres(klantId, adresId); 
         
-        String string = "U heeft de klant- en adresgegevens toegevoegd van klantId: " 
-                + klantId + " en adresId " + adresId; 
-        klantView.printString(string);
+        System.out.println("U heeft de klant- en adresgegevens toegevoegd van klantId: " 
+                + klantId + " en adresId " + adresId); 
         System.out.println();
         
         klantMenu();
@@ -93,7 +95,7 @@ public class KlantController {
     } // eind methode voegNieuweKlantToe
     
     
-    public void zoekKlantGegevens() throws SQLException, ClassNotFoundException{
+    public void zoekKlantGegevens() {
         
         int klantId = 0;   
         int x = 0;
@@ -149,7 +151,7 @@ public class KlantController {
     } // eind methode zoekKlantGegevens
     
     
-    public void wijzigKlantGegevens() throws SQLException, ClassNotFoundException{
+    public void wijzigKlantGegevens(){
        
        Klant gewijzigdeKlant = new Klant();
        int klantId = 0;
@@ -205,7 +207,7 @@ public class KlantController {
     } // einde methode wijzigKlantGegevens
    
     
-    public void verwijderKlantGegevens() throws SQLException, ClassNotFoundException{
+    public void verwijderKlantGegevens() {
        
         boolean deleted = false;
         int klantId = 0;
@@ -231,18 +233,8 @@ public class KlantController {
                     
                 deleted = klantDAO.deleteByKlantId(klantId);  
                 int verwijderd = klantAdresDAO.deleteKlantAdresByKlantId(klantId);
-
-                    if (deleted == true){
-                        System.out.println("De volgende klant is verwijderd uit het bestand: ");
-                        System.out.println();
-                        klantView.printKlantGegevens(klant);
-                        System.out.println(verwijderd + " koppeling(en) van klant met een adres zijn verwijderd");                                                                   
-                    }
-                    else{
-                        klantView.printString("De volgende klant is NIET verwijderd uit het bestand: ");
-                        System.out.println();
-                        klantView.printKlantGegevens(klant);
-                    }   
+                klantView.printDeleteResultaat(deleted, klantId, verwijderd, klant);
+                    
                 break;                    
                                     
             case 2: // alle klanten verwijderen
@@ -270,7 +262,7 @@ public class KlantController {
     }// eind methode verwijderKlantGegevens
     
     
-    public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
+    public void terugNaarHoofdMenu() {
         HoofdMenuController hoofdMenuController = new HoofdMenuController();
         hoofdMenuController.start();
     }    
@@ -285,9 +277,9 @@ public class KlantController {
         String email = klantView.voerEmailIn();        
                   
         //klantBuilder.klantId(klantId); pas duidelijk na invoer in database
-        klantBuilder.achterNaam(achternaam);
-        klantBuilder.voorNaam(voornaam);
-        klantBuilder.tussenVoegsel(tussenvoegsel);
+        klantBuilder.achternaam(achternaam);
+        klantBuilder.voornaam(voornaam);
+        klantBuilder.tussenvoegsel(tussenvoegsel);
         klantBuilder.email(email);
 
         // build klant
@@ -297,23 +289,23 @@ public class KlantController {
     } // eind methode createKlant
  
 
-    public Klant voerWijzigingenKlantIn(Klant klant) throws SQLException, ClassNotFoundException{
+    public Klant voerWijzigingenKlantIn(Klant klant){
         int juist = 0 ;
         
-	String voornaam = klant.getVoorNaam();
+	String voornaam = klant.getVoornaam();
         System.out.println("Uw voornaam: ");
 	juist = klantView.checkInputString(voornaam); // iets dergelijks als "is dit juist?: "+ voormaam 1/true 2/false
             if (juist == 2) { 
                 voornaam = klantView.voerVoorNaamIn();
             }
                 
-	String achternaam = klant.getAchterNaam();
+	String achternaam = klant.getAchternaam();
 	juist = klantView.checkInputString(achternaam);  // code schrijven voor methode iets als hierboven
             if (juist == 2) {
                 achternaam = klantView.voerAchterNaamIn();
             }
                 
-	String tussenvoegsel = klant.getTussenVoegsel();
+	String tussenvoegsel = klant.getTussenvoegsel();
 	juist = klantView.checkInputString(tussenvoegsel); // zie hierboven
             if(juist == 2) {
                 tussenvoegsel = klantView.voerTussenVoegselIn(); 
@@ -326,9 +318,9 @@ public class KlantController {
             }  
         
 	klantBuilder.klantId(klant.getKlantId());
-        klantBuilder.voorNaam(voornaam);
-        klantBuilder.achterNaam(achternaam);
-        klantBuilder.tussenVoegsel(tussenvoegsel);
+        klantBuilder.voornaam(voornaam);
+        klantBuilder.achternaam(achternaam);
+        klantBuilder.tussenvoegsel(tussenvoegsel);
         klantBuilder.email(email);
 
         // build Klant
