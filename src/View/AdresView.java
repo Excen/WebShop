@@ -21,11 +21,11 @@ public class AdresView {
     
     public int startAdresMenu() {
         System.out.println();
-        System.out.println("Werken in het adressenbestand. Wat wilt u doen?");
-        System.out.println("1. Een nieuw adres toevoegen in het adressenbestand. ");
-        System.out.println("2. Een adres opzoeken.");
-        System.out.println("3. Een adres wijzigen.");
-        System.out.println("4. Een adres verwijderen.");
+        System.out.println("Maak uw keuze: ");
+        System.out.println("1. Nieuw adres toevoegen. ");
+        System.out.println("2. Adresgegevens opzoeken.");
+        System.out.println("3. Adresgegevens wijzigen.");
+        System.out.println("4. Adresgegevens verwijderen.");
         System.out.println("5. Terug naar het hoofdmenu.");
         
         try {
@@ -72,8 +72,7 @@ public class AdresView {
     
     public int voerHuisnummerIn() {
         System.out.println("huisnummer: ");
-        int huisnummer = scanner.nextInt();
-        scanner.nextLine();
+        int huisnummer = Integer.parseInt(scanner.nextLine());
         return huisnummer;
     }
     public String voerToevoegingIn() {
@@ -92,26 +91,26 @@ public class AdresView {
     }
     public String voerWoonplaatsIn() {
         System.out.println("Woonplaats: ");
-        String woonplaats = scanner.nextLine().trim();
+        String woonplaats = scanner.nextLine();
         return woonplaats;
     }
     
     public void printAdresOverzicht(Adres adres) {
         System.out.println("Het adres heeft de volgende gegevens:");
-        System.out.println("adres id: " + adres.getAdresId());
-        System.out.println("straatnaam: " + adres.getStraatNaam());
-        System.out.println("huisnummer: " + adres.getHuisNummer());
-        System.out.println("toevoeging: " + adres.getToevoeging());
-        System.out.println("postcode: " + adres.getPostCode());
-        System.out.println("woonplaats: " + adres.getWoonPlaats());
+        System.out.println("Adres id: " + adres.getAdresId());
+        System.out.println("Straatnaam: " + adres.getStraatnaam());
+        System.out.println("Huisnummer: " + adres.getHuisnummer());
+        System.out.println("Toevoeging: " + adres.getToevoeging());
+        System.out.println("Postcode: " + adres.getPostcode());
+        System.out.println("Woonplaats: " + adres.getWoonplaats());
     }
     
     public int menuAdresZoeken(){
         
         System.out.println("Wat wilt u zoeken in het adressenbestand?");
         System.out.println("1. Één adres opzoeken.");
-        System.out.println("2. naar alle adressen.");
-        System.out.println("3. terug naar het adres menu.");
+        System.out.println("2. Alle adressen opzoeken.");
+        System.out.println("3. Terug naar adres menu.");
         
         try{
             userInput = Integer.parseInt(scanner.nextLine());            
@@ -146,10 +145,10 @@ public class AdresView {
         System.out.println("AdresId\tStraatnaam\t\tHuisnummer\tToevoeging\tPostcode\tWoonplaats");
             for (int i = 0; i< adressenLijst.size(); i++){
 
-            System.out.println ((adressenLijst.get(i)).getAdresId() + "\t" +
-            (adressenLijst.get(i)).getStraatNaam() + "\t\t" +(adressenLijst.get(i)).getHuisNummer() +
-            "\t" + (adressenLijst.get(i)).getToevoeging() + "\t" + (adressenLijst.get(i)).getPostCode() +
-            "\t" + (adressenLijst.get(i)).getWoonPlaats());
+            System.out.println ((adressenLijst.get(i)).getAdresId() + "\t\t" +
+            (adressenLijst.get(i)).getStraatnaam() + "\t\t" +(adressenLijst.get(i)).getHuisnummer() +
+            "\t" + (adressenLijst.get(i)).getToevoeging() + "\t" + (adressenLijst.get(i)).getPostcode() +
+            "\t" + (adressenLijst.get(i)).getWoonplaats());
             }        
     }
     
@@ -174,8 +173,7 @@ public class AdresView {
         System.out.println("3. terug naar het adres menu.");
         
         try{
-            userInput = scanner.nextInt();  
-            scanner.nextLine();
+            userInput = Integer.parseInt(scanner.nextLine());            
         }
         catch(InputMismatchException ex){
             System.out.print("Foute input, kies van de opties hierboven.");
@@ -188,7 +186,7 @@ public class AdresView {
     
     public int bevestigingsVraag(){
         
-        System.out.println("Weet u zeker dat u alle adresgegevens definitief verwijderen wil?");
+        System.out.println("Wilt u alle adressen definitief verwijderen?");
         System.out.println("1. ja");
         System.out.println("2. nee");
         

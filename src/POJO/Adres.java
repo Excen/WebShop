@@ -12,19 +12,19 @@ package POJO;
 public class Adres {
     
     private int adresId;
-    private String straatNaam;
-    private String postCode;
+    private String straatnaam;
+    private String postcode;
     private String toevoeging;
-    private int huisNummer;
-    private String woonPlaats;
+    private int huisnummer;
+    private String woonplaats;
     
     public Adres(AdresBuilder adresBuilder){
         this.adresId = adresBuilder.adresId;
-        this.straatNaam = adresBuilder.straatNaam;
-        this.postCode = adresBuilder.postCode;
+        this.straatnaam = adresBuilder.straatnaam;
+        this.postcode = adresBuilder.postcode;
         this.toevoeging = adresBuilder.toevoeging;
-        this.huisNummer = adresBuilder.huisNummer;
-        this.woonPlaats = adresBuilder.woonPlaats;
+        this.huisnummer = adresBuilder.huisnummer;
+        this.woonplaats = adresBuilder.woonplaats;
     }
     
     public Adres() {         
@@ -38,34 +38,34 @@ public class Adres {
         return adresId;
     }
     
-    public String getStraatNaam() {
-        return straatNaam;
+    public String getStraatnaam() {
+        return straatnaam;
     }
 
-    public String getPostCode() {
-        return postCode;
+    public String getPostcode() {
+        return postcode;
     }
 
     public String getToevoeging() {
         return toevoeging;
     }
 
-    public int getHuisNummer() {
-        return huisNummer;
+    public int getHuisnummer() {
+        return huisnummer;
     }
     
-    public String getWoonPlaats() {
-        return woonPlaats;
+    public String getWoonplaats() {
+        return woonplaats;
     }
 
     
     public static class AdresBuilder {
         private int adresId;
-        private String straatNaam;
-        private String postCode;
+        private String straatnaam;
+        private String postcode;
         private String toevoeging;
-        private int huisNummer;
-        private String woonPlaats;       
+        private int huisnummer;
+        private String woonplaats;       
     
         public AdresBuilder(){
             
@@ -76,13 +76,13 @@ public class Adres {
                 return this;
         }
         
-        public AdresBuilder straatNaam(String straatNaam){
-           this.straatNaam = straatNaam;
+        public AdresBuilder straatnaam(String straatnaam){
+           this.straatnaam = straatnaam;
                 return this; 
         }
         
-        public AdresBuilder postCode (String postCode){
-            this.postCode = postCode;
+        public AdresBuilder postcode (String postcode){
+            this.postcode = postcode;
                 return this;        
         }
         
@@ -91,13 +91,13 @@ public class Adres {
                 return this; 
         }
         
-        public AdresBuilder huisNummer (int huisNummer){
-            this.huisNummer = huisNummer;
+        public AdresBuilder huisnummer (int huisnummer){
+            this.huisnummer = huisnummer;
                 return this;
         }
         
-        public AdresBuilder woonPlaats (String woonPlaats){
-            this.woonPlaats = woonPlaats;
+        public AdresBuilder woonplaats (String woonplaats){
+            this.woonplaats = woonplaats;
                 return this;
         }
         

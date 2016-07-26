@@ -7,8 +7,6 @@ package DAOs.Interface;
 
 
 import POJO.Bestelling;
-import POJO.Klant;
-import java.sql.SQLException;
 import java.util.ArrayList;
 /**
  *
@@ -16,12 +14,10 @@ import java.util.ArrayList;
  */
 public interface BestellingDAOInterface {
     
-    public ArrayList<Bestelling> findAll() throws SQLException;
-    public Bestelling findById(int bestelling_id) throws SQLException;
-    public Klant findKlantByBestellingId (int bestelling_id) throws SQLException;
-    public int insertBestelling(int klant_id) throws SQLException;
-    public void updateKlantId(int bestelling_id, int klant_id) throws SQLException;
-    public void deleteBestelling(int bestelling_id) throws SQLException;
-    public void deleteAll() throws SQLException;  
+    public ArrayList<Bestelling> findAll();
+    public Bestelling findById(int bestelling_id);
+    public int insertBestelling(int klant_id);
+    public void deleteBestelling(int bestelling_id);
+    public void deleteAll();  
 }
 

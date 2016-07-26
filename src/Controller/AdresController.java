@@ -31,7 +31,7 @@ public class AdresController {
     
     int userInput;
     
-    public void adresMenu() throws SQLException, ClassNotFoundException {
+    public void adresMenu()  {
         userInput = adresView.startAdresMenu();
         switch (userInput) {
             case 1:
@@ -44,14 +44,21 @@ public class AdresController {
                 else if (userInput == 2) {
                     voegNieuwAdresToe();
                 }
+                break;
             case 2:
                 zoekAdresGegevens();
+                break;
             case 3:
                 wijzigAdresGegevens();
+                break;
             case 4:
                 verwijderAdresGegevens();
+                break;
             case 5: 
                 terugNaarHoofdMenu();   
+                break;
+            default:
+                break;
         } 
         
     }
@@ -83,18 +90,18 @@ public class AdresController {
         String postcode = adresView.voerPostcodeIn();
         String woonplaats = adresView.voerWoonplaatsIn();
         
-        adresBuilder.straatNaam(straatnaam);
-        adresBuilder.huisNummer(huisnummer);
+        adresBuilder.straatnaam(straatnaam);
+        adresBuilder.huisnummer(huisnummer);
         adresBuilder.toevoeging(toevoeging);
-        adresBuilder.postCode(postcode);
-        adresBuilder.woonPlaats(woonplaats);
+        adresBuilder.postcode(postcode);
+        adresBuilder.woonplaats(woonplaats);
         
         adres = adresBuilder.build();
         
         return adres;
     }
     
-    public void zoekAdresGegevens() throws SQLException, ClassNotFoundException {
+    public void zoekAdresGegevens()  {
         userInput = adresView.menuAdresZoeken();
         switch (userInput) {
             case 1:        
@@ -142,7 +149,7 @@ public class AdresController {
         adresMenu();
     }
     
-    public void wijzigAdresGegevens() throws SQLException, ClassNotFoundException {
+    public void wijzigAdresGegevens() {
                 
         userInput = adresView.hoeWiltUZoeken();
         switch (userInput) {
@@ -161,11 +168,13 @@ public class AdresController {
             case 5:
                 break; // doorsturen einde switch; terug naar adres menu
             default:
+                System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
                 break;
         }
         adresMenu();
     }
     public void updateOpAdresId() {
+        
         adres = new Adres();
         Adres gewijzigdAdres = new Adres();
         int adresId = adresView.voerAdresIdIn();
@@ -181,6 +190,7 @@ public class AdresController {
     }
     
     public void updateOpStraatnaam() {
+        
         adres = new Adres();
         Adres gewijzigdAdres = new Adres();
         String straatnaam = adresView.voerStraatnaamIn();
@@ -197,6 +207,7 @@ public class AdresController {
     }
     
     public void updateOpPostcodeHuisnummer() {
+        
         adres = new Adres();
         Adres gewijzigdAdres = new Adres();
         int huisnummer = adresView.voerHuisnummerIn();
@@ -212,7 +223,9 @@ public class AdresController {
         adresView.printAdresOverzicht(gewijzigdAdres);
     }
     
+    
     public void updateOpWoonplaats() {
+        
         adres = new Adres();
         Adres gewijzigdAdres = new Adres();
         String woonplaats = adresView.voerWoonplaatsIn();
@@ -229,15 +242,16 @@ public class AdresController {
     
     
     public Adres invoerNieuweAdresGegevens(Adres adres) {
+        
        int juist = 0;
         
-        String straatnaam = adres.getStraatNaam();
+        String straatnaam = adres.getStraatnaam();
         juist = adresView.checkInputString(straatnaam);
         if (juist == 2) {
             straatnaam = adresView.voerStraatnaamIn();
         } 
         
-        int huisnummer = adres.getHuisNummer();
+        int huisnummer = adres.getHuisnummer();
         String huisnummerString = huisnummer + "";
         juist = adresView.checkInputString(huisnummerString);
         if (juist == 2) {
@@ -250,30 +264,32 @@ public class AdresController {
             toevoeging = adresView.voerToevoegingIn();
         } 
         
-        String postcode = adres.getPostCode();
+        String postcode = adres.getPostcode();
         juist = adresView.checkInputString(postcode);
         if (juist == 2) {
             postcode = adresView.voerPostcodeIn();
         } 
         
-        String woonplaats = adres.getWoonPlaats();
+        String woonplaats = adres.getWoonplaats();
         juist = adresView.checkInputString(woonplaats);
         if (juist == 2) {
             woonplaats = adresView.voerWoonplaatsIn();
         } 
         
-        adresBuilder.straatNaam(straatnaam);
-        adresBuilder.huisNummer(huisnummer);
+        adresBuilder.straatnaam(straatnaam);
+        adresBuilder.huisnummer(huisnummer);
         adresBuilder.toevoeging(toevoeging);
-        adresBuilder.postCode(postcode);
-        adresBuilder.woonPlaats(woonplaats);
+        adresBuilder.postcode(postcode);
+        adresBuilder.woonplaats(woonplaats);
         
         adres = adresBuilder.build();
         
         return adres;
     }
     
-    public void verwijderAdresGegevens() throws SQLException, ClassNotFoundException{
+    
+    public void verwijderAdresGegevens() {
+        
         klantAdresDao = new KlantAdresDAOImpl();
         boolean isDeletedInAdres = false;
         boolean isDeletedInKlantAdres = false;
@@ -315,7 +331,7 @@ public class AdresController {
            
     }
     
-    public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
+    public void terugNaarHoofdMenu() {
         hoofdMenuController.start();
     }
 }

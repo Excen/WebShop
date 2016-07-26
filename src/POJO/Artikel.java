@@ -2,21 +2,21 @@ package POJO;
 
 
 public class Artikel {
-    private int artikelID;
+    private int artikelId;
     private String artikelNaam;
     private double artikelPrijs;
     
     public Artikel(){
     }
     
-    public Artikel(int artikelID, String artikelNaam, double artikelPrijs) {
-        this.artikelID = artikelID;
+    public Artikel(int artikelId, String artikelNaam, double artikelPrijs) {
+        this.artikelId = artikelId;
         this.artikelNaam = artikelNaam;
         this.artikelPrijs = artikelPrijs;
-        }
+    }
 
-    public int getArtikelID() {
-        return artikelID;
+    public int getArtikelId() {
+        return artikelId;
     }
 
     public String getArtikelNaam() {
@@ -27,8 +27,8 @@ public class Artikel {
         return artikelPrijs;
     }
 
-    public void setArtikelID(int artikelID) {
-        this.artikelID = artikelID;
+    public void setArtikelId(int artikelID) {
+        this.artikelId = artikelID;
     }
 
     public void setArtikelNaam(String artikelNaam) {

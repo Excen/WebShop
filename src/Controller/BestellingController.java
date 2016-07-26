@@ -24,11 +24,6 @@ import java.util.Scanner;
  * @author Excen
  */
 
-// Todo
-// Artikel toevoegen aan bestelling
-// Artikel verwijderen uit bestelling
-
-
 
 public class BestellingController {
     
@@ -40,156 +35,119 @@ public class BestellingController {
     Scanner scanner = new Scanner(System.in);
     int userInput;
     
-    public void bestellingMenu() throws SQLException, ClassNotFoundException{
+    public void bestellingMenu() {
         
-        int userInput = bestellingView.startBestellingMenu();
-        
-        // In deze switch moeten dus weer nieuwe methodes worden geschreven, deze methodes hebben return types die vervolgens aangeven
-        // wat de DAO's moeten doen. De methodes zijn methodes in de view, sout mag alleen maar daar komen te staan.
-        
-        // Todo
-        // Check inbouwen of KlantId al bestaat.
-        // 
-        //
-        //
+        userInput = bestellingView.startBestellingMenu();
         
         switch (userInput) {
             // bestelling plaatsen
             case 1:
-                {
-                    
-                    plaatsBestelling();
-                   
-                    break;
-                }
+                plaatsBestelling();                   
+                break;                
             // bestellinginfo ophalen
-            case 2:
-                {
-                          
-                    haalBestellingInfoOp();
-                    
-                    break;
-                }
-            // Bestelling wijzigen
+            case 2:      
+                haalBestellingInfoOp();
+                break;
+                // Bestelling wijzigen
             case 3:
-                {
-  
-                    wijzigBestelling();
-                  
-                    break;
-                }
-                
-            // Bestelling verwijderen
+                wijzigBestelling();
+                break;
+                // Bestelling verwijderen
             case 4:
-                {
-            
-                    verwijderBestelling();
-                    
-                    break;
-                }
-            
+                verwijderBestelling();
+                break;
             // Terug naar bestellingmenu
             case 5:
-            {
-                      
-                    
-                    break;
-            }
-            
-            
+                break;
             default:
-                    System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
-                    
-                    break;
+                System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
+                break;
         }
         terugNaarHoofdMenu();
     }
     
-    public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
+    public void terugNaarHoofdMenu() {
         HoofdMenuController hoofdMenu = new HoofdMenuController();
         hoofdMenu.start();
     }
     
-    public void plaatsBestelling() throws SQLException, ClassNotFoundException {
+    public void plaatsBestelling() {
                     
-                    int klantID = bestellingView.voerKlantIdIn();
-                    int bestellingID = bestellingDAO.insertBestelling(klantID);
-                    int anotherOne = 0;
-                    boolean checker = true;
+        int klantID = bestellingView.voerKlantIdIn();
+        int bestellingID = bestellingDAO.insertBestelling(klantID);
+        int anotherOne = 0;
+        boolean checker = true;
 
-                    // voeg artikelen toe aan bestelling
-                    ArrayList<BestellingArtikel>AL = new ArrayList<>();
-                    BestellingArtikel BS = new BestellingArtikel();
-                    
-                    // Overzicht beschikbare artikelen
-                    System.out.println("Beschikbare artikelen: ");
-                    ArrayList<Artikel>artikelLijst = new ArrayList<>();
-                    artikelLijst = artikelDAO.findAll();
-                    
-                    for (Artikel ar: artikelLijst){
-                        System.out.println(ar.getArtikelID() + " " + ar.getArtikelNaam());
-                    }
-                    
-                    // begin artikel toevoeg loop
-                    do {
-                    BS = createBestellingArtikel();
-                    BS.setBestelling_id(bestellingID);
-                    bestellingArtikelDAO.createBestellingArtikel(BS);
-                    AL.add(BS);
-                        
-                    System.out.println("Wil je nog een artikel toevoegen?\n1 ja\n2 nee");
-                        
-                        try{
-                        anotherOne = scanner.nextInt();    
-                        } catch (InputMismatchException ex){
-                            System.out.println("Voer een integer in.");
-                        }
-                        
-                        if (anotherOne == 1) {
-                            checker = true;
-                        }
-                        
-                        else {
-                            checker = false;
-                        }
-                    } while (checker);
-                    
-                    System.out.println("De artikelen van Klant " + klantID + " zijn toegevoegd aan bestelling ID: " + bestellingID);
-                    System.out.println("De toegevoegde artikelen zijn: ");
-                    for (BestellingArtikel bar: AL){
-                        System.out.println(artikelDAO.findByArtikelID(bar.getArtikel_id()).getArtikelNaam() + " " + bar.getArtikel_aantal() + " keer");
-                    }
-                    
-           bestellingMenu();         
+        // voeg artikelen toe aan bestelling
+        ArrayList<BestellingArtikel>AL = new ArrayList<>();
+        BestellingArtikel bestellingArtikel = new BestellingArtikel();
+
+        // Overzicht beschikbare artikelen
+        System.out.println("Beschikbare artikelen: ");
+        ArrayList<Artikel>artikelLijst = new ArrayList<>();
+        artikelLijst = artikelDAO.findAll();
+
+        for (Artikel ar: artikelLijst){
+            System.out.println(ar.getArtikelId() + " " + ar.getArtikelNaam());
+        }
+
+        // begin artikel toevoeg loop
+        do {
+            bestellingArtikel = createBestellingArtikel();
+            bestellingArtikel.setBestellingId(bestellingID);
+            bestellingArtikelDAO.createBestellingArtikel(bestellingArtikel);
+            AL.add(bestellingArtikel);
+
+            System.out.println("Wil je nog een artikel toevoegen?\n1 ja\n2 nee");
+
+            try{
+                anotherOne = scanner.nextInt();    
+            } catch (InputMismatchException ex){
+                System.out.println("Voer een integer in.");
+            }
+
+            if (anotherOne == 1) {
+                checker = true;
+            }
+
+            else {
+                checker = false;
+            }
+        } while (checker);
+
+        System.out.println("De artikelen van Klant " + klantID + " zijn toegevoegd aan bestelling ID: " + bestellingID);
+            System.out.println("De toegevoegde artikelen zijn: ");
+            for (BestellingArtikel bar: AL){
+            System.out.println(artikelDAO.findByArtikelID(bar.getArtikelId()).getArtikelNaam() + " " + bar.getArtikelAantal() + " keer");
+        }
+
+       bestellingMenu();         
     }
     
-    public void haalBestellingInfoOp() throws SQLException, ClassNotFoundException {
+    public void haalBestellingInfoOp() {
         
         int bestellingID = bestellingView.zoekBestellingInfo();
-                    Bestelling bestelling = bestellingDAO.findById(bestellingID);
-                    System.out.println("Bestelling ID: " + bestelling.getBestelling_id());
-                    System.out.println("Klant ID: " + bestelling.getKlant_id());
-                    System.out.println("Bestelling Datum: " + bestelling.getDatum());
-                    
-                    ArrayList<Artikel>artikellijst = new ArrayList<>();
-                    artikellijst = bestellingArtikelDAO.findByBestellingId(bestellingID);
-                    System.out.println("Artikellen in bestelling: ");
-                    for (Artikel ar: artikellijst){
-                        System.out.println(ar.getArtikelNaam() + ": " + bestellingArtikelDAO.findAantalByArtikelID(bestellingID, ar.getArtikelID()) + " keer");
-                        
-                    }     
+            Bestelling bestelling = bestellingDAO.findById(bestellingID);
+            System.out.println("Bestelling ID: " + bestelling.getBestellingId());
+            System.out.println("Klant ID: " + bestelling.getKlantId());
+            System.out.println("Bestelling Datum: " + bestelling.getDatum());
+
+            ArrayList<Artikel>artikellijst = new ArrayList<>();
+            artikellijst = bestellingArtikelDAO.findByBestellingId(bestellingID);
+            System.out.println("Artikellen in bestelling: ");
+            for (Artikel ar: artikellijst){
+                System.out.println(ar.getArtikelNaam() + ": " + bestellingArtikelDAO.findAantalByArtikelID(bestellingID, ar.getArtikelId()) + " keer");
+
+            }     
         bestellingMenu();            
     }
     
-    public void wijzigBestelling() throws SQLException, ClassNotFoundException {
+    public void wijzigBestelling() {
         
-        ArrayList<Artikel>artikelLijst = new ArrayList<>();
-        
+        ArrayList<Artikel>artikelLijst = new ArrayList<>();        
         int bestellingId = bestellingView.zoekBestellingInfo();
         
         artikelLijst = bestellingArtikelDAO.findByBestellingId(bestellingId);
-        
-        
         
         int welkArtikel = bestellingView.wijzigBestellingInfo(artikelLijst, bestellingId);
         int watTeDoenMetArtikel = bestellingView.wijzigBestellingKeuze();
@@ -211,7 +169,7 @@ public class BestellingController {
     }
     
     
-    public void verwijderBestelling() throws SQLException, ClassNotFoundException {
+    public void verwijderBestelling() {
         
     int bestellingID = bestellingView.zoekBestellingInfo();
                 bestellingDAO.deleteBestelling(bestellingID);
@@ -234,8 +192,8 @@ public class BestellingController {
         int artikelAantal = bestellingView.voerAantalIn();
                 
         BestellingArtikel BS = new BestellingArtikel();
-        BS.setArtikel_id(artikelId);
-        BS.setArtikel_aantal(artikelAantal);        
+        BS.setArtikelId(artikelId);
+        BS.setArtikelAantal(artikelAantal);        
         
         return BS;
         

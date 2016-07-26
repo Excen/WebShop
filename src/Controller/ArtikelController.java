@@ -3,8 +3,12 @@ package Controller;
 
 import View.ArtikelView;
 import DAOs.Impl.ArtikelDAOImpl;
+import DAOs.Impl.BestellingArtikelDAOImpl;
 import POJO.Artikel;
+import POJO.Bestelling;
+import View.BestellingView;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class ArtikelController {
@@ -21,7 +25,11 @@ public class ArtikelController {
     ArtikelDAOImpl artikelDAO = new ArtikelDAOImpl();
     Artikel artikel = new Artikel();
     
-    public void artikelMenu() throws SQLException, ClassNotFoundException {
+    BestellingView bestellingView = new BestellingView();
+    BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
+    
+    
+    public void artikelMenu()  {
         int userInput = artikelView.startArtikelMenu();
         
         switch (userInput) {
@@ -41,14 +49,14 @@ public class ArtikelController {
             case 5:
                 terugNaarHoofdMenu();
                 break;
-            case 6:
-                afsluiten();
+            default:
+                System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
                 break;
         }     
         
     }
     
-     public void voegNieuwArtikelToe(Artikel artikel) throws SQLException, ClassNotFoundException {
+     public void voegNieuwArtikelToe(Artikel artikel) {
         String artikelNaam = artikel.getArtikelNaam();
         double artikelPrijs = artikel.getArtikelPrijs();
         
@@ -65,42 +73,56 @@ public class ArtikelController {
         String artikelNaam = artikelView.voerArtikelNaamIn();
         double artikelPrijs = artikelView.voerAtrikelPrijsIn();
         
-        Artikel artikel = new Artikel();
+        artikel = new Artikel();
         artikel.setArtikelNaam(artikelNaam);
         artikel.setArtikelPrijs(artikelPrijs);
         return artikel;
     } 
      
-    public void zoekArtikelGegevens() throws SQLException, ClassNotFoundException {
-        artikel = new Artikel();
-        int userInput = artikelView.hoeWiltUZoeken();
-        
-        switch (userInput) {
-            case 1: 
-                int artikelId = artikelView.voerArtikelIdIn();
-                artikel = artikelDAO.findByArtikelID(artikelId);
-                artikelView.printArtikelOverzicht(artikel);
-                break;
-            case 2:
-                String artikelNaam = artikelView.voerArtikelNaamIn();
-                artikel = artikelDAO.findByArtikelNaam(artikelNaam);
-                artikelView.printArtikelOverzicht(artikel);
-                break;
-            case 3:
-                double artikelPrijs = artikelView.voerAtrikelPrijsIn();
-                artikel = artikelDAO.findByArtikelPrijs(artikelPrijs);
-                artikelView.printArtikelOverzicht(artikel);
-                break;
-            case 4: 
-                artikelMenu();
-                break;
-        }
-        artikelMenu();
+    public void zoekArtikelGegevens()  {       
+        artikel = new Artikel();         
+		
+        int input = artikelView.menuArtikelZoeken();
+        switch (input){
+                case 1:  // naar 1 artikel zoeken
+                        int userInput = artikelView.hoeWiltUZoeken();				
+                        switch (userInput) {
+                                case 1: 
+                                        int artikelId = artikelView.voerArtikelIdIn();
+                                        artikel = artikelDAO.findByArtikelID(artikelId);
+                                        artikelView.printArtikelOverzicht(artikel);
+                                        break;
+                                case 2:
+                                        String artikelNaam = artikelView.voerArtikelNaamIn();
+                                        artikel = artikelDAO.findByArtikelNaam(artikelNaam);
+                                        artikelView.printArtikelOverzicht(artikel);
+                                        break;
+                                case 3:
+                                        double artikelPrijs = artikelView.voerAtrikelPrijsIn();
+                                        artikel = artikelDAO.findByArtikelPrijs(artikelPrijs);
+                                        artikelView.printArtikelOverzicht(artikel);
+                                        break;
+                                case 4: 
+                                        break;
+                                default: 
+                                        break;
+                        }
+                        break; // einde naar 1 artikel zoeken
+                case 2: // alle artikelen zoeken
+                        ArrayList <Artikel> artikelenLijst = artikelDAO.findAll();
+        System.out.println("Alle artikelen in het bestand");
+        artikelView.printArtikelenLijst(artikelenLijst); 
+                        break; 
+                case 3: // naar artikelmenu
+                        break; 
+                default: // automatisch naar artikelmenu	
+                        break; 
+        }		
+     artikelMenu();
     }
     
     
-    
-    public void wijzigArtikelGegevens() throws SQLException, ClassNotFoundException {
+    public void wijzigArtikelGegevens() {
         
         int userInput = artikelView.hoeWiltUZoeken();
         switch (userInput) {
@@ -156,6 +178,7 @@ public class ArtikelController {
     }
     
     public void updateOpArtikelPrijs() {
+        
         Artikel gewijzigdArtikel = new Artikel();
         boolean gewijzigd;
         
@@ -189,44 +212,48 @@ public class ArtikelController {
             artikelPrijs = artikelView.voerAtrikelPrijsIn();
         }
         
-        int artikelId = artikel.getArtikelID();
+        int artikelId = artikel.getArtikelId();
         Artikel artikelNieuw = new Artikel(artikelId, artikelNaam, artikelPrijs);
         
-        return artikelNieuw;
-        
+        return artikelNieuw;        
     }
     
     
-    public void verwijderArtikelGegevens() throws SQLException, ClassNotFoundException {
-        
+    public void verwijderArtikelGegevens()  {
+                
         int userInput = artikelView.printVerwijderMenu();
-        if (userInput == 1) {
-            int artikelId = artikelView.printDeleteArtikelView();
-            boolean deleted = artikelDAO.deleteArtikel(artikelId);
-            artikelView.printDeleteResultaat(deleted, artikelId);        
-        }
-        else if (userInput == 2){
-            // code
-        }
-        else if (userInput == 3){
-            // door naar einde methode > naar artikelmenu();
+        switch (userInput) {
+            case 1:// 1 artikel verwijderen  
+                artikelView.printArtikelenLijst(artikelDAO.findAll());
+                int artikelId = artikelView.printDeleteArtikelView();
+                boolean deleted = artikelDAO.deleteArtikel(artikelId);
+                artikelView.printDeleteResultaat(deleted, artikelId);
+                ArrayList <Bestelling> lijst = bestellingArtikelDAO.findBestellingByArtikelId(artikelId);
+                System.out.println("In de volgende bestelling(en) is het verwijderde artikel aanwezig");
+                bestellingView.printBestellingLijst(lijst);
+                break;
+            case 2:// alle artikelen verwijderen                
+                int x = artikelView.bevestigingsVraag();                
+                if (x == 1){ // bevestiging is ja
+                    int rowsAffected = artikelDAO.deleteAll();                    
+                    System.out.println(rowsAffected + " totaal aantal artikelen zijn verwijderd");                       
+                }                
+                else { // bevestiging = nee
+                    System.out.println("De artikel gegevens worden NIET verwijderd.");
+                }
+                break;                
+            case 3:// door naar einde methode > naar artikelmenu();
+                break;
+            default:
+                break;
         }
         artikelMenu();
     }
     
-    public void terugNaarHoofdMenu() throws SQLException, ClassNotFoundException {
+    public void terugNaarHoofdMenu() {
         HoofdMenuController hoofdMenu = new HoofdMenuController();
         hoofdMenu.start();
     }
-        
-    public void afsluiten() {
-        
-    }
-    
-    
-    
-    
-        
-    
+     
     
 }

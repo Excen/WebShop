@@ -12,42 +12,37 @@ package POJO;
  */
 public class Klant {
     private int klantId;
-    private String voorNaam;
-    private String achterNaam;
-    private String tussenVoegsel;
+    private String voornaam;
+    private String achternaam;
+    private String tussenvoegsel;
     private String email;    
     
     public Klant (KlantBuilder builder){
         this.klantId = builder.klantId;
-        this.voorNaam = builder.voorNaam;
-        this.achterNaam = builder.achterNaam; 
-        this.tussenVoegsel = builder.tussenVoegsel;
+        this.voornaam = builder.voornaam;
+        this.achternaam = builder.achternaam; 
+        this.tussenvoegsel = builder.tussenvoegsel;
         this.email = builder.email;       
     }
     
     public Klant(){
         
     }
-
-    public static Klant getInstance(){
-        return new Klant();
-    }
-    
-    
+   
     public int getKlantId() {
         return klantId;
     }
 
-    public String getVoorNaam() {
-        return voorNaam;
+    public String getVoornaam() {
+        return voornaam;
     }
 
-    public String getAchterNaam() {
-        return achterNaam;
+    public String getAchternaam() {
+        return achternaam;
     }
 
-    public String getTussenVoegsel() {
-        return tussenVoegsel;
+    public String getTussenvoegsel() {
+        return tussenvoegsel;
     }
 
     public String getEmail() {
@@ -56,9 +51,9 @@ public class Klant {
    
     public static class KlantBuilder {
         private int klantId;
-        private String voorNaam;
-        private String achterNaam;
-        private String tussenVoegsel;
+        private String voornaam;
+        private String achternaam;
+        private String tussenvoegsel;
         private String email;       
     
         public KlantBuilder(){
@@ -69,18 +64,18 @@ public class Klant {
                 return this;
         }
     
-        public KlantBuilder voorNaam(String voorNaam){
-            this.voorNaam = voorNaam;
+        public KlantBuilder voornaam(String voornaam){
+            this.voornaam = voornaam;
                 return this;
         }
         
-        public KlantBuilder achterNaam(String achterNaam){
-            this.achterNaam = achterNaam;
+        public KlantBuilder achternaam(String achternaam){
+            this.achternaam = achternaam;
                 return this;
         }
         
-        public KlantBuilder tussenVoegsel(String tussenVoegsel){
-            this.tussenVoegsel = tussenVoegsel;
+        public KlantBuilder tussenvoegsel(String tussenvoegsel){
+            this.tussenvoegsel = tussenvoegsel;
                 return this;
         }
         

@@ -1,7 +1,6 @@
 
 package View;
 
-import static DAOs.Impl.KlantDAOImpl.isValidEmailAddress;
 import POJO.Klant;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -17,16 +16,13 @@ public class KlantView {
          
     
     public int startMenuKlant(){
-        System.out.println();
-        System.out.println("Werken in klantenbestand");
-        System.out.println("Keuzes in het klantenbestand. Wat wilt u doen?");
-        System.out.println("1. Nieuw klant toevoegen in het klantenbestand.");
+        System.out.println();        
+        System.out.println("Maak uw keuze:");
+        System.out.println("1. Nieuwe klant toevoegen.");
         System.out.println("2. Klantgegevens opzoeken.");
         System.out.println("3. Klantgegevens wijzigen.");
-        System.out.println("4. Klantgegevens verwijderen uit het klantenbestand.");
+        System.out.println("4. Klantgegevens verwijderen.");
         System.out.println("5. Terug naar het hoofdmenu.");
-        System.out.println("6. Afsluiten.");
-        System.out.println();
         
         try{
             userInput = Integer.parseInt(scanner.nextLine());            
@@ -59,7 +55,7 @@ public class KlantView {
     
     public String voerTussenVoegselIn(){
         
-        System.out.print("tussenvoegsel: ");
+        System.out.print("Tussenvoegsel: ");
         String tussenvoegsel = scanner.nextLine().trim();
         
         return tussenvoegsel; 
@@ -67,7 +63,7 @@ public class KlantView {
     
     
     public String voerEmailIn(){
-        System.out.println("email: ");
+        System.out.println("Email: ");
         String email = scanner.nextLine();
         
         //isValidEmailAddress(email);
@@ -95,7 +91,7 @@ public class KlantView {
                 System.out.println("Is het klantId bekend?");
                 System.out.println("1. ja");    
                 System.out.println("2. nee");
-                System.out.println("3. Terug naar hoofdmenu klant");
+                System.out.println("3. Terug naar klant menu");
                 userInput = Integer.parseInt(scanner.nextLine());            
 
                 
@@ -121,8 +117,8 @@ public class KlantView {
     public void printKlantGegevens(Klant klant){
         
         System.out.println("De huidige gegevens van de klant met klantId: " + klant.getKlantId());
-        System.out.println(klant.getVoorNaam() + " " + klant.getTussenVoegsel() + " "
-                + klant.getAchterNaam());
+        System.out.println(klant.getVoornaam() + " " + klant.getTussenvoegsel() + " "
+                + klant.getAchternaam());
         System.out.println(klant.getEmail());
         
     }
@@ -133,7 +129,7 @@ public class KlantView {
         System.out.println("Hoe wilt u zoeken?");
         System.out.println("1. Zoek met voor- en achternaam");
         System.out.println("2. Zoek met email");  
-        System.out.println("3. Terug naar klanthoofdmenu");
+        System.out.println("3. Terug naar klantmenu");
         System.out.println("Maak een keuze:");
         
         try{
@@ -178,39 +174,12 @@ public class KlantView {
         return userInput; 
         
     }
-    
-    public int vraagDoorgaan(){
-        
-        System.out.println("Hoe wilt u verder?");
-        System.out.println("1. Werken in klantbestand");
-        System.out.println("2. Werken in artikelbestand");
-        System.out.println("3. Werken in bestellingbestand");
-        System.out.println("4. Werken in adresbestand");
-        System.out.println("5. Terug naar hoofdmenu");
-        System.out.println("6. Programma afsluiten");
-        
-        
-        try{
-            userInput = Integer.parseInt(scanner.nextLine());            
-
-            if (userInput <= 1 && userInput >= 6){
-                System.out.println("Foutieve input, voer 1 of 2 in.");
-                // code om opnieuw keuze in te voeren    
-                // scanner.nextLine();
-            }                        
-            
-        }catch(InputMismatchException ex){
-            System.out.print("Foute input, kies van de opties hierboven.");
-        }
-        
-        return userInput;
-    }
-    
+   
     public int menuKlantVerwijderen() {
-        System.out.println("Wat wilt u verwijderen uit het klantenbestand?");
-        System.out.println("1. één klant.");
-        System.out.println("2. alle klanten.");
-        System.out.println("3. terug naar het klanten menu.");
+        System.out.println("Maak uw keuze: ");
+        System.out.println("1. Één klant verwijderen.");
+        System.out.println("2. Alle klanten verwijderen.");
+        System.out.println("3. Terug naar klantmenu.");
         
         try{
             userInput = Integer.parseInt(scanner.nextLine());            
@@ -225,10 +194,10 @@ public class KlantView {
     
     public int menuKlantZoeken(){
         
-        System.out.println("Wat wilt u zoeken in het klantenbestand?");
-        System.out.println("1. naar één klant.");
-        System.out.println("2. naar alle klanten.");
-        System.out.println("3. terug naar het menu Klant.");
+        System.out.println("Wat wilt u opzoeken: ");
+        System.out.println("1. Gegevens één klant.");
+        System.out.println("2. Gegevens alle klanten.");
+        System.out.println("3. Terug naar klantmenu.");
         
         try{
             userInput = Integer.parseInt(scanner.nextLine());            
@@ -265,11 +234,27 @@ public class KlantView {
         System.out.println("KlantId\t\tVoornaam\t\tTussenvoegsel\t\tAchternaam\t\tEmail");
             for (int i = 0; i< lijst.size(); i++){
 
-            System.out.println ((lijst.get(i)).getKlantId() + "\t" +
-            (lijst.get(i)).getVoorNaam() + "\t" +(lijst.get(i)).getTussenVoegsel() +
-            "\t" + (lijst.get(i)).getAchterNaam() + "\t" + (lijst.get(i)).getEmail());
+            System.out.println ((lijst.get(i)).getKlantId() + "\t\t" +
+            (lijst.get(i)).getVoornaam() + "\t\t" +(lijst.get(i)).getTussenvoegsel() +
+            "\t\t" + (lijst.get(i)).getAchternaam() + "\t\t" + (lijst.get(i)).getEmail());
         }        
     }
+    
+    public void printDeleteResultaat(boolean deleted, int klantId, int verwijderd, Klant klant) {
+        
+        if (deleted == true){
+            
+            System.out.println("De volgende klant is verwijderd uit het bestand: ");
+            printKlantGegevens(klant);
+            System.out.println(verwijderd + " koppeling(en) van klant met een adres zijn verwijderd"); 
+            System.out.println();
+        }
+        else{
+            System.out.println("De volgende klant is NIET verwijderd uit het bestand: ");
+            printKlantGegevens(klant);
+            System.out.println();
+        }   
+    }   
     
     
     public void printString(String string ){
