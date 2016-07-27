@@ -32,13 +32,14 @@ BestellingArtikelDAOImpl bestellingArtikelDAO = new BestellingArtikelDAOImpl();
     public int startBestellingMenu(){
         
         try{
-            System.out.println();
             System.out.println("Maak een keuze:");
-            System.out.println("1. Nieuwe bestelling plaatsen");
-            System.out.println("2. Bestellingsgegevens opzoeken");
-            System.out.println("3. Bestellinggegevens wijzigen");
-            System.out.println("4. Bestellinggegevens verwijderen");
-            System.out.println("5. Terug naar hoofdmenu");       
+            System.out.println("1 bestelling plaatsen");
+            System.out.println("2 bestellingsinformatie ophalen");
+            System.out.println("3 bestelling wijzigen");
+            System.out.println("4 bestelling verwijderen");
+            System.out.println("5 toon alle bestellingen");
+            System.out.println("6 verwijder alle bestellingen");
+            System.out.println("7 terug naar hoofdmenu");       
 
             userInput = Integer.parseInt(scanner.nextLine());
             
