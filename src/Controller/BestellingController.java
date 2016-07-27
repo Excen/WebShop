@@ -40,27 +40,43 @@ public class BestellingController {
         userInput = bestellingView.startBestellingMenu();
         
         switch (userInput) {
-            // bestelling plaatsen
+                // bestelling plaatsen
             case 1:
                 plaatsBestelling();                   
-                break;                
-            // bestellinginfo ophalen
+                break;  
+                
+                // bestellinginfo ophalen
             case 2:      
                 haalBestellingInfoOp();
                 break;
+                
                 // Bestelling wijzigen
             case 3:
                 wijzigBestelling();
                 break;
+                
                 // Bestelling verwijderen
             case 4:
                 verwijderBestelling();
                 break;
-            // Terug naar bestellingmenu
+                
+                // Alle bestellingen tonen
             case 5:
+                toonAlleBestellingen();       
                 break;
-            default:
-                System.out.println("Die optie is niet beschikbaar, we keren terug naar het bestelling menu.");
+                
+                // verijder alle bestellingen
+            case 6:
+                verwijderAlleBestellingen();    
+                break;
+                
+                // terug naar hoofdmenu
+            case 7:
+                terugNaarHoofdMenu();    
+                break;
+                    
+                // default        
+            default:    
                 break;
         }
         terugNaarHoofdMenu();
@@ -168,7 +184,6 @@ public class BestellingController {
     bestellingMenu();
     }
     
-    
     public void verwijderBestelling() {
         
     int bestellingID = bestellingView.zoekBestellingInfo();
@@ -181,6 +196,46 @@ public class BestellingController {
                 bestellingArtikelDAO.deleteBestellingArtikel(bestellingID);
                 System.out.println(bestellingID + " is verwijderd.");    
         bestellingMenu();        
+    }
+    
+    public void toonAlleBestellingen() {
+        
+
+        //  bestellingen uit bestelling tabel
+        ArrayList<Bestelling>bestellingLijst = bestellingDAO.findAll();
+        bestellingView.printBestellingLijst(bestellingLijst);
+        
+        
+        // TODO implementatie van onderstaande bestellingartikel lijst
+        // bestellingen uit bestellingartikel koppel tabel
+        // ArrayList<BestellingArtikel>bestellingArtikelLijst = bestellingArtikelDAO.findAll();
+        // bestellingView.printBestellingLijst(bestellingArtikelLijst);
+        
+    }
+    
+    public void verwijderAlleBestellingen() {
+        
+        int verwijderConfirmatie = 0;
+        
+        System.out.println("Weet je het zeker?\n1 ja\n2 nee");
+        
+        try{
+            verwijderConfirmatie = scanner.nextInt();
+        } catch (InputMismatchException ex){
+            System.out.println("Vul een van de opties in");
+        }
+        
+        if (verwijderConfirmatie == 1){
+            bestellingDAO.deleteAll();
+            bestellingArtikelDAO.deleteAll();
+            System.out.println("Alles is verwijderd.\n");  
+        }
+        
+        else {
+            System.out.println("Verwijderen afgebroken.\n");
+        }
+        
+
     }
     
     
